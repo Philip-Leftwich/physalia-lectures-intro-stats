@@ -1,6 +1,6 @@
 ---
 title: "Introduction to Statistics:"
-subtitle: " A guide for Biologists and Ecologists<br><small>7th Jan 2025</small>"
+subtitle: " A guide for Biologists and Ecologists<br><small>24th June 2025</small>"
 author: "Dr Philip Leftwich"
 format:
   LUstyle-revealjs:
@@ -155,7 +155,6 @@ I hope you end up with more questions than answers after this workshop!
 
 - Coursebook available [here](https://ueabio.github.io/physalia-intro-stats-2023/index.html)
 
-- Posit Cloud workspace available [here]
 
 
 # An Introduction to R {background-color="#D9DBDB"}
@@ -416,6 +415,27 @@ knitr::include_graphics("images/reproducible-data-analysis-02.png")
 
 - Visualization: Excellent plotting libraries such as `ggplot2` for creating stunning visualizations.
 
+# Questions? {background-color="#D9DBDB"}
+
+
+- We have some introductory R exercises:
+
+```{r}
+#| label: ex-getting-started
+countdown::countdown(
+  minutes = 30,
+  color_border = "#00AEEF",
+  color_text = "#00AEEF",
+  color_running_text = "white",
+  color_running_background = "#00AEEF",
+  color_finished_text = "#00AEEF",
+  color_finished_background = "white",
+  top = 0,
+  margin = "0.8em",
+  font_size = "2em"
+)
+```
+
 ## Main Features of RStudio
 
 User-Friendly Interface: Four-pane layout (script, console, environment, files) for easy navigation.
@@ -470,19 +490,15 @@ knitr::include_graphics("images/annotated.png")
 ```
 
 
-# Questions? {background-color="#D9DBDB"}
+# Setting up a project {background-color="#D9DBDB"}
 
 
-- We have three introductory sections of coursework
-
-Chapters 1 &2 are basic navigation and R operations
-
-Chapter 3 is setting up a fresh project and loading data
+- We have some introductory R exercises:
 
 ```{r}
-#| label: ex-getting-started
+#| label: ex-continue
 countdown::countdown(
-  minutes = 40,
+  minutes = 15,
   color_border = "#00AEEF",
   color_text = "#00AEEF",
   color_running_text = "white",
@@ -845,6 +861,8 @@ penguins_cleaned <- penguins %>%
 
 ## Recap and Next Steps
 
+
+
 ```{r}
 #| label: ex-data-wrangling
 countdown::countdown(
@@ -861,12 +879,1096 @@ countdown::countdown(
 )
 ```
 
-We introduced the tidyverse and focused on dplyr for data wrangling using the palmer penguins dataset.
 
+
+We introduced the tidyverse and focused on dplyr for data wrangling using the palmer penguins dataset.
 
 Emphasized the importance of keeping raw data raw and documenting manipulations for transparency.
 
 # Questions and Discussion   {background-color="#D9DBDB"}
+
+
+# Understanding Data Quality  {background-color="#D9DBDB"}
+
+## Importance of data quality
+
+## Missing  data
+
+The first issue we will cover is missing data. There is a whole host of reasons that your data could have missing values.
+
+## Missing data {.smaller}
+
+This can be broken down into three broad categories:
+
+:::{.incremental}
+
+- **MCAR (Missing Completely at Random)**	The probability of missing data is independent of any observed or unobserved data.	
+
+- Leaf samples lost randomly due to a labeling error in a plant growth study.
+
+- **MAR (Missing at Random)	** The probability of missing data is related to some observed data but not to the missing data itself.	
+
+- Blood pressure readings missing more frequently for older patients in a drug trial.
+
+- **MNAR (Missing Not at Random)**	The probability of missing data is related to the value of the missing data itself.	
+
+- Heavier birds in a wildlife study are harder to capture and weigh, leading to missing weight data.
+
+:::
+
+## Missing data
+
+Lots of ways to gather information on missing data:
+
+```{r, echo = T}
+
+summary(penguins)
+
+```
+
+And ways to remove it:
+
+```{r, echo = T, eval = F}
+
+drop_na(penguins)
+
+drop_na(penguins, -delta_15n, -delta_13c, -comments)
+
+```
+
+
+## Missing data
+
+There are helpful R packages that can give us greater insights into the distribution and clustering of missing data: 
+
+- `naniar`
+
+
+
+## Mean imputation
+
+- Preserves power
+
+- Mean imputation can introduce bias if data is not **missing completely at random**.
+
+- Reduces variability in the dataset.
+
+- For MAR - we can use multiple imputation methods - see [mice package](https://www.rdocumentation.org/packages/mice/versions/3.17.0/topics/mice).
+
+- MNAR very specialist
+
+```{r, echo = T, eval = F}
+penguins %>% 
+  group_by(species, sex) %>% 
+  mutate(body_mass_g = replace_na(body_mass_g, mean(body_mass_g, na.rm = T))) %>% 
+  ungroup()
+
+```
+
+## Duplications
+
+Duplications can skew results and reduce reliability of our data insights
+
+```{r, eval = T, echo = T}
+# check for duplicate rows in the data
+penguins %>% 
+  duplicated() %>% # produces a list of TRUE/FALSE statements for duplicated or not
+  sum() # sums all the TRUE statements
+```
+
+## Data types and consistency
+
+Example: Data is treated as a factor when it should be numerical 
+
+Ensuring correct data types is essential for performing accurate analyses
+
+```{r}
+
+str(penguins)
+
+```
+
+## Implausible values {.smaller}
+
+Values that fall outside of a possible range for a given variable.
+
+- **Categorical**: "Male", "Female", "Mle"
+
+```{r}
+penguins %>% 
+  distinct(species)
+
+```
+
+- **Continuous**: Negative values for an age, or a date given in the future
+
+```{r}
+summary(penguins)
+
+```
+
+## Outliers
+
+::::{.columns}
+
+:::{.column}
+
+Observations that fall outside of a tolerated range from other observations
+
+- > 3* Standard Deviation from the mean
+
+- > 1.5 * Interquartile Range
+
+Important to identify, but crucially these are *real* values
+
+:::
+
+:::{.column}
+
+```{r, echo = T}
+penguins %>% ggplot(aes(x = species, y = body_mass_g)) + geom_boxplot() +coord_flip()
+```
+
+:::
+
+::::
+
+## Histograms
+
+A key aspect of histograms is the bin size (or number of bins), which determines how the data is grouped along the x-axis. 
+
+- Choosing too few bins can oversimplify the data, hiding important details or patterns. 
+
+- On the other hand, too many bins can make the histogram noisy and hard to interpret, exaggerating minor fluctuations. 
+
+## Histograms
+
+::::{.columns}
+
+:::{.column}
+
+```{r, fig.width = 7}
+library(ggridges)
+penguins %>% drop_na(sex) %>% 
+ggplot(aes(x = body_mass_g, y = species)) + 
+  ggridges::stat_binline(aes(fill = sex),
+                alpha = 0.8)
+
+```
+:::
+
+:::{.column}
+```{r, fig.width = 7}
+
+library(ggridges)
+penguins %>% drop_na(sex) %>% 
+ggplot(aes(x = body_mass_g, y = species)) + 
+  ggridges::stat_binline(aes(fill = sex),
+                alpha = 0.8,
+                bins = 10)
+
+```
+:::
+
+:::{.column}
+
+```{r}
+
+library(ggridges)
+penguins %>% drop_na(sex) %>% 
+ggplot(aes(x = body_mass_g, y = species)) + 
+  ggridges::stat_binline(aes(fill = sex),
+                alpha = 0.8,
+                bins = 50)
+
+```
+:::
+
+::::
+
+## Density plots
+
+::::{.columns}
+
+:::{.column}
+
+```{r, fig.width = 7}
+library(ggridges)
+penguins %>% drop_na(sex) %>% 
+ggplot(aes(x = body_mass_g, y = species)) + 
+  ggridges::stat_binline(aes(fill = sex),
+                alpha = 0.8)
+
+```
+:::
+
+:::{.column}
+```{r, fig.width = 7, warning = FALSE}
+
+library(ggridges)
+penguins %>% drop_na(sex) %>% 
+ggplot(aes(x = body_mass_g, y = species)) + 
+  ggridges::geom_density_ridges(aes(fill = sex),
+                alpha = 0.8)
+
+```
+:::
+
+::::
+
+
+## Distributions
+
+How values are spread across a range:
+
+- Normal distribution
+
+- Skewed distribution
+
+- Uniform distribution
+
+Hard to tell even when using a histogram/density plot
+
+
+## QQ Plot
+
+```{r}
+# Set up 2x4 layout: 2 columns (Histogram + QQ plot) × 4 rows (sample sizes)
+par(mfrow = c(4, 2), mar = c(4, 4, 2, 1))  # Adjust margins
+
+# Define different sample sizes
+sample_sizes <- c(20, 50, 200, 1000)
+
+# Loop over sample sizes
+for (n in sample_sizes) {
+  data_normal <- rnorm(n, mean = 0, sd = 1)
+  
+  # Histogram
+  hist(data_normal, main = paste("Histogram (n =", n, ")"), 
+       xlab = "Value", col = "lightblue", border = "black")
+  
+  # QQ plot
+  qqnorm(data_normal, main = paste("QQ Plot (n =", n, ")"))
+  qqline(data_normal, col = "red")
+}
+
+
+```
+
+## QQ plots
+
+::::{.columns}
+
+:::{.column}
+
+A Q-Q plot (quantile-quantile plot) is a graphical tool used to compare the distribution of a dataset to a theoretical distribution (like the normal distribution) by plotting their quantiles against each other—if the points fall roughly along a straight line, it suggests the data follows that distribution.
+
+:::
+
+:::{.column}
+
+
+```{r, echo = FALSE, out.width="90%", fig.alt = "QQ plot examples"}
+knitr::include_graphics("images/qq_example.png")
+```
+
+:::
+
+::::
+
+
+## QQplots
+
+```{r}
+# Set up 4-panel layout: 4 rows × 1 column (only QQ plots)
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))  # Adjust margins
+
+# Define different sample sizes
+sample_sizes <- c(30, 30, 30, 30)
+
+# Loop over sample sizes to generate QQ plots
+for (n in sample_sizes) {
+    data_normal <- rnorm(n, mean = 0, sd = 2)
+    
+    # QQ plot only
+    qqnorm(data_normal, main = paste("QQ Plot (n =", n, ")"))
+    qqline(data_normal, col = "red")
+}
+
+```
+
+
+## Formal tests of normality
+
+The Shapiro-Wilk test is a commonly used statistical test for checking normality, but it has some limitations:
+
+- Too sensitive at large sample sizes: With large datasets, the test can detect very small deviations from normality that are not practically significant, often leading to rejection of normality even when the data is nearly normal.
+
+- Low power at small sample sizes: With small samples, the test may not detect meaningful departures from normality — leading to false confidence that the data is normal.
+
+- It's always best to pair statistical tests with visual checks, like Q-Q plots, to assess normality in context
+
+## Skimr - generate quick overviews of data {.smaller}
+
+
+```{r, echo = T}
+
+skimr::skim(penguins)
+
+```
+
+
+
+## Exercise practice data checking
+
+```{r}
+#| label: ex-data-quality
+countdown::countdown(
+  minutes = 30,
+  color_border = "#00AEEF",
+  color_text = "#00AEEF",
+  color_running_text = "white",
+  color_running_background = "#00AEEF",
+  color_finished_text = "#00AEEF",
+  color_finished_background = "white",
+  top = 0,
+  margin = "0.8em",
+  font_size = "2em"
+)
+```
+
+- We need to have strategies for removing or correcting errors in the data.
+
+- R scripts give us a record of changes without affecting the integrity of the raw data
+
+- Having a clear series of checks saves time in the long run
+
+# Descriptive Statistics  {background-color="#D9DBDB"}
+
+## Building Statistical Models
+
+
+::::{.columns}
+
+:::{.column}
+
+A model is a representation of what we think is going on in the real world. It can be a good fit, or a poor fit. 
+
+
+A well fitted model could be used to make *predictions* about what might happen in the real world. 
+
+
+A poorly fitted model could also make *predictions* but they might be disastrously wrong.
+
+
+If we want our inferences to be **accurate** the model must represent the data collected.
+
+:::
+
+:::{.column}
+
+```{r, echo = FALSE, fig.alt = " Model bridges - Andy Field Discovering Statistics"}
+
+knitr::include_graphics("images/bridge.png")
+```
+:::
+
+::::
+
+
+## Populations
+
+- The total “pool” you are trying to explore/describe
+
+- You define what it is
+
+- Usually you’re not going to be able to study the entire population, because: time, money, access, resources, support, etc. 
+
+- So instead, we can usually only take a...
+
+
+
+## Sample
+
+- Drawn randomly from the population...
+
+- ...to collect observations for variable(s) of interest...
+
+- ...to try to say something meaningful about the population.
+
+
+
+## Central tendency & spread
+
+Often we will start with
+
+**Central tendency** - a central or typical value
+
+**Data Spread** - how observations are dispersed
+
+Generally classed as **Descriptive Statistics**
+
+## What is Descriptive Statistics?
+
+- Descriptive statistics summarise and organise data in a clear, understandable way.
+
+- They help us see patterns and trends without diving into deeper analytical methods.
+
+## Central tendency
+
+The **central tendency** of a series of observations is a measure of the “middle value”
+
+
+
+The three most commonly reported measures of central tendency are the sample **mean, median, and mode**.
+
+
+| Mean        | Median      | Mode       |
+| ----------- | ----------- |----------- |
+| The average value     | The middle value      |The most frequent value      |
+| Sum of the total divided by *n*   | The middle value (if *n* is odd). The average of the two central values (if *n* is even)      |The most frequent value      |
+| Most common reported measure, affected by outliers | Less influenced by outliers, improves as *n* increases | Less common
+
+
+
+
+## Mean
+
+One of the simplest statistical models in biology is the **mean**
+
+::::{.columns}
+
+:::{.column}
+
+| Lecturer     | Friends |
+| ----------- | ----------- |
+| Mark      | 5       |
+| Tony   | 3     |
+| Becky | 3    |
+| Ellen   | 2      |
+| Phil   | 1     |
+| **Mean **  | **2.6**      |
+| **Median **  | **3**      |
+| **Mode **  | **3**      |
+
+
+:::
+
+:::{.column}
+
+
+Calculating the mean:
+
+$$ \bar{x} = \frac{\sum_{i=1}^{n} x_i}{n} $$
+$$\frac{5 + 3 + 3 + 2 + 1}{5} = 2.6$$
+
+Sum all the values and divide by n of values
+
+:::
+
+::::
+
+
+
+## The mean
+
+One of the simplest statistical models in biology is the **mean**
+
+::::{.columns}
+
+:::{.column}
+
+
+| Lecturer     | Friends |
+| ----------- | ----------- |
+| Mark      | 5       |
+| Tony   | 3     |
+| Becky | 3    |
+| Ellen   | 2      |
+| Phil   | 1     |
+| **Mean **  | **2.6**      |
+| **Median **  | **3**      |
+| **Mode **  | **3**      |
+
+
+:::
+
+:::{.column}
+
+We already *know* this is a hypothetical value as you can't have 2.6 friends (I think?)
+
+Now with any model we have to know how well it fits/ how accurate it is
+
+:::
+
+::::
+
+
+
+## Symmetrical
+
+If data is symmetrically distributed, the **mean and median** will be close, especially as *n* increases. 
+
+This is also know as a **normal distribution**
+
+
+```{r, echo = FALSE, out.width = "60%"}
+# Load required packages
+library(ggplot2)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate random sample from a normal distribution
+sample_size <- 1000
+mu <- 0  # mean
+sigma <- 1  # standard deviation
+sample <- rnorm(sample_size, mean = mu, sd = sigma)
+
+# Create a data frame with the sample data
+df <- data.frame(x = sample)
+
+# Create a histogram plot using ggplot2
+ggplot(df, aes(x = x)) +
+  geom_histogram(binwidth = 0.2, fill = "lightblue", color = "black") +
+  labs(x = "Value", y = "Frequency", title = "Distribution Histogram") +
+  theme_classic()
+
+
+```
+
+
+## Variance
+
+The average of the squared differences from the mean.
+
+
+$$s{^2}_{sample} = \frac{\sum(x - \bar{x})^2}{N -1}$$
+Sample variance is a robust measure of data spread, a higher variance means more spread.
+
+## Calculating variance
+
+::::{.columns}
+
+:::{.column}
+
+```{r, echo = FALSE, out.width="100%", fig.alt = "Symmetrical sides"}
+knitr::include_graphics("images/normal-distribution.jpg")
+```
+
+:::
+
+:::{.column}
+
+```
+
+   value residuals squared residuals
+ 1 12.7      2.88         8.27 
+ 2 14.2      4.32        18.7  
+ 3 11.3      1.41         1.99 
+ 4  7.43    -2.44         5.93 
+ 5  8.27    -1.60         2.57 
+ 6 12.7      2.81         7.90 
+ 7  5.34    -4.53        20.5  
+ 8 13.9      4.00        16.0  
+
+```
+
+```
+
+  sum of residuals sum of squares  mean
+1       -0.0577        359        9.87
+
+```
+
+:::
+
+::::
+
+
+## N-1? {.smaller}
+
+```{r, echo = FALSE, out.width="30%", fig.alt = "Sampling"}
+knitr::include_graphics("images/pop_sam.png")
+```
+
+For a *population* the variance $S_p^2$ is exactly the **mean** squared distance of the values from the population mean
+
+$$
+s{^2}_{pop} = \frac{\sum(x - \bar{x})^2}{N}
+$$
+
+
+
+But this is a *biased* estimate for the population variance 
+
+- A biased sample variance will *underestimate* population variance
+
+- n-1 (if you take a large enough sample size, will correct for this)
+
+[More here](https://www.jamelsaadaoui.com/unbiased-estimator-for-population-variance-clearly-explained/#:~:text=The%20expected%20value%20of%20the%20sample%20variance%20is%20equal%20to,definition%20of%20an%20unbiased%20estimator.)
+
+
+
+## Standard Deviation
+
+- Square root of **sample variance**
+
+- A measure of dispersion of the sample
+
+- Smaller SD = more values closer to mean, larger SD = greater data spread from mean
+
+* *variance*:
+
+$$
+\sigma = \sqrt{\sum(x - \overline x)^2\over n - 1}
+$$
+
+
+## Standard deviation - our example
+
+Lecturer     | Friends | Diff | Squared diff |
+  ------------ | ------- | --- | ------ |
+  Mark         | 5       | 2.4  | 5.76    |
+  Tony         | 3       | 0.4  | 0.16    |
+  Becky        | 3       | 0.4  | 0.16    |
+  Ellen        | 2       | -0.6  | 0.36    |
+  Phil         | 1       | -1.6  | 2.56    |   
+|  **Mean **  | **2.6**      |
+| **variance** | **2.2** |
+| **SD **  | **1.4**      |
+
+
+## Standard Deviation
+
+Small $s$ = data points are clustered near the mean
+
+Large $s$ = data points are widely dispersed around the mean
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, out.width = "60%"}
+
+library(patchwork)
+
+`SD = 1` <- rnorm(n = 1000, mean = 0, sd = 1)
+`SD = 2` <- rnorm(n = 1000, mean = 0, sd = 2)
+`SD = 3` <- rnorm(n = 1000, mean = 0, sd = 3)
+
+tibble(`SD = 1`, `SD = 2`, `SD = 3`) %>% 
+pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "values") %>% 
+  ggplot(aes(x = values, fill = `Standard Deviation`))+
+  geom_histogram()+
+  facet_wrap(~ `Standard Deviation`)+
+  theme_classic()+
+  theme(legend.position = "none")+
+  labs(x = " ",
+       y = "Frequency")
+
+
+```
+
+
+## Why the Normal Distribution matters
+
+Shape: Symmetrical, bell-shaped curve
+
+- Rule of Thumb: For normally distributed data:
+
+    ~68% within 1 SD
+
+    ~95% within 2 SDs
+
+    ~99.7% within 3 SDs
+
+Relevance: Underpins many statistical tests and probability calculations (e.g., Z-scores)
+
+## Why the Normal Distribution matters
+
+If we assume a normal distribution (or close enough), we can calculate the probability of observing any given value using just the mean and standard deviation. 
+
+$$
+f(x) = \frac{1}{\sqrt{2\pi} \, \sigma}
+       \exp\!\Biggl(-\frac{(x - \mu)^2}{2\,\sigma^2}\Biggr)
+$$
+
+This has applications in hypothesis testing and building confidence intervals
+
+## Visualising a Distribution
+
+::::{.columns}
+
+:::{.column}
+
+**Histograms** plot frequency/density of observations within bins
+
+```{r, echo = FALSE, message = FALSE, out.width="80%"}
+tibble(`SD = 1`, `SD = 2`, `SD = 3`) %>% 
+pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "values") %>% 
+  filter(`Standard Deviation` == "SD = 2") %>% 
+  ggplot(aes(x = values), fill = "grey")+
+  geom_histogram()+
+  theme_minimal()+
+  theme(legend.position = "none")+
+  labs(x = bquote(bar(x)),
+       y = " ")
+```
+
+:::
+
+:::{.column}
+
+**Quantile-Quantile plots** plot quantiles of a dataset vs. quantiles of a *theoretical* (usually normal) distribution
+
+```{r, echo = FALSE, warning = F, message  = F, out.width="80%"}
+
+tibble(`SD = 1`,`SD = 2`, `SD = 3`) %>% 
+pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "values") %>% 
+  filter(`Standard Deviation` == "SD = 2") %>% 
+  ggplot(aes(sample = values))+
+  geom_qq()+
+  geom_qq_line()+
+  theme(legend.position = "none")+
+  labs(x = " ",
+       y = " ")
+```
+
+:::
+
+::::
+
+
+## Why is data distribution important?
+
+Understanding the shape of our data informs the summary statistics we can use
+
+```{r, echo = FALSE, fig.alt = "Frequency distribution with central tendencies", out.width = "60%"}
+# Set seed for reproducibility
+set.seed(123)
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+
+# Generate random sample from a skewed distribution
+sample_size <- 1000
+skewness <- 0.6  # skewness parameter
+sample1 <- rnorm(sample_size)
+sample1 <- exp(sample * skewness)
+
+# Create a data frame with the sample data
+df1 <- data.frame(x = sample1)
+
+# Calculate mean and median
+mean_val <- mean(sample1)
+median_val <- median(sample1)
+mode_val <- Mode(sample1)
+# Create a histogram plot using ggplot2
+ggplot(df1, aes(x = x)) +
+    geom_histogram(binwidth = 0.2, fill = "lightblue", color = "black") +
+    geom_vline(xintercept = mean_val, linetype = "dashed", color = "red", size = 1) +
+    geom_vline(xintercept = median_val, linetype = "dashed", color = "blue", size = 1) +
+    geom_vline(xintercept = mode_val, linetype = "dashed", color = "black", size = 1) +
+    labs(x = "Value", y = "Frequency") +
+    annotate("text", x = mean_val, y = 80, label = "Mean", color = "red", vjust = -1, hjust = -0.2) +
+    annotate("text", x = median_val, y = 140, label = "Median", color = "blue", vjust = -1, hjust = -0.2)+annotate("text", x = mode_val, y = 160, label = "Mode", color = "black", vjust = -1, hjust = -0.2)+
+    theme_classic()
+```
+
+
+
+## Asymmetrical
+
+Depending on our question, if the data is not symmetrical this could really matter...
+
+```{r, echo = FALSE, out.width = "60%"}
+
+mean_val2 <- mean(sample)
+
+ggplot(df1, aes(x = x)) +
+    geom_histogram(binwidth = 0.2, fill = "lightpink", color = "black", alpha = 0.6) +
+    geom_histogram(data = df, binwidth = 0.2, fill = "lightpink", color = "black") +
+    geom_vline(xintercept = mean_val, linetype = "dashed", color = "red", size = 1) +
+    labs(x = "Value", y = "Frequency") +
+    annotate("text", x = mean_val, y = 80, label = "Mean 2", color = "red", vjust = -1, hjust = -0.2) +  
+  geom_histogram(data = df, aes(x=x), binwidth = 0.2, fill = "lightblue", color = "black", alpha =0.6)+
+  geom_vline(xintercept = mean_val2, linetype = "dashed", color = "blue", size = 1)+
+  annotate("text", x = mean_val2, y = 80, label = "Mean 1", color = "blue", vjust = -1, hjust = 1.2) +
+    theme_classic()
+
+
+```
+
+## When data are not normal
+
+- Median: Middle value of sorted data—resistant to skew/outliers
+
+- Range: Max − Min (simple but sensitive to outliers)
+
+- Interquartile Range (IQR): More robust (Q3 – Q1)
+
+Why Use These?:
+
+- Mean/SD can be misleading in highly skewed distributions
+
+- Median & IQR often better represent central tendency & spread
+
+## Median and Range
+
+Going back to our friends data: 
+
+::::{.columns}
+
+:::{.column}
+
+
+| Lecturer     | Friends |
+| ----------- | ----------- |
+| Mark      | 5       |
+| Tony   | 3     |
+| Becky | 3    |
+| Ellen   | 2      |
+| Phil   | 1     |
+| **Median **  | **3**      |
+| **Range **  | **4**      |
+
+:::
+
+:::{.column}
+
+
+- The range is affected by extreme values
+
+- The interquartile range (IQR)  looks at the middle 50% of scores
+
+- The first **quartile** is the median of the lower 50% of the data: 1.5
+
+- The second **quartile** is the median: 3
+
+- The third **quartile** is the median of the upper 50% of the data: 5
+
+:::
+
+::::
+
+
+## IQR
+
+* Box bounded by 25th and 75th percentile (first and third quartile). This is called the interquartile range (IQR)
+
+* Line in box is usually the median
+
+* Whiskers extend to last OBSERVATION within 1 step (usually 1.5*IQR) from end of the box
+
+* Any observations beyond whisker are plotted as individual points
+
+::::{.columns}
+
+:::{.column}
+
+
+```{r, echo = FALSE, out.width="80%", fig.alt = "Boxplot"}
+knitr::include_graphics("images/boxplot.png")
+```
+
+:::
+
+:::{.column}
+
+```{r, echo = FALSE, out.width="50%", fig.alt = "Box and whiskers"}
+knitr::include_graphics("images/cat.jpg")
+```
+
+:::
+
+::::
+
+## What is Correlation?
+
+A statistical measure that quantifies the degree to which two variables move together.
+
+Correlation Coefficient Range: −1 to +1
+
+- +1: Perfect positive relationship
+
+- -1: Perfect negative relationship
+
+- 0: No linear relationship
+
+
+## Pearson's correlation
+
+Pearson’s correlation measures the strength and direction of the linear relationship between two continuous variables: 
+
+### Key Assumptions of Pearson’s Correlation:
+
+- Linearity: The relationship between variables is linear.
+
+- Continuous data: Both variables are measured on an interval or ratio scale.
+
+- Normality: Both variables should be approximately normally distributed (especially important for inference).
+
+- Homoscedasticity: The variance of one variable is similar across the values of the other.
+
+- No significant outliers: Outliers can strongly distort the correlation.
+
+$$
+r = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}
+{\sqrt{\sum_{i=1}^{n} (x_i - \bar{x})^2} \cdot \sqrt{\sum_{i=1}^{n} (y_i - \bar{y})^2}}
+$$
+
+## Spearman's correlation
+
+- Less sensitive to outliers
+
+- Works with rank ordered data, no requirement for normality
+
+$$
+\rho = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}
+$$
+
+## Correlation
+
+- Correlation ≠ Causation
+A high correlation does not imply that one variable causes the other to change.
+
+- Sign provides direction (+/-)
+
+- Magnitude tells you the strength (0 - 1)
+
+- There may be confounding variables or a third factor causing both.
+
+# Understanding Bias  {background-color="#D9DBDB"}
+
+##  Multicollinearity
+
+- **Multicollinearity** occurs when two or more predictor variables in a regression model are highly correlated, making it difficult to determine their individual effect on the response variable.
+
+**Impact:**
+- Inflated standard errors, leading to unreliable coefficient estimates.
+- Complicated interpretation of model results.
+
+**Action:**
+- Check for multicollinearity using Variance Inflation Factor (VIF) and correlation matrices.
+- Consider removing or combining correlated variables to simplify the model.
+
+**Example:**
+- In a model predicting house prices, having both "square footage" and "number of rooms" may lead to multicollinearity.
+
+## Multicollinearity
+
+```{r, echo = T, warning = F, message = F}
+penguins %>% 
+  GGally::ggpairs(columns = 2:6, ggplot2::aes(colour = species))
+
+```
+
+## Omitted Variable Bias
+
+
+**Definition:**
+- **Omitted Variable Bias** occurs when a relevant variable that influences the dependent variable is left out of the model, leading to biased estimates of the included variables.
+
+**Impact:**
+- Misleading conclusions about the relationships among variables.
+- Reduced model accuracy and reliability.
+
+**Action:**
+- Conduct thorough literature reviews to identify all relevant variables.
+- Use domain knowledge to guide variable selection and inclusion.
+
+**Example:**
+- If studying the effect of education on income without including "work experience," the model may incorrectly attribute income differences solely to education.
+
+## Sample Bias
+
+This type of bias occurs when there’s not a representative sample of a group/groups in the dataset, thus skewing results and performance
+
+
+```{r, message = F, warning = F}
+
+island_species_summary <- penguins %>% 
+  group_by(island, species) %>% 
+  summarise(n=n()) %>% 
+  ungroup() %>% # needed to remove group calculations
+  mutate(freq=n/sum(n)) # 
+
+penguins %>% 
+  ggplot(aes(x=island, fill=species))+
+  geom_bar(position=position_dodge2(preserve="single"))+ 
+  #keeps bars to appropriate widths
+    labs(x="Island",
+       y = "Number of observations")+
+  geom_text(data=island_species_summary, # use the data from the summarise object
+            aes(x=island,
+                y= n+10, # offset text to be slightly to the right of bar
+                group=species, # need species group to separate text
+                label=scales::percent(freq) # automatically add %
+                ),
+            position=position_dodge2(width=0.8))+ # set width of dodge
+  scale_fill_manual(values=c("cyan",
+                            "darkorange",
+                            "purple"
+                            ))+
+  coord_flip()+
+  theme_minimal()+
+  theme(legend.position="bottom") # put legend at the bottom of the graph
+
+```
+
+## Survivorship Bias
+
+```{r, echo = FALSE, out.width="90%", fig.alt = "WW2 planes returning from battle with bullet holes"}
+knitr::include_graphics("images/survivor.png")
+```
+
+## Confirmation Bias
+
+
+**Definition:**
+- **Confirmation Bias** is the tendency to search for, interpret, and remember information that confirms pre-existing beliefs or hypotheses, rather than seeking out contradictory evidence.
+
+**Impact:**
+- Skewed analysis outcomes and reduced objectivity in decision-making.
+- Important insights or alternative explanations may be overlooked.
+
+**Action:**
+- Encourage a culture of critical thinking and actively seek out opposing viewpoints.
+- Use blind analysis techniques where applicable.
+
+**Example:**
+- Analysts may only report findings that support a preferred model while ignoring results that suggest alternative explanations.
+
+
+## Discussion
+
+
+- **How can we implement strategies to recognize and mitigate these biases in our data analysis processes?**
+
+**Considerations:**
+
+- Share examples from your experiences where these biases impacted outcomes.
+
+- Discuss methods or tools you use to identify and address bias in your work.
+
+## Exercise - Data Insights
+
+```{r}
+#| label: ex-data-insights
+countdown::countdown(
+  minutes = 30,
+  color_border = "#00AEEF",
+  color_text = "#00AEEF",
+  color_running_text = "white",
+  color_running_background = "#00AEEF",
+  color_finished_text = "#00AEEF",
+  color_finished_background = "white",
+  top = 0,
+  margin = "0.8em",
+  font_size = "2em"
+)
+```
 
 
 # Introduction to ggplot  {background-color="#D9DBDB"}
@@ -2462,6 +3564,8 @@ ggplot(aes(x = species,
 
 [Beautiful plotting in R](https://www.cedricscherer.com/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/)
 
+[Data to viz](https://www.data-to-viz.com/)
+
 [The ggplot2 book](https://ggplot2-book.org/)
 
 [The ggplot extensions library](https://exts.ggplot2.tidyverse.org/)
@@ -2484,1094 +3588,7 @@ countdown::countdown(
 )
 ```
 
-# Understanding Data Quality  {background-color="#D9DBDB"}
 
-## Importance of data quality
-
-## Missing  data
-
-The first issue we will cover is missing data. There is a whole host of reasons that your data could have missing values.
-
-## Missing data {.smaller}
-
-This can be broken down into three broad categories:
-
-:::{.incremental}
-
-- **MCAR (Missing Completely at Random)**	The probability of missing data is independent of any observed or unobserved data.	
-
-- Leaf samples lost randomly due to a labeling error in a plant growth study.
-
-- **MAR (Missing at Random)	** The probability of missing data is related to some observed data but not to the missing data itself.	
-
-- Blood pressure readings missing more frequently for older patients in a drug trial.
-
-- **MNAR (Missing Not at Random)**	The probability of missing data is related to the value of the missing data itself.	
-
-- Heavier birds in a wildlife study are harder to capture and weigh, leading to missing weight data.
-
-:::
-
-## Missing data
-
-Lots of ways to gather information on missing data:
-
-```{r, echo = T}
-
-summary(penguins)
-
-```
-
-And ways to remove it:
-
-```{r, echo = T, eval = F}
-
-drop_na(penguins)
-
-drop_na(penguins, -delta_15n, -delta_13c, -comments)
-
-```
-
-## Mean imputation
-
-- Preserves power
-
-- Mean imputation can introduce bias if data is not **missing completely at random**.
-
-- Reduces variability in the dataset.
-
-- For MAR - we can use multiple imputation methods - see [mice package](https://www.rdocumentation.org/packages/mice/versions/3.17.0/topics/mice).
-
-- MNAR very specialist
-
-```{r, echo = T, eval = F}
-penguins %>% 
-  group_by(species, sex) %>% 
-  mutate(body_mass_g = replace_na(body_mass_g, mean(body_mass_g, na.rm = T))) %>% 
-  ungroup()
-
-```
-
-## Duplications
-
-Duplications can skew results and reduce reliability of our data insights
-
-```{r, eval = T, echo = T}
-# check for duplicate rows in the data
-penguins %>% 
-  duplicated() %>% # produces a list of TRUE/FALSE statements for duplicated or not
-  sum() # sums all the TRUE statements
-```
-
-## Data types and consistency
-
-Example: Data is treated as a factor when it should be numerical 
-
-Ensuring correct data types is essential for performing accurate analyses
-
-```{r}
-
-str(penguins)
-
-```
-
-## Implausible values {.smaller}
-
-Values that fall outside of a possible range for a given variable.
-
-- **Categorical**: "Male", "Female", "Mle"
-
-```{r}
-penguins %>% 
-  distinct(species)
-
-```
-
-- **Continuous**: Negative values for an age, or a date given in the future
-
-```{r}
-summary(penguins)
-
-```
-
-## Outliers
-
-::::{.columns}
-
-:::{.column}
-
-Observations that fall outside of a tolerated range from other observations
-
-- > 3* Standard Deviation from the mean
-
-- > 1.5 * Interquartile Range
-
-Important to identify, but crucially these are *real* values
-
-:::
-
-:::{.column}
-
-```{r, echo = T}
-penguins %>% ggplot(aes(x = species, y = body_mass_g)) + geom_boxplot() +coord_flip()
-```
-
-:::
-
-::::
-
-## Histograms
-
-::::{.columns}
-
-:::{.column}
-
-```{r, fig.width = 7}
-library(ggridges)
-penguins %>% drop_na(sex) %>% 
-ggplot(aes(x = body_mass_g, y = species)) + 
-  ggridges::stat_binline(aes(fill = sex),
-                alpha = 0.8)
-
-```
-:::
-
-:::{.column}
-```{r, fig.width = 7}
-
-library(ggridges)
-penguins %>% drop_na(sex) %>% 
-ggplot(aes(x = body_mass_g, y = species)) + 
-  ggridges::stat_binline(aes(fill = sex),
-                alpha = 0.8,
-                bins = 10)
-
-```
-:::
-
-:::{.column}
-
-```{r}
-
-library(ggridges)
-penguins %>% drop_na(sex) %>% 
-ggplot(aes(x = body_mass_g, y = species)) + 
-  ggridges::stat_binline(aes(fill = sex),
-                alpha = 0.8,
-                bins = 50)
-
-```
-:::
-
-::::
-
-## Distributions
-
-How values are spread across a range:
-
-- Normal distribution
-
-- Skewed distribution
-
-- Uniform distribution
-
-Hard to tell even when using a histogram
-
-## QQ plots
-
-::::{.columns}
-
-:::{.column}
-
-If data is normally distributed, then if we plot the [*quantiles*](https://www.youtube.com/watch?v=okjYjClSjOg) vs. theoretical normal quantiles (with same *n*), then we find a linear relationship
-
-:::
-
-:::{.column}
-
-
-```{r, echo = FALSE, out.width="90%", fig.alt = "QQ plot examples"}
-knitr::include_graphics("images/qq_example.png")
-```
-
-:::
-
-::::
-
-## Normal distribution
-
-```{r}
-# Generate right-skewed data
-data_normal <- rnorm(1000, mean =0, sd =1)
-
-# Create histogram and QQ plot
-par(mfrow = c(1, 2))
-hist(data_normal, main = "Normal distribution", xlab = "Value", col = "lightgreen", border = "black")
-qqnorm(data_normal)
-qqline(data_normal, col = "red")
-
-```
-
-## Outliers
-
-```{r}
-# Generate right-skewed data
-data_normal <- rnorm(500, mean =0, sd =1)
-data_extra <- rnorm(20, mean = 3, sd = 1)
-
-data_normal <- c(data_normal, data_extra)
-
-# Create histogram and QQ plot
-par(mfrow = c(1, 2))
-hist(data_normal, main = "Outliers", xlab = "Value", col = "lightgreen", border = "black")
-qqnorm(data_normal)
-qqline(data_normal, col = "red")
-
-```
-
-## Right-skewed
-
-```{r}
-# Generate right-skewed data
-data_right_skewed <- rexp(1000)
-
-# Create histogram and QQ plot
-par(mfrow = c(1, 2))
-hist(data_right_skewed, main = "Right Skewed", xlab = "Value", col = "lightgreen", border = "black")
-qqnorm(data_right_skewed)
-qqline(data_right_skewed, col = "red")
-
-
-```
-
-## Left-skewed
-
-```{r}
-# Generate left-skewed data
-data_left_skewed <- -rexp(1000)
-
-# Create histogram and QQ plot
-par(mfrow = c(1, 2))
-hist(data_left_skewed, main = "Left Skewed", xlab = "Value", col = "lightcoral", border = "black")
-qqnorm(data_left_skewed)
-qqline(data_left_skewed, col = "red")
-
-
-```
-
-## Bimodal
-
-```{r}
-# Generate bimodal data
-data_bimodal <- c(rnorm(500, mean = -2), rnorm(500, mean = 2))
-
-# Create histogram and QQ plot
-par(mfrow = c(1, 2))
-hist(data_bimodal, main = " Bimodal", xlab = "Value", col = "lightyellow", border = "black")
-qqnorm(data_bimodal)
-qqline(data_bimodal, col = "red")
-
-
-
-```
-
-## Heavy tailed
-
-```{r}
-# Generate heavy-tailed data
-data_heavy_tailed <- rt(1000, df = 5)  # T-distribution with low degrees of freedom
-
-# Create histogram and QQ plot
-par(mfrow = c(1, 2))
-hist(data_heavy_tailed, main = "Heavy-tailed", xlab = "Value", col = "lightblue", border = "black")
-qqnorm(data_heavy_tailed)
-qqline(data_heavy_tailed, col = "red")
-
-
-```
-
-## Light tailed
-
-```{r}
-# Load necessary library
-library(ggplot2)
-
-# Generate light-tailed data with high kurtosis using Beta distribution
-set.seed(123)
-data_beta <- rbeta(1000, shape1 = 2, shape2 = 2) * 2 - 1  # Scale to [-1, 1]
-
-# Create histogram and QQ plot
-par(mfrow = c(1, 2))
-
-# Histogram
-hist(data_beta, main = "Light tailed", 
-     xlab = "Value", col = "lightblue", border = "black")
-
-# QQ Plot
-qqnorm(data_beta)
-qqline(data_beta, col = "red")
-
-```
-
-## Uniform
-
-```{r}
-# Load necessary library
-library(ggplot2)
-
-# Generate light-tailed data with high kurtosis using Beta distribution
-set.seed(123)
-data_uni <- runif(1000, min = 0, max = 10) # Scale to [-1, 1]
-
-# Create histogram and QQ plot
-par(mfrow = c(1, 2))
-
-# Histogram
-hist(data_uni, main = "Uniform", 
-     xlab = "Value", col = "lightblue", border = "black")
-
-# QQ Plot
-qqnorm(data_uni)
-qqline(data_uni, col = "red")
-
-```
-
-## Skimr - generate quick overviews of data {.smaller}
-
-
-
-```{r, echo = T}
-
-skimr::skim(penguins)
-
-```
-
-
-
-## Exercise practice data checking
-
-```{r}
-#| label: ex-data-quality
-countdown::countdown(
-  minutes = 30,
-  color_border = "#00AEEF",
-  color_text = "#00AEEF",
-  color_running_text = "white",
-  color_running_background = "#00AEEF",
-  color_finished_text = "#00AEEF",
-  color_finished_background = "white",
-  top = 0,
-  margin = "0.8em",
-  font_size = "2em"
-)
-```
-
-- We need to have strategies for removing or correcting errors in the data.
-
-- R scripts give us a record of changes without affecting the integrity of the raw data
-
-- Having a clear series of checks saves time in the long run
-
-
-# Descriptive Statistics  {background-color="#D9DBDB"}
-
-## Building Statistical Models
-
-
-::::{.columns}
-
-:::{.column}
-
-A model is a representation of what we think is going on in the real world. It can be a good fit, or a poor fit. 
-
-
-A well fitted model could be used to make *predictions* about what might happen in the real world. 
-
-
-A poorly fitted model could also make *predictions* but they might be disastrously wrong.
-
-
-If we want our inferences to be **accurate** the model must represent the data collected.
-
-:::
-
-:::{.column}
-
-```{r, echo = FALSE, fig.alt = " Model bridges - Andy Field Discovering Statistics"}
-
-knitr::include_graphics("images/bridge.png")
-```
-:::
-
-::::
-
-
-## Populations
-
-- The total “pool” you are trying to explore/describe
-
-- You define what it is
-
-- Usually you’re not going to be able to study the entire population, because: time, money, access, resources, support, etc. 
-
-- So instead, we can usually only take a...
-
-
-
-## Sample
-
-- Drawn randomly from the population...
-
-- ...to collect observations for variable(s) of interest...
-
-- ...to try to say something meaningful about the population.
-
-
-
-## Central tendency & spread
-
-Often we will start with
-
-**Central tendency** - a central or typical value
-
-**Data Spread** - how observations are dispersed
-
-Generally classed as **Descriptive Statistics**
-
-## What is Descriptive Statistics?
-
-- Descriptive statistics summarise and organise data in a clear, understandable way.
-
-- They help us see patterns and trends without diving into deeper analytical methods.
-
-## Central tendency
-
-The **central tendency** of a series of observations is a measure of the “middle value”
-
-
-
-The three most commonly reported measures of central tendency are the sample **mean, median, and mode**.
-
-
-| Mean        | Median      | Mode       |
-| ----------- | ----------- |----------- |
-| The average value     | The middle value      |The most frequent value      |
-| Sum of the total divided by *n*   | The middle value (if *n* is odd). The average of the two central values (if *n* is even)      |The most frequent value      |
-| Most common reported measure, affected by outliers | Less influenced by outliers, improves as *n* increases | Less common
-
-
-
-
-## Mean
-
-One of the simplest statistical models in biology is the **mean**
-
-::::{.columns}
-
-:::{.column}
-
-| Lecturer     | Friends |
-| ----------- | ----------- |
-| Mark      | 5       |
-| Tony   | 3     |
-| Becky | 3    |
-| Ellen   | 2      |
-| Phil   | 1     |
-| **Mean **  | **2.6**      |
-| **Median **  | **3**      |
-| **Mode **  | **3**      |
-
-
-:::
-
-:::{.column}
-
-
-Calculating the mean:
-
-$$ \bar{x} = \frac{\sum_{i=1}^{n} x_i}{n} $$
-$$\frac{5 + 3 + 3 + 2 + 1}{5} = 2.6$$
-
-Sum all the values and divide by n of values
-
-:::
-
-::::
-
-
-
-## The mean
-
-One of the simplest statistical models in biology is the **mean**
-
-::::{.columns}
-
-:::{.column}
-
-
-| Lecturer     | Friends |
-| ----------- | ----------- |
-| Mark      | 5       |
-| Tony   | 3     |
-| Becky | 3    |
-| Ellen   | 2      |
-| Phil   | 1     |
-| **Mean **  | **2.6**      |
-| **Median **  | **3**      |
-| **Mode **  | **3**      |
-
-
-:::
-
-:::{.column}
-
-We already *know* this is a hypothetical value as you can't have 2.6 friends (I think?)
-
-Now with any model we have to know how well it fits/ how accurate it is
-
-:::
-
-::::
-
-
-
-## Symmetrical
-
-If data is symmetrically distributed, the **mean and median** will be close, especially as *n* increases. 
-
-This is also know as a **normal distribution**
-
-
-```{r, echo = FALSE, out.width = "60%"}
-# Load required packages
-library(ggplot2)
-
-# Set seed for reproducibility
-set.seed(123)
-
-# Generate random sample from a normal distribution
-sample_size <- 1000
-mu <- 0  # mean
-sigma <- 1  # standard deviation
-sample <- rnorm(sample_size, mean = mu, sd = sigma)
-
-# Create a data frame with the sample data
-df <- data.frame(x = sample)
-
-# Create a histogram plot using ggplot2
-ggplot(df, aes(x = x)) +
-  geom_histogram(binwidth = 0.2, fill = "lightblue", color = "black") +
-  labs(x = "Value", y = "Frequency", title = "Distribution Histogram") +
-  theme_classic()
-
-
-```
-
-
-## Variance
-
-The average of the squared differences from the mean.
-
-
-$$s{^2}_{sample} = \frac{\sum(x - \bar{x})^2}{N -1}$$
-Sample variance is a robust measure of data spread, a higher variance means more spread.
-
-## Calculating variance
-
-::::{.columns}
-
-:::{.column}
-
-```{r, echo = FALSE, out.width="100%", fig.alt = "Symmetrical sides"}
-knitr::include_graphics("images/normal-distribution.jpg")
-```
-
-:::
-
-:::{.column}
-
-```
-
-   value residuals squared residuals
- 1 12.7      2.88         8.27 
- 2 14.2      4.32        18.7  
- 3 11.3      1.41         1.99 
- 4  7.43    -2.44         5.93 
- 5  8.27    -1.60         2.57 
- 6 12.7      2.81         7.90 
- 7  5.34    -4.53        20.5  
- 8 13.9      4.00        16.0  
-
-```
-
-```
-
-  sum of residuals sum of squares  mean
-1       -0.0577        359        9.87
-
-```
-
-:::
-
-::::
-
-
-## N-1? {.smaller}
-
-```{r, echo = FALSE, out.width="30%", fig.alt = "Sampling"}
-knitr::include_graphics("images/pop_sam.png")
-```
-
-For a *population* the variance $S_p^2$ is exactly the **mean** squared distance of the values from the population mean
-
-$$
-s{^2}_{pop} = \frac{\sum(x - \bar{x})^2}{N}
-$$
-
-
-
-But this is a *biased* estimate for the population variance 
-
-- A biased sample variance will *underestimate* population variance
-
-- n-1 (if you take a large enough sample size, will correct for this)
-
-[More here](https://www.jamelsaadaoui.com/unbiased-estimator-for-population-variance-clearly-explained/#:~:text=The%20expected%20value%20of%20the%20sample%20variance%20is%20equal%20to,definition%20of%20an%20unbiased%20estimator.)
-
-
-
-## Standard Deviation
-
-- Square root of **sample variance**
-
-- A measure of dispersion of the sample
-
-- Smaller SD = more values closer to mean, larger SD = greater data spread from mean
-
-* *variance*:
-
-$$
-\sigma = \sqrt{\sum(x - \overline x)^2\over n - 1}
-$$
-
-
-## Standard deviation - our example
-
-Lecturer     | Friends | Diff | Squared diff |
-  ------------ | ------- | --- | ------ |
-  Mark         | 5       | 2.4  | 5.76    |
-  Tony         | 3       | 0.4  | 0.16    |
-  Becky        | 3       | 0.4  | 0.16    |
-  Ellen        | 2       | -0.6  | 0.36    |
-  Phil         | 1       | -1.6  | 2.56    |   
-|  **Mean **  | **2.6**      |
-| **variance** | **2.2** |
-| **SD **  | **1.4**      |
-
-
-## Standard Deviation
-
-Small $s$ = data points are clustered near the mean
-
-Large $s$ = data points are widely dispersed around the mean
-
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE, out.width = "60%"}
-
-library(patchwork)
-
-`SD = 1` <- rnorm(n = 1000, mean = 0, sd = 1)
-`SD = 2` <- rnorm(n = 1000, mean = 0, sd = 2)
-`SD = 3` <- rnorm(n = 1000, mean = 0, sd = 3)
-
-tibble(`SD = 1`, `SD = 2`, `SD = 3`) %>% 
-pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "values") %>% 
-  ggplot(aes(x = values, fill = `Standard Deviation`))+
-  geom_histogram()+
-  facet_wrap(~ `Standard Deviation`)+
-  theme_classic()+
-  theme(legend.position = "none")+
-  labs(x = " ",
-       y = "Frequency")
-
-
-```
-
-
-## Why the Normal Distribution matters
-
-Shape: Symmetrical, bell-shaped curve
-
-- Rule of Thumb: For normally distributed data:
-
-    ~68% within 1 SD
-
-    ~95% within 2 SDs
-
-    ~99.7% within 3 SDs
-
-Relevance: Underpins many statistical tests and probability calculations (e.g., Z-scores)
-
-## Why the Normal Distribution matters
-
-If we assume a normal distribution (or close enough), we can calculate the probability of observing any given value using just the mean and standard deviation. 
-
-$$
-f(x) = \frac{1}{\sqrt{2\pi} \, \sigma}
-       \exp\!\Biggl(-\frac{(x - \mu)^2}{2\,\sigma^2}\Biggr)
-$$
-
-This has applications in hypothesis testing and building confidence intervals
-
-## Visualising a Distribution
-
-::::{.columns}
-
-:::{.column}
-
-**Histograms** plot frequency/density of observations within bins
-
-```{r, echo = FALSE, message = FALSE, out.width="80%"}
-tibble(`SD = 1`, `SD = 2`, `SD = 3`) %>% 
-pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "values") %>% 
-  filter(`Standard Deviation` == "SD = 2") %>% 
-  ggplot(aes(x = values), fill = "grey")+
-  geom_histogram()+
-  theme_minimal()+
-  theme(legend.position = "none")+
-  labs(x = bquote(bar(x)),
-       y = " ")
-```
-
-:::
-
-:::{.column}
-
-**Quantile-Quantile plots** plot quantiles of a dataset vs. quantiles of a *theoretical* (usually normal) distribution
-
-```{r, echo = FALSE, warning = F, message  = F, out.width="80%"}
-
-tibble(`SD = 1`,`SD = 2`, `SD = 3`) %>% 
-pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "values") %>% 
-  filter(`Standard Deviation` == "SD = 2") %>% 
-  ggplot(aes(sample = values))+
-  geom_qq()+
-  geom_qq_line()+
-  theme(legend.position = "none")+
-  labs(x = " ",
-       y = " ")
-```
-
-:::
-
-::::
-
-
-## Why is data distribution important?
-
-Understanding the shape of our data informs the summary statistics we can use
-
-```{r, echo = FALSE, fig.alt = "Frequency distribution with central tendencies", out.width = "60%"}
-# Set seed for reproducibility
-set.seed(123)
-
-Mode <- function(x) {
-  ux <- unique(x)
-  ux[which.max(tabulate(match(x, ux)))]
-}
-
-
-# Generate random sample from a skewed distribution
-sample_size <- 1000
-skewness <- 0.6  # skewness parameter
-sample1 <- rnorm(sample_size)
-sample1 <- exp(sample * skewness)
-
-# Create a data frame with the sample data
-df1 <- data.frame(x = sample1)
-
-# Calculate mean and median
-mean_val <- mean(sample1)
-median_val <- median(sample1)
-mode_val <- Mode(sample1)
-# Create a histogram plot using ggplot2
-ggplot(df1, aes(x = x)) +
-    geom_histogram(binwidth = 0.2, fill = "lightblue", color = "black") +
-    geom_vline(xintercept = mean_val, linetype = "dashed", color = "red", size = 1) +
-    geom_vline(xintercept = median_val, linetype = "dashed", color = "blue", size = 1) +
-    geom_vline(xintercept = mode_val, linetype = "dashed", color = "black", size = 1) +
-    labs(x = "Value", y = "Frequency") +
-    annotate("text", x = mean_val, y = 80, label = "Mean", color = "red", vjust = -1, hjust = -0.2) +
-    annotate("text", x = median_val, y = 140, label = "Median", color = "blue", vjust = -1, hjust = -0.2)+annotate("text", x = mode_val, y = 160, label = "Mode", color = "black", vjust = -1, hjust = -0.2)+
-    theme_classic()
-```
-
-
-
-## Asymmetrical
-
-Depending on our question, if the data is not symmetrical this could really matter...
-
-```{r, echo = FALSE, out.width = "60%"}
-
-mean_val2 <- mean(sample)
-
-ggplot(df1, aes(x = x)) +
-    geom_histogram(binwidth = 0.2, fill = "lightpink", color = "black", alpha = 0.6) +
-    geom_histogram(data = df, binwidth = 0.2, fill = "lightpink", color = "black") +
-    geom_vline(xintercept = mean_val, linetype = "dashed", color = "red", size = 1) +
-    labs(x = "Value", y = "Frequency") +
-    annotate("text", x = mean_val, y = 80, label = "Mean 2", color = "red", vjust = -1, hjust = -0.2) +  
-  geom_histogram(data = df, aes(x=x), binwidth = 0.2, fill = "lightblue", color = "black", alpha =0.6)+
-  geom_vline(xintercept = mean_val2, linetype = "dashed", color = "blue", size = 1)+
-  annotate("text", x = mean_val2, y = 80, label = "Mean 1", color = "blue", vjust = -1, hjust = 1.2) +
-    theme_classic()
-
-
-```
-
-## When data are not normal
-
-- Median: Middle value of sorted data—resistant to skew/outliers
-
-- Range: Max − Min (simple but sensitive to outliers)
-
-- Interquartile Range (IQR): More robust (Q3 – Q1)
-
-Why Use These?:
-
-- Mean/SD can be misleading in highly skewed distributions
-
-- Median & IQR often better represent central tendency & spread
-
-## Median and Range
-
-Going back to our friends data: 
-
-::::{.columns}
-
-:::{.column}
-
-
-| Lecturer     | Friends |
-| ----------- | ----------- |
-| Mark      | 5       |
-| Tony   | 3     |
-| Becky | 3    |
-| Ellen   | 2      |
-| Phil   | 1     |
-| **Median **  | **3**      |
-| **Range **  | **4**      |
-
-:::
-
-:::{.column}
-
-
-- The range is affected by extreme values
-
-- The interquartile range (IQR)  looks at the middle 50% of scores
-
-- The first **quartile** is the median of the lower 50% of the data: 1.5
-
-- The second **quartile** is the median: 3
-
-- The third **quartile** is the median of the upper 50% of the data: 5
-
-:::
-
-::::
-
-
-## IQR
-
-* Box bounded by 25th and 75th percentile (first and third quartile). This is called the interquartile range (IQR)
-
-* Line in box is usually the median
-
-* Whiskers extend to last OBSERVATION within 1 step (usually 1.5*IQR) from end of the box
-
-* Any observations beyond whisker are plotted as individual points
-
-::::{.columns}
-
-:::{.column}
-
-
-```{r, echo = FALSE, out.width="80%", fig.alt = "Boxplot"}
-knitr::include_graphics("images/boxplot.png")
-```
-
-:::
-
-:::{.column}
-
-```{r, echo = FALSE, out.width="50%", fig.alt = "Box and whiskers"}
-knitr::include_graphics("images/cat.jpg")
-```
-
-:::
-
-::::
-
-## What is Correlation?
-
-A statistical measure that quantifies the degree to which two variables move together.
-
-Correlation Coefficient Range: −1 to +1
-
-- +1: Perfect positive relationship
-
-- -1: Perfect negative relationship
-
-- 0: No linear relationship
-
-
-## Pearson's correlation
-
-Measures the **linear** relationship between two variables
-
-Assumes the data is approximately normally distributed
-
-Few (if any) outliers
-
-## Spearman's correlation
-
-- Less sensitive to outliers
-
-- Works with rank ordered data, no requirement for normality
-
-# Understanding Bias  {background-color="#D9DBDB"}
-
-##  Multicollinearity
-
-
-- **Multicollinearity** occurs when two or more predictor variables in a regression model are highly correlated, making it difficult to determine their individual effect on the response variable.
-
-**Impact:**
-- Inflated standard errors, leading to unreliable coefficient estimates.
-- Complicated interpretation of model results.
-
-**Action:**
-- Check for multicollinearity using Variance Inflation Factor (VIF) and correlation matrices.
-- Consider removing or combining correlated variables to simplify the model.
-
-**Example:**
-- In a model predicting house prices, having both "square footage" and "number of rooms" may lead to multicollinearity.
-
-## Multicollinearity
-
-```{r, echo = T, warning = F, message = F}
-penguins %>% 
-  GGally::ggpairs(columns = 2:6, ggplot2::aes(colour = species))
-
-```
-
-## Omitted Variable Bias
-
-
-**Definition:**
-- **Omitted Variable Bias** occurs when a relevant variable that influences the dependent variable is left out of the model, leading to biased estimates of the included variables.
-
-**Impact:**
-- Misleading conclusions about the relationships among variables.
-- Reduced model accuracy and reliability.
-
-**Action:**
-- Conduct thorough literature reviews to identify all relevant variables.
-- Use domain knowledge to guide variable selection and inclusion.
-
-**Example:**
-- If studying the effect of education on income without including "work experience," the model may incorrectly attribute income differences solely to education.
-
-## Sample Bias
-
-This type of bias occurs when there’s not a representative sample of a group/groups in the dataset, thus skewing results and performance
-
-
-```{r, message = F, warning = F}
-
-island_species_summary <- penguins %>% 
-  group_by(island, species) %>% 
-  summarise(n=n()) %>% 
-  ungroup() %>% # needed to remove group calculations
-  mutate(freq=n/sum(n)) # 
-
-penguins %>% 
-  ggplot(aes(x=island, fill=species))+
-  geom_bar(position=position_dodge2(preserve="single"))+ 
-  #keeps bars to appropriate widths
-    labs(x="Island",
-       y = "Number of observations")+
-  geom_text(data=island_species_summary, # use the data from the summarise object
-            aes(x=island,
-                y= n+10, # offset text to be slightly to the right of bar
-                group=species, # need species group to separate text
-                label=scales::percent(freq) # automatically add %
-                ),
-            position=position_dodge2(width=0.8))+ # set width of dodge
-  scale_fill_manual(values=c("cyan",
-                            "darkorange",
-                            "purple"
-                            ))+
-  coord_flip()+
-  theme_minimal()+
-  theme(legend.position="bottom") # put legend at the bottom of the graph
-
-```
-
-## Survivorship Bias
-
-```{r, echo = FALSE, out.width="90%", fig.alt = "WW2 planes returning from battle with bullet holes"}
-knitr::include_graphics("images/survivor.png")
-```
-
-## Confirmation Bias
-
-
-**Definition:**
-- **Confirmation Bias** is the tendency to search for, interpret, and remember information that confirms pre-existing beliefs or hypotheses, rather than seeking out contradictory evidence.
-
-**Impact:**
-- Skewed analysis outcomes and reduced objectivity in decision-making.
-- Important insights or alternative explanations may be overlooked.
-
-**Action:**
-- Encourage a culture of critical thinking and actively seek out opposing viewpoints.
-- Use blind analysis techniques where applicable.
-
-**Example:**
-- Analysts may only report findings that support a preferred model while ignoring results that suggest alternative explanations.
-
-
-## Discussion
-
-
-- **How can we implement strategies to recognize and mitigate these biases in our data analysis processes?**
-
-**Considerations:**
-
-- Share examples from your experiences where these biases impacted outcomes.
-
-- Discuss methods or tools you use to identify and address bias in your work.
-
-## Exercise - Data Insights
-
-```{r}
-#| label: ex-data-insights
-countdown::countdown(
-  minutes = 30,
-  color_border = "#00AEEF",
-  color_text = "#00AEEF",
-  color_running_text = "white",
-  color_running_background = "#00AEEF",
-  color_finished_text = "#00AEEF",
-  color_finished_background = "white",
-  top = 0,
-  margin = "0.8em",
-  font_size = "2em"
-)
-```
 
 # Inferential Statistics  {background-color="#D9DBDB"}
 
@@ -3651,9 +3668,39 @@ knitr::include_graphics("images/standard_error.png")
 
 ### Standard deviation vs. standard error: 
 
+
+::::{.columns}
+
+:::{.column}
+
 - Standard deviation measures variability **within** a sample
 
-- Standard error measures variability **between** sample means.
+
+$s = \sqrt{\sum(x - \overline x)^2\over n - 1}$
+
+:::
+
+
+:::{.column}
+
+- Standard error  is how much the sample mean (from a given sample) is likely to vary from the true population mean.
+
+$SE(\overline{X}) = \frac{s}{\sqrt(N)}$
+
+:::
+
+::::
+
+
+## Standard Error
+
+- Standard Error of the Mean ($\overline{X}$) is the **Standard Deviation of the Sampling Distribution of the Mean.
+
+- If you took many samples of size 𝑛from the same population, each sample would yield a different sample mean.
+
+```{r, echo = FALSE, out.width="50%", fig.alt = ""}
+knitr::include_graphics("images/sampling.png")
+```
 
 ## Are two distributions the same or different?
 
@@ -3836,6 +3883,59 @@ ggplot(data, aes(x = x, y = y)) +
 ::::
 
 
+## Central Limit Theoreom (CLT)
+
+- For large 𝑛the distribution of sample means becomes approximately normal, **no matter the original data’s shape** (assuming finite variance & independence).
+
+
+- Lets us use normal-based methods (like confidence intervals and hypothesis tests) even if the original data are not normal—provided 𝑛 is large.
+
+
+[Shiny App demonstrating CLT](https://pleft86.shinyapps.io/Sampling/)
+
+## Small Samples
+
+What is a sufficient 𝑛?
+
+- When the data is very close to a normal distribution it might be very small c.10
+
+- When the data is slightly skewed it might be 𝑛 = 30
+
+- When the data follows an alternative distribution it could be very large
+
+
+## Bootstrapping
+
+- Bootstrapping: Resample from your data many times to estimate the distribution (and SE) of the Mean ($\overline{X}$) without assuming normality.
+
+::::{.columns}
+
+:::{.column}
+
+```{r, echo = FALSE, out.width="70%", fig.alt = ""}
+knitr::include_graphics("images/bootstrapping.jpg")
+```
+
+:::
+
+:::{.column}
+
+```{r, eval = F, echo = T}
+
+# Perform bootstrapping
+for(i in 1:1000) {
+  # Resample with replacement
+  resample <- sample(my_data, size = length(my_data), replace = TRUE)
+  # Compute the statistic (mean here)
+  boot_means[i] <- mean(resample)
+}
+
+```
+
+:::
+
+::::
+
 ## The T Distribution
 
 Under realistic scenarios we only ever have an *estimate* of the standard deviation. 
@@ -3924,17 +4024,11 @@ plot_mean_diff(mean1 = 0, sd1 = 1, mean2 = 0.5, sd2 = 1, sample_size = 20)
 
 Observed *t* is the product of the mean difference divided by the Standard error of the difference
 
-${t=}{mean~difference\over~SE}$ 
+- ${t=}{mean~difference\over~SE}{=-2.617\over1.074}{-2.437}$ 
 
-${-2.437=}{-2.617\over1.074}$
+- Degrees of freedom (df) = 28
 
-${95\%~CI} = {\overline x \pm t_{critical}*SE}$
-
-${95\%~CI} = {-2.617 \pm 2.048*1.07}$
-
-${95\%CI;[-4.81:-0.417]}$
-
-${=-2.617\pm2.19}$
+- Critical t-value at 𝛼 = 0.05 (two-tailed) = ±2.048
 
 :::
 
@@ -3955,6 +4049,46 @@ p = 0.05 when observed t > than critical t:
 :::
 
 ::::
+
+##
+
+```{r}
+# Load required libraries
+library(ggplot2)
+
+# Parameters
+df <- 28
+t_obs <- -2.437
+t_crit <- qt(0.975, df)  # Two-tailed 5% alpha level
+
+# Create data for the t-distribution
+x_vals <- seq(-4, 4, length.out = 1000)
+t_dist <- data.frame(
+    x = x_vals,
+    y = dt(x_vals, df)
+)
+
+# Create shading for critical regions only (tails)
+t_dist$region <- ifelse( t_dist$x <= -t_crit, "Critical", "Non-critical")
+
+# Plot
+ggplot(t_dist, aes(x = x, y = y)) +
+    geom_area(data = subset(t_dist, region == "Critical"), aes(fill = region), alpha = 0.4) +
+    geom_line(color = "black", size = 1) +
+    geom_vline(xintercept = t_obs, color = "red", linetype = "dashed", size = 1) +
+    geom_vline(xintercept = c(-t_crit, t_crit), linetype = "dotted") +
+    scale_fill_manual(values = c("Critical" = "cyan")) +
+    labs(
+        title = "t-Distribution with df = 28",
+        subtitle = "Shaded: Critical Regions (|t| > 2.048); Red line: Observed t = -2.437",
+        x = "t-value",
+        y = "Density",
+        fill = ""
+    ) +
+    theme_minimal(base_size = 14)
+
+
+```
 
 ## Exercise - introduction to statistics
 
@@ -4309,6 +4443,26 @@ countdown::countdown(
 )
 ```
 
+
+## Interpreting the linear model
+
+```{r, include = FALSE}
+library(here)
+library(tidyverse)
+darwin <- read_csv(here("data", "darwin.csv"))
+
+lsmodel1 <- lm(height~type, data = darwin)
+
+```
+
+
+```{r}
+
+summary(lsmodel1)
+
+```
+
+
 ## Linear model assumptions
 
 ::::{.columns}
@@ -4342,6 +4496,82 @@ knitr::include_graphics("images/commmon_statistical_tests_linear_models.png")
 ```
 
 
+## Assumptions of the Linear Model
+
+:::{.incremental}
+
+-  *Errors* should be normally distributed
+
+- Homoscedasticity of the errors
+
+- Independent observations
+
+- A Linear relationship
+
+:::
+
+## Model fit checks
+
+```{r, echo = T, out.width="100%"}
+performance::check_model(lsmodel1, 
+                         detrend = F) 
+```
+
+
+## Linearity
+
+```{r, echo = T, out.width="100%"}
+performance::check_model(lsmodel1,
+                         check = "linearity") 
+```
+
+
+## Normality
+
+```{r}
+#| eval: true
+#| echo: true
+#| layout-ncol: 2
+#| fig-height: 7
+#| message: false
+
+performance::check_model(lsmodel1,
+                         check = "normality")
+
+performance::check_normality(lsmodel1)
+```
+
+## Heteroscedasticity
+
+```{r}
+#| eval: true
+#| echo: true
+#| layout-ncol: 2
+#| fig-height: 7
+#| message: false
+
+performance::check_model(lsmodel1,
+                         check = "homogeneity")
+
+performance::check_heteroscedasticity(lsmodel1)
+```
+
+## Outliers
+
+```{r}
+#| eval: true
+#| echo: true
+#| layout-ncol: 2
+#| fig-height: 7
+#| message: false
+
+performance::check_model(lsmodel1,
+                         check = "outliers")
+
+performance::check_outliers(lsmodel1)
+```
+
+
 ## Assumption checking
 
 ```{r}
@@ -4358,6 +4588,108 @@ countdown::countdown(
   margin = "1.2em",
   font_size = "2em"
 )
+```
+
+
+## Bootstrapping
+
+- Assumption check: In linear regression, one key assumption is normally distributed residuals.
+
+- If residuals are non-normal, traditional inference methods (e.g. t-tests, CIs) may be invalid.
+
+- Solution: Use case bootstrapping to generate robust, non-parametric estimates.
+
+```{r, echo = FALSE}
+
+# Load required libraries
+library(ggplot2)
+library(dplyr)
+
+# Simulate data with non-normal residuals
+set.seed(123)
+n <- 100
+x <- rnorm(n)
+y <- 3 * x + rt(n, df = 2)  # Heavy-tailed residuals (non-normal)
+
+# Fit original linear model
+model <- lm(y ~ x)
+
+# Bootstrapping
+n_boot <- 1000
+boot_coefs <- replicate(n_boot, {
+  indices <- sample(1:n, replace = TRUE)
+  boot_data <- data.frame(x = x[indices], y = y[indices])
+  coef(lm(y ~ x, data = boot_data))
+})
+
+# Convert to tidy format
+boot_df <- as.data.frame(t(boot_coefs))
+colnames(boot_df) <- c("Intercept", "Slope")
+
+# Calculate 95% bootstrap CI for slope
+slope_ci <- quantile(boot_df$Slope, probs = c(0.025, 0.975))
+slope_ci
+# Example output: [2.75, 3.35] depending on random seed
+
+# Plot histogram of slope estimates with 95% CI
+ggplot(boot_df, aes(x = Slope)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black", alpha = 0.8) +
+  geom_vline(xintercept = coef(model)["x"], color = "red", linetype = "dashed", size = 1) +
+  geom_vline(xintercept = slope_ci, color = "darkgreen", linetype = "dotted", size = 1) +
+  labs(
+    title = "Bootstrap Distribution of the Slope (Case Resampling)",
+    subtitle = "Red = OLS estimate | Green = 95% Bootstrap CI",
+    x = "Slope Coefficient",
+    y = "Frequency"
+  ) +
+  theme_minimal(base_size = 14)
+
+```
+
+
+## Permutation tests
+
+```{r, echo = FALSE, out.width="50%"}
+
+knitr::include_graphics("images/perm.png")
+
+```
+
+```{r}
+# Load libraries
+library(ggplot2)
+library(dplyr)
+
+# Simulate data (non-normal, two groups)
+set.seed(123)
+group <- rep(c("A", "B"), each = 30)
+values <- c(rnorm(30, mean = 5), rt(30, df = 2) + 6)  # Group B has non-normal data
+data <- data.frame(group, values)
+
+# Observed difference in means
+obs_diff <- with(data, mean(values[group == "B"]) - mean(values[group == "A"]))
+
+# Permutation test
+n_perm <- 5000
+perm_diffs <- replicate(n_perm, {
+  perm_group <- sample(data$group)
+  mean(values[perm_group == "B"]) - mean(values[perm_group == "A"])
+})
+
+# Create data frame for plotting
+perm_df <- data.frame(perm_diffs)
+
+# Plot null distribution and observed difference
+ggplot(perm_df, aes(x = perm_diffs)) +
+  geom_histogram(bins = 50, fill = "skyblue", color = "black", alpha = 0.7) +
+  geom_vline(xintercept = obs_diff, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "Permutation Test: Null Distribution of Mean Differences",
+    subtitle = paste("Red line = Observed difference =", round(obs_diff, 2)),
+    x = "Mean Difference (B - A)",
+    y = "Frequency"
+  ) +
+  theme_minimal(base_size = 14)
 ```
 
 # P-values
@@ -4511,7 +4843,6 @@ legend("topright", legend = "95% CI", lty = 1, col = "red")
 
 ## Exercise - Testing
 
-- Testing
 
 - Paired designs
 
@@ -4531,13 +4862,14 @@ countdown::countdown(
 )
 ```
 
-## Common misundertandings\n about P values
+
+## Discussion on paired design and variable selection
+
+## Common misunderstandings\n about P values
 
 [Common misconceptions about P-values](https://daniellakens.blogspot.com/2017/12/understanding-common-misconceptions.html?m=1)
 
 [Evidence of P-hacking](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4359000/#:~:text=Evidence%20for%20p%2Dhacking%20from,test%20function%20in%20R)
-
-
 
 
 ## Comparing hypothetical distributions
@@ -4652,13 +4984,11 @@ knitr::include_graphics("images/type_2_errors.png")
 Type 2 error = Keeping the null hypothesis (because *p* > $\alpha$) the random sampling effect made it look like they come from the *same* parent distribution, but in reality the populations are distinct. 
 
 
-
 ## Type 2 error
 
 :::{.incremental}
 
 * Probability of a Type 2 error is known as $\beta$ 
-
 
 
 * Power is the inverse of a Type 2 error $\beta=1-Power$ 
@@ -4686,145 +5016,92 @@ There are three primary factors affecting power:
 
 
 
-
 Raising the value of any of effect size, sample size or $\alpha$ all increase Power $1-\beta$
 
+## Standardised Effect Sizes
+
+| Type                     | Effect Size   | Interpretation (Cohen's)                |
+| ------------------------ | ------------- | --------------------------------------- |
+| Mean difference (t-test) | **Cohen’s d** | 0.2 (small), 0.5 (medium), 0.8 (large)  |
+| ANOVA                    | **f**         | 0.1 (small), 0.25 (medium), 0.4 (large) |
+| Correlation              | **r**         | 0.1 (small), 0.3 (medium), 0.5 (large)  |
 
 
+## Power analysis in R with `pwr`
 
-## Are the statistics correct?
+```{r}
+library(pwr)
+```
 
-Reporting effect sizes, levels of uncertainty and understanding the statistical power of your experiment are all important. 
-
-
-But a single experiment is **never** enough to know which hypothesis is correct. 
-
-
-Only multiple experiments will allow true statistical trends to emerge
-
-::::{.columns}
-
-:::{.column}
-
-```{r, figures-side, fig.show="hold", echo = F, out.width = "40%"}
-
-#### write function 
-simT <- function(n, mean2 = 0){
-  x1 <- rnorm(n,0,1)
-  x2 <- rnorm(n,mean2,1)
-  t.test(x1, x2)$p.value 
-}
-
-
-#### repeat function for n = 10 and for different nrep and plot
-
-simTRep <- replicate(1000, simT(20))
-hist(simTRep, breaks = 21, col = c('red',rep('grey',20)), 
-     main = "Null hypothesis true", sub = "nrep = 1000, n = 20", xlab = "pvalue")
-
+```{r}
+pwr.t.test(d = 0.5, power = 0.8, sig.level = 0.05,
+           type = "two.sample", alternative = "two.sided")
 
 ```
 
-:::
+## Limitations of using standardised effect sizes
 
-:::{.column}
+- What does a Cohen's D of 0.5 mean in real life?
 
-```{r, figures-sidea, fig.show="hold", echo = F, out.width = "40%"}
+- Can it obscure the real question?
 
-simTRep <- replicate(1000, simT(20, 0.5))
-hist(simTRep, breaks = 21, col = c('red',rep('grey',20)), 
-     main = "Alternate hypothesis true", sub = "nrep = 1000, n = 20", xlab = "pvalue")
-```
+## Manual power analysis
 
-:::
+You're running an experiment comparing two groups (e.g., Control vs. Treatment), and:
 
-::::
+- The outcome is continuous (e.g., test score, measurement, revenue).
 
+- The mean in the control group is 100.
 
-## Are most published results wrong?
+- The mean in the treatment group is 105 (a 5% increase).
 
-```{r, echo = FALSE, out.width="80%", fig.alt = "."}
+- The standard deviation is assumed to be 15.
 
-knitr::include_graphics("images/effects_wrong.png")
-
-```
-
-```{r, eval = FALSE, warning = FALSE, out.width = "100%", fig.cap = "9/(16+9) = 36% of significant p values would be false positives"}
+- You want to know:
+➤ What is the power to detect a 5-point difference with a given sample size per group?
 
 
-grViz("
-digraph boxes_and_circles {
-  rankdir = LR
+##
 
-  # a 'graph' statement
-  graph [overlap = true, fontsize = 8]
-
-
-
-
-  # several 'node' statements
-  node [shape = box,
-        fontname = Helvetica]
-
+```{r}
+simulate_lm_power <- function(n_per_group = 50,
+                              mu_control = 100,
+                              mu_treatment = 105,
+                              sd = 15,
+                              alpha = 0.05,
+                              nsim = 1000) {
   
-# label names
-
-A[label = '200\n experiments']
-B[label = '20 \n real effect ']
-C[label = '180 \n no real effect']
-
-F[label = '171 \n true null \n rejection']
-G[label = '9 \n false null \n rejection',
-color = blue]
-
-E[label = '4 \n real effect \nnot found',
-
-color = red]
-D[label = '16 \n real effect \n found']
-
-  # several 'edge' statements
-  A->B 
-  A->C
-  C->F[label = 0.95]
-  C->G[label = 0.05]
-  B->D[label = 0.8]
-  B->E[label = 0.2]
+  p_values <- replicate(nsim, {
+    group <- rep(c(0, 1), each = n_per_group)
+    means <- ifelse(group == 0, mu_control, mu_treatment)
+    outcome <- rnorm(n_per_group * 2, mean = means, sd = sd)
+    
+    model <- lm(outcome ~ group)
+    summary(model)$coefficients[2, 4]  # p-value for group
+  })
+  
+  mean(p_values < alpha)  # Power estimate
 }
-")
+
+simulate_lm_power(n_per_group = 50)
 
 
 ```
 
 
+## Power curves
 
-[Smaldino & McElreath 2016](https://royalsocietypublishing.org/doi/full/10.1098/rsos.160384?wm=3049_a111)
-[Ioannidis 2005](https://doi.org/10.1371%2Fjournal.pmed.0020124)
+```{r}
+sample_sizes <- seq(10, 100, by = 10)
+powers <- sapply(sample_sizes, simulate_lm_power)
 
-
-
-## Irreproducible science
-
-* Publication bias
-
-* Low statistical power
-
-* P-hacking
-
-* P-HARKing (*H*ypothesis *A*fter *R*esults *K*nown)
-
-[Bishop 2019](https://www.nature.com/articles/d41586-019-01307-2)
+plot(sample_sizes, powers, type = "b", pch = 16,
+     xlab = "Sample Size per Group", ylab = "Estimated Power",
+     main = "Power Curve: Detecting a 5% Difference (SD = 15)")
+abline(h = 0.8, col = "red", lty = 2)
 
 
-
-
-## What can be done?
-
-- Open, reproducible analyses can disclose analysis choices and sample sizes
-
-- Preconsidered statistical models
-
-- Pre-registered studies can detect P-hacking and HARKing
-
+```
 
 # Regression {background-color="#D9DBDB"}
 
@@ -5223,6 +5500,43 @@ performance::check_outliers(janka_ls1)
 
 # Questions?
 
+## Box-cox
+
+Choose the power value (λ) that produces the best model-fit
+
+$$
+y^{(\lambda)} =
+\begin{cases}
+\frac{y^\lambda - 1}{\lambda}, & \text{if } \lambda \ne 0 \\\\
+\log(y), & \text{if } \lambda = 0
+\end{cases}
+$$
+
+
+## Robust Standard Errors
+
+- Also called heteroscedasticity-consistent (HC) standard errors
+
+- Used when the assumption of constant variance (homoscedasticity) is violated
+
+- Helps provide valid inference (e.g., confidence intervals, p-values) even with heteroscedasticity
+
+## Robust Errors
+
+OLS Standard Errors
+
+$$
+\text{Var}(\hat{\beta}) = \sigma^2 (X'X)^{-1}
+$$
+
+Sandwich estimator
+
+$$
+\text{Var}(\hat{\beta}) = (X'X)^{-1} X' \hat{\Omega} X (X'X)^{-1}
+$$
+
+Ω is a diagonal matrix with squared residuals or functions of them on the diagonal, allowing for heteroscedasticity.
+
 # ANOVA {background-color="#D9DBDB"}
 
 ## z and t distributions
@@ -5576,8 +5890,9 @@ anova(bulb_lsmodel0)
 | Method     | Equation | Notes|
 | ----------- | ----------- |----------- |
 | Bonferroni/Dunn-Sidak    | $p = {\alpha \over k}$      | Correct critical p for the number of independent tests
-| Holm's    | $p_{1} < \alpha/(k–1+1) = \alpha/k$      | we start with the smallest p-value (i = 1) and determine whether there is a significant result (i.e. p1 < α/(k–1+1) = α/k. If so we move on to the second test. We continue in this manner until we get a non-significant result
+| Holm's    | $p_{(i)} < \alpha/(k–i) = \alpha/k$      | we start with the smallest p-value (i = 1) and determine whether there is a significant result (i.e. p1 < α/(k–1+1) = α/k. If so we move on to the second test. We continue in this manner until we get a non-significant result
 | Tukey HSD  | $t_{crit} = q * \sqrt{MSE \over N}$  | Essential a t-test, correcting for multiple comparison, q-values can be looked up for test df and number of treatments
+| Benjamin-Hochberg | $p_{(i)} \le \frac{i}{m} \cdot \alpha$ | 
 
 
 
@@ -5792,7 +6107,15 @@ knitr::include_graphics("images/three_penguins.png")
 
 ## Practice
 
+```{r, include = FALSE}
+rm(list = ls(penguins))
+data(penguins)
+
+```
+
 ```{r, echo =T}
+
+
 lm(bill_length_mm ~ 
               bill_depth_mm +
               body_mass_g + 
@@ -6332,6 +6655,18 @@ $VIF_j={1\over{1-R^2_i}}$
 Each predictor is regressed (in turn) against the full model *without* that predictor present $R^2_i$
 
 
+## Should I worry about multicollinearity?
+
+- [Maybe not as much as we think](https://janhove.github.io/posts/2019-09-11-collinearity/#collinearity-doesnt-require-a-statistical-solution)
+
+- Could affect automated/AIC based model selection
+
+- If variables are conceptually important - take the hit!
+
+- If theoretically valid, justify inclusion/exclusion
+
+- Methods exist to reduce multicollinearity (Elastic Net/Ridge regression) but may be overkill
+
 ## Normality of Residuals
 
 
@@ -6360,9 +6695,6 @@ check_model(lsmodel1, check = c("qq", "normality"), detrend = FALSE)
 :::
 
 ::::
-
-
-
 
 ## Assumptions not met?
 
@@ -6432,9 +6764,6 @@ MASS::boxcox(lsmodel1)
 :::
 
 ::::
-
-
-
 
 
 ## Omitted variable bias
@@ -6550,13 +6879,16 @@ countdown::countdown(
 )
 ```
 
-## Stepwise-removal
 
-- Stepwise regression is a popular tool for simplifying models and removing non-significant predictors
+# Variable selection
+
+## Formward/Backward/Stepwise-selection
+
+- These are popular tools for simplifying models and removing non-significant predictors
 
 - However standard statistical tests do not account for sequential testing
 
-- models can have inflated p-valyes and narrow confidence intervals
+- models can have inflated p-values and narrow confidence intervals
 
 - I recommend restricting this to testing whether interaction terms are required
 
@@ -6585,7 +6917,6 @@ By default `anova()` implements type I
 
 
 When data are balanced these will all be **the same**. For unbalanced designs these may not
-
 
 
 ## drop1()
@@ -6703,31 +7034,10 @@ head(model_dredge, n = 3)
 
 ```
 
-## Model averaging {.smaller}
 
-```{r, eval = F, echo = T}
-model.avg(model_dredge)
-```
+## Issues with Model dredging
 
-```{r}
-
-ma_df <- model.avg(model_dredge)
-ma_coefs <- coefTable(ma_df, full=TRUE, adjust.se = TRUE)
-coefnames <- row.names(ma_coefs)
-ma_coefs <- as.data.frame(ma_coefs)
-ma_coefs <- mutate(ma_coefs,
-                   coefficient = coefnames,
-                   t = Estimate / `Std. Error`,
-                   p = pt(abs(t), df = 195, lower.tail = FALSE),
-                   lower95 = Estimate - 1.96 * `Std. Error`,
-                   upper95 = Estimate + 1.96 * `Std. Error`) %>% select(Estimate, `Std. Error`, t, p, lower95, upper95)
-knitr::kable(ma_coefs, digits = 2)
-
-```
-
-## Issues with Model averaging
-
-- Multi-collinearity: When predictors are highly correlated, the AIC weights can become unreliable. Multi-collinearity can lead to inflated standard errors and unstable coefficient estimates, which affects the calculation of AIC weights.
+- Multi-collinearity: When predictors are highly correlated, the AIC weights can become unreliable. Multi-collinearity can  affect the calculation of AIC weights.
 
 - The AIC model weights apply to an entire model and not any individual predictor variables within that model and, thus, have minimal information content about contributions of individual predictor variables to predicted responses
 
@@ -10627,6 +10937,23 @@ x             2.0271     0.1703 424.0815   11.90   <2e-16 ***
 
 ```
 
+## Degrees of Freedom
+
+- When we add these random variance components it adds uncertainty
+
+- Standard t/F assumptions don't hold
+
+- Degrees of freedom are absent or approximate
+
+## Satterthwaite method
+
+$$\text{df} \approx \frac{2 \cdot (\text{Var})^2}{\text{Var}(\text{Var})}$$
+
+- Var: This is the estimated variance of a quantity (like a fixed effect estimate).
+
+- Var of Var: This is the uncertainty in that variance estimate — how much the estimated variance might vary.
+
+We are estimating variance of fixed effects - and that estimate has its own uncertainty - lower df = wider confidence intervals. 
 
 ## Random slopes and intercepts {.smaller}
 

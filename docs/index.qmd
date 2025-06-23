@@ -5029,11 +5029,11 @@ Raising the value of any of effect size, sample size or $\alpha$ all increase Po
 
 ## Power analysis in R with `pwr`
 
-```{r}
+```{r, echo = T}
 library(pwr)
 ```
 
-```{r}
+```{r, echo = T}
 pwr.t.test(d = 0.5, power = 0.8, sig.level = 0.05,
            type = "two.sample", alternative = "two.sided")
 
@@ -5061,7 +5061,40 @@ You're running an experiment comparing two groups (e.g., Control vs. Treatment),
 ➤ What is the power to detect a 5-point difference with a given sample size per group?
 
 
-##
+## Simulate for power
+
+::::{.columns}
+
+:::{.column}
+
+```{r, echo = T, eval = F}
+simulate_lm_power <- function(n_per_group = 50,
+                              mu_control = 100,
+                              mu_treatment = 105,
+                              sd = 15,
+                              alpha = 0.05,
+                              nsim = 1000) {
+  
+  p_values <- replicate(nsim, {
+    group <- rep(c(0, 1), each = n_per_group)
+    means <- ifelse(group == 0, mu_control, mu_treatment)
+    outcome <- rnorm(n_per_group * 2, mean = means, sd = sd)
+    
+    model <- lm(outcome ~ group)
+    summary(model)$coefficients[2, 4]  # p-value for group
+  })
+  
+  mean(p_values < alpha)  # Power estimate
+}
+
+simulate_lm_power(n_per_group = 50)
+
+
+```
+
+:::
+
+::: {.column}
 
 ```{r}
 simulate_lm_power <- function(n_per_group = 50,
@@ -5088,10 +5121,18 @@ simulate_lm_power(n_per_group = 50)
 
 ```
 
+:::
+
+::::
+
 
 ## Power curves
 
-```{r}
+::::{.columns}
+
+:::{.column}
+
+```{r, echo = T, eval = F}
 sample_sizes <- seq(10, 100, by = 10)
 powers <- sapply(sample_sizes, simulate_lm_power)
 
@@ -5102,6 +5143,37 @@ abline(h = 0.8, col = "red", lty = 2)
 
 
 ```
+:::
+
+:::{.column}
+
+```{r, echo = F, eval = T}
+sample_sizes <- seq(10, 100, by = 10)
+powers <- sapply(sample_sizes, simulate_lm_power)
+
+plot(sample_sizes, powers, type = "b", pch = 16,
+     xlab = "Sample Size per Group", ylab = "Estimated Power",
+     main = "Power Curve: Detecting a 5% Difference (SD = 15)")
+abline(h = 0.8, col = "red", lty = 2)
+
+
+```
+
+:::
+
+::::
+
+## Simulated power
+
+This is a Shiny App designed to demonstrate the effects of: 
+
+- Power
+
+- P distributions
+
+- Winner's curse
+
+[Link to App](https://philip-leftwich-hypothesis-testing-simulation.share.connect.posit.cloud/)
 
 # Regression {background-color="#D9DBDB"}
 

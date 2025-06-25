@@ -4593,11 +4593,19 @@ countdown::countdown(
 
 ## Bootstrapping
 
+::::{.columns}
+
+:::{.column}
+
 - Assumption check: In linear regression, one key assumption is normally distributed residuals.
 
 - If residuals are non-normal, traditional inference methods (e.g. t-tests, CIs) may be invalid.
 
 - Solution: Use case bootstrapping to generate robust, non-parametric estimates.
+
+:::
+
+:::{.column}
 
 ```{r, echo = FALSE}
 
@@ -4646,14 +4654,25 @@ ggplot(boot_df, aes(x = Slope)) +
 
 ```
 
+:::
+
+::::
 
 ## Permutation tests
+
+::::{.columns}
+
+:::{.column}
 
 ```{r, echo = FALSE, out.width="50%"}
 
 knitr::include_graphics("images/perm.png")
 
 ```
+
+:::
+
+:::{.column}
 
 ```{r}
 # Load libraries
@@ -4691,6 +4710,10 @@ ggplot(perm_df, aes(x = perm_diffs)) +
   ) +
   theme_minimal(base_size = 14)
 ```
+
+:::
+
+::::
 
 # P-values
 

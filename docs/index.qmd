@@ -7116,7 +7116,7 @@ penguins1 <- penguins %>% drop_na(bill_length_mm) %>%
          body_mass_g = mean(body_mass_g) - body_mass_g)
 ```
 
-```{r, echo = T}
+```{r, echo = T, eval = FALSE}
 
 library(MuMIn)
 
@@ -7129,6 +7129,19 @@ head(model_dredge, n = 3)
 
 ```
 
+```
+Model selection table 
+   (Int) bll_dpt_mm bdy_mss_g spc bll_dpt_mm:bdy_mss_g bll_dpt_mm:spc bdy_mss_g:spc df   logLik   AICc delta weight
+24 39.72    -0.3000 -0.002565   +                                   +                8 -762.436 1541.3  0.00  0.619
+32 39.72    -0.2864 -0.002565   +           -6.338e-05              +                9 -762.353 1543.2  1.94  0.234
+56 39.91    -0.2466 -0.002811   +                                   +             + 10 -761.754 1544.2  2.87  0.147
+Models ranked by AICc(x) 
+
+```
+```
+
+
+```
 
 ## Issues with Model dredging
 

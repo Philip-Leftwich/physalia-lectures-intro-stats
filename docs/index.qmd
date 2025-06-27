@@ -11063,6 +11063,54 @@ $$\text{df} \approx \frac{2 \cdot (\text{Var})^2}{\text{Var}(\text{Var})}$$
 
 We are estimating variance of fixed effects - and that estimate has its own uncertainty - lower df = wider confidence intervals. 
 
+**Method of calculating degrees of freedom will affect CI and inference**
+
+## Marginal and conditional variance
+
+```{r, include = FALSE}
+library(ggeffects)
+
+```
+
+- `ggpredict` and `ggemmeans` both from the ggeffects package
+
+- Both can extract predictions from a model, but behave differently
+
+::: {.panel-tabset}
+
+
+## ggpredict
+
+```{r}
+
+ggpredict(mixed_model, terms = "x")
+
+```
+
+## ggemmeans
+
+```{r}
+
+ggemmeans(mixed_model, terms = "x")
+
+```
+
+:::
+
+## Marginal and conditional variance
+
+- Marginal variance:
+
+    - Random effects averaged out across the population   
+    - Narrower SE
+    - Good for general comparisons
+    
+- Conditional variance:
+
+    - Random effects included for each block
+    - Highly group-specific predictions
+    - SE larger to represent more individual variation
+
 ## Random slopes and intercepts {.smaller}
 
 ```{r, include = FALSE}

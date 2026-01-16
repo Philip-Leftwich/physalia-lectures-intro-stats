@@ -1,6 +1,6 @@
 ---
 title: "Introduction to Statistics:"
-subtitle: " A guide for Biologists and Ecologists<br><small>24th June 2025</small>"
+subtitle: " A guide for Biologists and Ecologists<br><small>2026</small>"
 author: "Dr Philip Leftwich"
 format:
   LUstyle-revealjs:
@@ -597,10 +597,11 @@ summary(model)
 
 :::
 
+
 ## Workflow
 
 
-```{r}
+```{r, echo = FALSE, out.width="60%", fig.alt = "Allison Horst"}
 knitr::include_graphics("images/annotated.png")
 ```
 
@@ -1878,13 +1879,13 @@ Cairo 2016; Schwabish and Feng 2021; Nunez et al. 2018
 
 ## 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, out.width="60%"}
 knitr::include_graphics("images/choosing-data-to-viz.png")
 
 ```
 
 ::: aside
-[https://www.data-to-viz.com/]
+(https://www.data-to-viz.com/)
 :::
 
 
@@ -1988,7 +1989,7 @@ theme_minimal()+
 
 ## Use appropriate palettes
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, out.width="60%"}
 knitr::include_graphics("images/palette.png")
 
 ```
@@ -2188,7 +2189,7 @@ penguins |>
 
 Tufte 2001; Correll et al. 2020
 
-##
+## Strip plots
 
 :::{.panel-tabset}
 
@@ -2264,6 +2265,7 @@ ggplot(aes(x= bill_length_mm,
   facet_wrap(~sex)
 
 ```
+
 :::
 
 ## Gridlines: Less Is Usually More
@@ -2311,11 +2313,12 @@ penguins |>
 
 ```
 
+:::
 
 ##
 
-:::{.panel-tabset}
 
+:::{.panel-tabset}
 
 ## Bad
 
@@ -2348,6 +2351,7 @@ ggplot(aes(x= bill_length_mm,
   theme(text = element_text(size = 6))
 
 ```
+
 :::
 
 
@@ -2404,6 +2408,7 @@ penguins |>
     subtitle = "Box and jitter plot of body mass by species")
 
 ```
+
 :::
 
 ## Reproducibility and Visualisation
@@ -5268,7 +5273,7 @@ Dummy variables, are coded with 0 and 1's. With three species we would have the 
 
 :::
 
-```{r, echo = FALSE, out.width="60%", fig.alt = "Adelie, Chinstrap, Gentoo"}
+```{r, echo = FALSE, out.width="40%", fig.alt = "Adelie, Chinstrap, Gentoo"}
 
 knitr::include_graphics("images/three_penguins.png")
 
@@ -6084,6 +6089,8 @@ lm(recovery_time ~ infection_severity + antibiotic)
 
 ```
 
+:::
+
 ## Exercise & Heart Disease
 
 We want to know if exercise reduces heart disease risk. Age affects both exercise habits (younger people exercise more) and heart disease risk. Exercise might work through weight loss, which is on the causal pathway.
@@ -6225,9 +6232,11 @@ lm(yield ~ soil_quality + rainfall)
 
 ```
 
+:::
+
 # Questions? {background-color="#D9DBDB"}
 
-:::
+
 
 # Checking models  {background-color="#D9DBDB"}
 
@@ -8355,7 +8364,7 @@ ggplot(df, aes(x = Outcome, y = Probability, group = Outcome)) +
 
 ## Probability distribution
 
-:::: columns
+::::{columns}
 
 ::: {.column}
 $logit(p) = \log \frac{p}{1 - p}$
@@ -8888,7 +8897,7 @@ $y_i = Binomial(n,p)$
 
 ## Binomial: Example
 
-:::: columns
+::::
 
 ::: {.column}
 
@@ -9192,7 +9201,7 @@ summary(beetle_glm_weights)
 
 ## Overdispersion
 
-:::: columns
+::::
 
 ::: {.column}
 
@@ -9351,7 +9360,7 @@ countdown::countdown(
 
 :::: columns
 
-::: {.column}
+:::{.column}
 
 ```{r}
 #| eval: true
@@ -9384,7 +9393,7 @@ ggplot(poisson_data, aes(x = events, y = probability, color = lambda)) +
 
 ::: 
 
-::: {.column}
+:::{.column}
 
 Count or rate data are ubiquitous in the life sciences (e.g number of parasites per microlitre of blood, number of species counted in a particular area). These type of data are **discrete** and **non-negative**.
 
@@ -9399,7 +9408,7 @@ a discrete distribution with a single parameter, λ (lambda), which defines both
 
 ## GLM
 
-::: {.incremental}
+:::{.incremental}
 
 Recall the simple linear regression case (i.e a GLM with a Gaussian error structure and identity link). For the sake of clarity let's consider a single explanatory variable where $\mu$ is the mean for *Y*:
 
@@ -9432,7 +9441,7 @@ $y_i \sim \mathcal{N}(\mu_i, \sigma^2)$
 
 The **Poisson** distribution has the following characteristics:
 
-::: {.incremental}
+:::{.incremental}
 
 * **Discrete** variable (integer), defined on the range $0, 1, \dots, \infty$.
 
@@ -9449,9 +9458,10 @@ The **Poisson** distribution has the following characteristics:
 
 :::: columns
 
-::: {.column}
+:::{.column}
 
 ![](images/3 Spined Stickleback.jpg){fig-align="center" fig-alt="Stickleback" width=50%}
+
 :::
 
 :::{.column}
@@ -9464,7 +9474,7 @@ In this study the authors investigated the effect of the parasitic tapeworm *Sch
 
 ::::
 
-##
+## Model evaluation
 
 This model looks ok
 
@@ -9485,6 +9495,7 @@ parasite <- read_csv("../data_2/parasite_exp.csv")
 
 ```
 
+
 ```{r}
 #| eval: true
 #| echo: false
@@ -9504,6 +9515,7 @@ ggplot(aes(x=Treatment, y=emmean)) +
 
 
 ```
+
 
 
 ## Diagnostics
@@ -9561,7 +9573,7 @@ summary(stick_poisson)
 
 ## Poisson model fit 
 
-::::{.columns}
+:::: columns
 
 :::{.column}
 
@@ -9621,7 +9633,7 @@ drop1(stick_poisson, test = "Chisq")
 
 ## Model summary
 
-::::{.columns}
+:::: columns
 
 :::{.column}
 
@@ -10663,7 +10675,8 @@ sjPlot::tab_model(lmer3)
 
 ## 
 
-::: columns
+::::
+
 ::: {.column}
 
 <br>
@@ -10683,4 +10696,5 @@ sjPlot::tab_model(lmer3)
 
 
 :::
-:::
+
+::::

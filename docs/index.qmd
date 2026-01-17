@@ -35,7 +35,7 @@ library(sjPlot)
 
 ```
 
-::: columns
+:::: columns
 ::: {.column .right}
 
 
@@ -46,12 +46,12 @@ library(sjPlot)
 ![](images/physalia.png){fig-align="center" fig-alt="physalia logo" width=70%}
 
 :::
-:::
+::::
 
 
 ## About me
 
-::: columns
+:::: columns
 ::: {.column .right}
 
 Associate Professor in Data Science and Genetics at the [University of East Anglia](https://www.uea.ac.uk/).
@@ -71,7 +71,7 @@ Teach Genetics, Programming, and Statistics
 ![](images/UEA.jpg){fig-align="center" fig-alt="UEA logo" width=70%}
 
 :::
-:::
+::::
 
 ## About me
 
@@ -111,9 +111,8 @@ Norwich - "A Fine City!"
 
 ## What to expect during this workshop
 
-These workshop will run for *6 hours* each.
 
-We will have a 40 min break halfway through and some shorter breaks
+We will have a 30 min break halfway through each day
 
 But take breaks when you need to!
 
@@ -146,17 +145,6 @@ I hope you end up with more questions than answers after this workshop!
 
 
 
-
-## Workshop Resources
-
-<br><br>
-
-- Slides available [here](https://philip-leftwich.github.io/physalia-lectures-intro-stats/#/title-slide)
-
-- Coursebook available [here](https://ueabio.github.io/physalia-intro-stats-2023/index.html)
-
-
-
 # An Introduction to R {background-color="#D9DBDB"}
 
 ## What is R?
@@ -184,7 +172,96 @@ I hope you end up with more questions than answers after this workshop!
 
 - Excellent for reproducible research 
 
-## Basic R Syntax
+
+## What is RStudio/Posit?
+
+```{r, echo = FALSE, out.width="85%"}
+knitr::include_graphics("images/engine.png")
+```
+
+
+
+# R is for Open, Reproducible Research {background-color="#D9DBDB"}
+
+
+## Open Research
+
+:::: {.columns}
+
+::: {.column}
+
+Reproducible
+
+Robust
+
+Transparent
+
+Reusable
+
+Shareable research materials
+
+:::
+
+::: {.column}
+
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/reproducible-data-analysis-02.png")
+```
+
+:::
+
+::::
+
+## Why Reproducibility Matters
+
+- Computational reproducibility means obtaining the same results using the same data, code, and computational environment
+
+- It underpins scientific credibility, transparency, and trust
+
+- Reproducibility failures are widespread across disciplines
+
+::: aside
+[Powers and Hampton 2019](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/eap.1822)
+:::
+
+
+## Evidence: The Current State of Reproducibility
+
+::: {.panel-tabset}
+
+## Trisovic et al 2022
+
+- 74% of archived R scripts failed to run without error in a large-scale audit
+
+- After code cleaning, 56% still failed
+
+- Failures were dominated by file paths, missing dependencies, and lack of documentation
+
+::: aside
+[Trisovic et al](https://pubmed.ncbi.nlm.nih.gov/35190569/)
+:::
+
+## Kellner et al 2025
+
+- 93% of R scripts associated with species distribution and abundance papers failed to execute
+
+- Reproducibility assessment had to be abandoned due to non-functional code
+
+- Structural issues dominated over statistical ones
+
+::: aside
+
+[Kellner et al. 2025](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecy.4475)
+
+:::
+
+:::
+
+
+# Basic R {background-color="#D9DBDB"}
+
+## Syntax
 
 ```{r, echo = T}
 
@@ -309,49 +386,6 @@ dplyr::select(name) |>
 
 ```
 
-
-## What is RStudio/Posit?
-
-```{r, echo = FALSE, out.width="70%"}
-knitr::include_graphics("images/engine.png")
-```
-
-## What is RStudio/Posit
-
-
-```{r, echo = FALSE, out.width="70%"}
-knitr::include_graphics("images/environment.jpg")
-```
-
-## Navigating RStudio
-
-Layout:
-
-- Source Pane: Writing and editing scripts
-
-- Console Pane: Executing R commands
-
-- Environment/History Pane: Viewing and managing variables and command history
-
-- Files/Plots/Packages/Help Pane: Managing files, viewing plots, accessing packages, and getting help
-
-## Scripts
-
-- Scripts: Write **reusable code** in .R files
-
-```{r, echo = T}
-
-# This is a comment
-
-print("Hello, R!")
-
-
-```
-
-- Run code by executing lines or selections
-
-- Automate running scripts
-
 ## Using Packages
 
 R packages are collections of code and data that extend or improve functionality
@@ -375,117 +409,73 @@ ggplot(data, aes(x=variable1, y=variable2)) + geom_point()
 ```
 
 
-# R is for Open, Reproducible Research {background-color="#D9DBDB"}
+# Practice R {background-color="#D9DBDB"}
 
 
-## Open Research
-
-:::
-::: {.column}
-
-Reproducible
-
-Robust
-
-Transparent
-
-Reusable
-
-Shareable research materials
-
-:::
-
-::: {.column}
-
-
-```{r, echo = FALSE}
-knitr::include_graphics("images/reproducible-data-analysis-02.png")
+```{r}
+#| label: ex-R
+countdown::countdown(
+  minutes = 15,
+  color_border = "#00AEEF",
+  color_text = "#00AEEF",
+  color_running_text = "white",
+  color_running_background = "#00AEEF",
+  color_finished_text = "#00AEEF",
+  color_finished_background = "white",
+  top = 0,
+  margin = "0.8em",
+  font_size = "2em"
+)
 ```
 
-:::
-:::
+# RStudio {background-color="#D9DBDB"}
 
-## Why Reproducibility Matters
-
-- Computational reproducibility means obtaining the same results using the same data, code, and computational environment
-
-- It underpins scientific credibility, transparency, and trust
-
-- Reproducibility failures are widespread across disciplines
-
-::: aside
-[Powers and Hampton 2019](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/eap.1822)
-:::
+## Layout
 
 
-## Evidence: The Current State of Reproducibility
+```{r, echo = FALSE, out.width="70%"}
+knitr::include_graphics("images/environment.jpg")
+```
 
-::: {.panel-tabset}
+## Navigating RStudio
 
-## Trisovic et al 2022
+Layout:
 
-- 74% of archived R scripts failed to run without error in a large-scale audit
+- Source Pane: Writing and editing scripts
 
-- After code cleaning, 56% still failed
+- Console Pane: Executing R commands
 
-- Failures were dominated by file paths, missing dependencies, and lack of documentation
+- Environment/History Pane: Viewing and managing variables and command history
 
-::: aside
-[Trisovic et al](https://pubmed.ncbi.nlm.nih.gov/35190569/)
-:::
+- Files/Plots/Packages/Help Pane: Managing files, viewing plots, accessing packages, and getting help
 
-## Kellner et al 2025
-93% of R scripts associated with species distribution and abundance papers failed to execute
+# Practice RStudio {background-color="#D9DBDB"}
 
-Reproducibility assessment had to be abandoned due to non-functional code
 
-Structural issues dominated over statistical ones
+```{r}
+#| label: ex-studio
+countdown::countdown(
+  minutes = 15,
+  color_border = "#00AEEF",
+  color_text = "#00AEEF",
+  color_running_text = "white",
+  color_running_background = "#00AEEF",
+  color_finished_text = "#00AEEF",
+  color_finished_background = "white",
+  top = 0,
+  margin = "0.8em",
+  font_size = "2em"
+)
+```
 
-::: aside
+# Projects {background-color="#D9DBDB"}
 
-[Kellner et al. 2025](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecy.4475)
-
-:::
-
-:::
-
-## Why We Use Scripts in R
-
-- Scripts provide a complete and permanent record of an analysis
-
-- All analytical decisions are explicit and inspectable
-
-- Scripts can be rerun, reviewed, and shared
-
-- GUI-based workflows leave no reproducible audit trail
-
-::: aside
-[Ivimey-Cook et al. 2023](https://onlinelibrary.wiley.com/doi/10.1111/jeb.14230)
-:::
-
-## Main Features of R
-
-- Comprehensive packages via CRAN, Bioconductor, and GitHub
-
-- Explicit data manipulation pipelines (e.g. dplyr, tidyr)
-
-- Script-based statistical modelling
-
-- Programmatic, reproducible visualisation (e.g. ggplot2)
-
-## Main Features of RStudio
-
-- Four-pane interface (script, console, environment, files)
-
-- Integrated package management
-
-- Project-based organisation of analyses
 
 ## Why Use RStudio Projects?
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 - Organisation: keeps related files together
 
@@ -495,15 +485,15 @@ Structural issues dominated over statistical ones
 
 :::
 
-:::{.column}
+::: {.column}
 
-```{r, echo = F}
+```{r, echo = F, out.width = "80%"}
 knitr::include_graphics("images/Project.png")
 ```
 
 :::
 
-:::
+::::
 
 ## Evidence for Project-Oriented Workflows
 
@@ -527,9 +517,11 @@ knitr::include_graphics("images/Project.png")
 ## Organising an R Project
 
 
-::: {.panel-tabset}
+:::: {.columns}
 
-## Outline
+::: {.column}
+
+### Outline
 
 ```
 project/
@@ -538,15 +530,78 @@ project/
 ├── outputs/
 └── README.txt
 ```
+:::
 
-## Best Practice
+::: {.column}
+
+### Best Practice
 
 - Raw data should never be overwritten
 
 - Scripts should be clearly named and ordered
 
 - Outputs should be generated automatically
+
 :::
+
+::::
+
+# Setting up a project {background-color="#D9DBDB"}
+
+
+- We have some introductory project exercises:
+
+```{r}
+#| label: ex-proj
+countdown::countdown(
+  minutes = 15,
+  color_border = "#00AEEF",
+  color_text = "#00AEEF",
+  color_running_text = "white",
+  color_running_background = "#00AEEF",
+  color_finished_text = "#00AEEF",
+  color_finished_background = "white",
+  top = 0,
+  margin = "0.8em",
+  font_size = "2em"
+)
+```
+
+# Scripts {background-color="#D9DBDB"}
+
+## Scripts
+
+- Scripts: Write **reusable code** in .R files
+
+```{r, echo = T}
+
+# This is a comment
+
+print("Hello, R!")
+
+
+```
+
+- Run code by executing lines or selections
+
+- Automate running scripts
+
+
+
+## Why We Use Scripts in R
+
+- Scripts provide a complete and permanent record of an analysis
+
+- All analytical decisions are explicit and inspectable
+
+- Scripts can be rerun, reviewed, and shared
+
+- GUI-based workflows leave no reproducible audit trail
+
+::: aside
+[Ivimey-Cook et al. 2023](https://onlinelibrary.wiley.com/doi/10.1111/jeb.14230)
+:::
+
 
 ## Writing Clear and Reproducible Scripts
 
@@ -562,9 +617,11 @@ project/
 
 ## Bad vs Good Reproducibility
 
-:::{.panel-tabset}
+:::: {.columns}
 
-## Poor practice
+:::{.column}
+
+### Poor practice
 
 ```
 setwd("C:/Users/alice/Documents/analysis")
@@ -579,7 +636,11 @@ summary(model)
 
 - Fails on other systems
 
-## Good practice
+:::
+
+:::{.column}
+
+### Good practice
 
 ```
 # Load data and fit linear model of y as a function of x
@@ -596,6 +657,8 @@ summary(model)
 - Portable and reproducible
 
 :::
+
+::::
 
 
 ## Workflow
@@ -629,16 +692,17 @@ knitr::include_graphics("images/annotated.png")
 
 - Small habits substantially improve reliability
 
+
 # Questions? {background-color="#D9DBDB"}
 
 
-# Setting up a project {background-color="#D9DBDB"}
+# Importing Data {background-color="#D9DBDB"}
 
 
-- We have some introductory project exercises:
+- We have some introductory data exercises:
 
 ```{r}
-#| label: ex-proj
+#| label: ex-load-data
 countdown::countdown(
   minutes = 15,
   color_border = "#00AEEF",
@@ -702,7 +766,7 @@ Restructure data so that each variable forms a column and each observation forms
 
 :::
 
-:::{.column}
+::: {.column}
 
 | Name   | Age | Height |
 |--------|-----|--------|
@@ -762,7 +826,7 @@ data <- tibble(
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 data |> 
@@ -785,9 +849,9 @@ data |>
 
 ## What is the Tidyverse?
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 - The **tidyverse** is a collection of R packages designed for data science.
 
@@ -797,7 +861,7 @@ data |>
 
 :::
 
-:::{.column}
+::: {.column}
 
 - Core packages include:
 
@@ -999,14 +1063,13 @@ penguins_cleaned <- penguins |>
 ```
 
 
-## Recap and Next Steps
-
+# Data wrangling practice
 
 
 ```{r}
 #| label: ex-data-wrangling
 countdown::countdown(
-  minutes = 40,
+  minutes = 30,
   color_border = "#00AEEF",
   color_text = "#00AEEF",
   color_running_text = "white",
@@ -1040,7 +1103,7 @@ The first issue we will cover is missing data. There is a whole host of reasons 
 
 This can be broken down into three broad categories:
 
-:::{.incremental}
+::: {.incremental}
 
 - **MCAR (Missing Completely at Random)**	The probability of missing data is independent of any observed or unobserved data.	
 
@@ -1149,9 +1212,9 @@ summary(penguins)
 
 ## Outliers
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 Observations that fall outside of a tolerated range from other observations
 
@@ -1163,7 +1226,7 @@ Important to identify, but crucially these are *real* values
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = T}
 penguins |>  ggplot(aes(x = species, y = body_mass_g)) + geom_boxplot() +coord_flip()
@@ -1183,9 +1246,9 @@ A key aspect of histograms is the bin size (or number of bins), which determines
 
 ## Histograms
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, fig.width = 7}
 library(ggridges)
@@ -1197,7 +1260,7 @@ ggplot(aes(x = body_mass_g, y = species)) +
 ```
 :::
 
-:::{.column}
+::: {.column}
 ```{r, fig.width = 7}
 
 library(ggridges)
@@ -1210,7 +1273,7 @@ ggplot(aes(x = body_mass_g, y = species)) +
 ```
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 
@@ -1228,9 +1291,9 @@ ggplot(aes(x = body_mass_g, y = species)) +
 
 ## Density plots
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, fig.width = 7}
 library(ggridges)
@@ -1242,7 +1305,7 @@ ggplot(aes(x = body_mass_g, y = species)) +
 ```
 :::
 
-:::{.column}
+::: {.column}
 ```{r, fig.width = 7, warning = FALSE}
 
 library(ggridges)
@@ -1297,15 +1360,15 @@ for (n in sample_sizes) {
 
 ## QQ plots
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 A Q-Q plot (quantile-quantile plot) is a graphical tool used to compare the distribution of a dataset to a theoretical distribution (like the normal distribution) by plotting their quantiles against each other—if the points fall roughly along a straight line, it suggests the data follows that distribution.
 
 :::
 
-:::{.column}
+::: {.column}
 
 
 ```{r, echo = FALSE, out.width="90%", fig.alt = "QQ plot examples"}
@@ -1391,7 +1454,7 @@ countdown::countdown(
 
 * `ggplot2` is an application of the **grammar of graphics** for R  
 
-:::{.fragment}
+::: {.fragment}
 
 * A default dataset and set of mappings from variables to aesthetics  
 * One or more layers of geometric objects    
@@ -1405,9 +1468,9 @@ countdown::countdown(
 
 ## A **grammar** of graphics, from [**ggplot2 as a creativity engine**](https://johnburnmurdoch.github.io/slides/r-ggplot/#/)  
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 
 ```{r, include = FALSE}
@@ -1429,7 +1492,7 @@ flyls2 <- lm(longevity ~ type + thorax + sleep, data = fruitfly)
 
 Easy enough to [*rapidly prototype*](https://johnburnmurdoch.github.io/slides/r-ggplot/#/14) graphics at the "speed of thought"  
 
-```{r, warning = FALSE, echo = FALSE}
+```{r, warning = FALSE, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 fruitfly |>  
   ggplot()+
@@ -1442,11 +1505,11 @@ fruitfly |>
 
 :::
 
-:::{.column}
+::: {.column}
 
 Powerful enough for [*final "publication"*](https://johnburnmurdoch.github.io/slides/r-ggplot/#/34)  
 
-```{r, warning = FALSE, echo = FALSE}
+```{r, warning = FALSE, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 # density plot of thorax length by treatment
 marginal1 <- fruitfly |>  
   ggplot()+
@@ -1504,15 +1567,15 @@ marginal1+model_plot+marginal2 +plot_layout(design = layout)
 
 
 
-##
+## Axis
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
-```{r, eval = FALSE, echo = T}
+```{r, eval = FALSE, echo = T, fig.asp = 0.8, fig.width = 7}
 ggplot(data = penguins, 
        aes(x = bill_depth_mm,#<<
            y = body_mass_g))#<<
@@ -1522,9 +1585,9 @@ ggplot(data = penguins,
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
-```{r, echo = FALSE, fig.width = 10}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 theme_set(theme_gray(base_size = 18))
 
 penguins <- penguins |> 
@@ -1541,13 +1604,13 @@ ggplot(data = penguins,
 
 ::::
 
-##
+## Geoms
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
-```{r, eval = FALSE, echo = T}
+```{r, eval = FALSE, echo = T, fig.asp = 0.8, fig.width = 7}
 ggplot(data = penguins, 
        aes(x = bill_depth_mm,
            y = body_mass_g))+
@@ -1558,9 +1621,9 @@ ggplot(data = penguins,
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
-```{r, echo = FALSE, fig.width = 10}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 
 ggplot(data = penguins, 
@@ -1575,11 +1638,11 @@ ggplot(data = penguins,
 
 ::::
 
-##
+## Colour
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 ```{r, eval = FALSE, echo = T}
@@ -1593,9 +1656,9 @@ ggplot(data = penguins,
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
-```{r, echo = FALSE, fig.width = 10}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 ggplot(data = penguins, 
        aes(x = bill_depth_mm,
@@ -1609,11 +1672,11 @@ ggplot(data = penguins,
 
 ::::
 
-##
+## Colour by variable
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 ```{r, eval = FALSE, echo = T}
@@ -1628,9 +1691,9 @@ ggplot(data = penguins,
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
-```{r, echo = FALSE, fig.width = 10}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 ggplot(data = penguins, 
        aes(x = bill_depth_mm,
@@ -1644,11 +1707,11 @@ ggplot(data = penguins,
 
 ::::
 
-##
+## Layers
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 ```{r, eval = FALSE, echo = T}
@@ -1665,9 +1728,9 @@ ggplot(data = penguins,
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
-```{r, echo = FALSE, fig.width = 10}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 ggplot(data = penguins, 
        aes(x = bill_depth_mm,
@@ -1683,11 +1746,11 @@ ggplot(data = penguins,
 
 ::::
 
-##
+## Labels
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 ```{r, eval = FALSE, echo = T}
@@ -1706,9 +1769,9 @@ ggplot(data = penguins,
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
-```{r, echo = FALSE, fig.width = 10}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 ggplot(data = penguins, 
        aes(x = bill_depth_mm,
            y = body_mass_g,
@@ -1727,11 +1790,11 @@ ggplot(data = penguins,
 
 ::::
 
-##
+## Manual colours
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 ```{r, eval = FALSE, echo = T}
@@ -1753,9 +1816,9 @@ ggplot(data = penguins,
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
-```{r, echo = FALSE, fig.width = 10}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 ggplot(data = penguins, 
        aes(x = bill_depth_mm,
@@ -1777,11 +1840,11 @@ ggplot(data = penguins,
 
 ::::
 
-##
+## Themes
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 
@@ -1799,15 +1862,15 @@ ggplot(data = penguins,
     values = c("darkolivegreen4", 
                "darkorchid3", 
                "goldenrod1"))+
-  theme_classic()#<<
+  theme_minimal()#<<
 
 ```
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
-```{r, echo = FALSE, fig.width = 10}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 ggplot(data = penguins, 
        aes(x = bill_depth_mm,
@@ -1822,7 +1885,7 @@ ggplot(data = penguins,
     values = c("darkolivegreen4", 
                "darkorchid3", 
                "goldenrod1"))+
-  theme_classic(base_size = 18)
+  theme_minimal(base_size = 18)
 
 
 ```
@@ -1877,9 +1940,9 @@ Cairo 2016; Schwabish and Feng 2021; Nunez et al. 2018
 
 - Choosing the wrong chart obscures structure and comparisons
 
-## 
+## Data to viz
 
-```{r, echo = FALSE, out.width="60%"}
+```{r, echo = FALSE, out.width="50%"}
 knitr::include_graphics("images/choosing-data-to-viz.png")
 
 ```
@@ -1903,11 +1966,11 @@ Few 2012; Correll et al. 2020
 
 ## 
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 data <- data.frame(
 Category = factor(c("A","B","C","D","E")),
 Value = c(20,22,18,25,15)
@@ -1924,7 +1987,7 @@ ggtitle("Poor choice: pie chart")
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 ggplot(data, aes(x=Category, y=Value)) +
 geom_col() +
@@ -1935,7 +1998,7 @@ ggtitle("Better choice: bar chart")
 
 ## Better
 
-```{r}
+```{r, fig.asp = 0.8, fig.width = 7}
 
 data |> 
     mutate(Category = fct_reorder(Category, Value)) |> 
@@ -1960,13 +2023,13 @@ data |>
 
 Cairo 2016; Wilke 2019
 
-## 
+## Example
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 ggplot(penguins, aes(bill_length_mm, bill_depth_mm, colour=species)) +
 geom_point() +
 ggtitle("Relies on colour alone")
@@ -1975,7 +2038,7 @@ ggtitle("Relies on colour alone")
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(colorspace)
 ggplot(penguins, aes(bill_length_mm, bill_depth_mm,
 colour=species, shape=species)) +
@@ -1989,7 +2052,7 @@ theme_minimal()+
 
 ## Use appropriate palettes
 
-```{r, echo = FALSE, out.width="60%"}
+```{r, echo = FALSE, out.width="80%"}
 knitr::include_graphics("images/palette.png")
 
 ```
@@ -2019,13 +2082,13 @@ Ware 2013; Nunez et al. 2018
 
 Crameri et al. 2020; Wilke 2019
 
-##
+## Example
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 ggplot(penguins, aes(bill_length_mm, bill_depth_mm, colour=species)) +
 geom_point() +
 ggtitle("Relies on colour alone")
@@ -2034,7 +2097,7 @@ ggtitle("Relies on colour alone")
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(colorspace)
 ggplot(penguins, aes(bill_length_mm, bill_depth_mm,
 colour=species, shape=species)) +
@@ -2059,13 +2122,13 @@ theme_minimal()+
 
 Cleveland et al. 1988; Pandey et al. 2015
 
-##
+## Example
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 set.seed(123)
 data <- data.frame(
   Time = 1:10,
@@ -2081,7 +2144,7 @@ ggplot(data, aes(x = Time, y = Value)) +
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 ggplot(data, aes(x = Time, y = Value)) +
   geom_line() +
   scale_y_log10(labels = scales::label_log()) +
@@ -2133,13 +2196,13 @@ Cairo 2016; Wilke 2019
 
 Few 2012; Schwabish 2020
 
-##
+## Example
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguin_count <- penguins |> group_by(species) |> 
   summarise(n = n())
 
@@ -2156,7 +2219,7 @@ penguins |>
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguin_count <- penguins |> group_by(species) |> 
   summarise(n = n())
 
@@ -2191,11 +2254,11 @@ Tufte 2001; Correll et al. 2020
 
 ## Strip plots
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 
 penguins |> 
@@ -2207,9 +2270,10 @@ penguins |>
 scale_colour_discrete_qualitative()
 
 ```
+
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 library(ggbeeswarm)
 penguins |> 
@@ -2226,14 +2290,14 @@ penguins |>
 :::
 
 
-##
+## Example
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> drop_na(sex) |> 
 ggplot(aes(x= bill_length_mm, 
                      y= bill_depth_mm,
@@ -2250,7 +2314,7 @@ ggplot(aes(x= bill_length_mm,
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> drop_na(sex) |> 
 ggplot(aes(x= bill_length_mm, 
                      y= bill_depth_mm,
@@ -2279,13 +2343,13 @@ ggplot(aes(x= bill_length_mm,
 
 Few 2012; Cairo 2016
 
-## 
+## Example
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(ggbeeswarm)
 penguins |> 
     ggplot(aes(x = species,
@@ -2300,7 +2364,7 @@ penguins |>
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(ggbeeswarm)
 penguins |> 
     ggplot(aes(x = species,
@@ -2315,14 +2379,14 @@ penguins |>
 
 :::
 
-##
+## Example
 
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> 
 ggplot(aes(x= bill_length_mm, 
                      y= bill_depth_mm,
@@ -2338,7 +2402,7 @@ ggplot(aes(x= bill_length_mm,
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> 
 ggplot(aes(x= bill_length_mm, 
                      y= bill_depth_mm,
@@ -2362,14 +2426,14 @@ ggplot(aes(x= bill_length_mm,
 - Show raw data where possible
 
 
-##
+## Example
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 
 ## Bad
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> 
 ggplot(aes(x= species, 
                      y= body_mass_g,
@@ -2386,7 +2450,7 @@ ggplot(aes(x= species,
 
 ## Good
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> 
   ggplot(aes(x = species, y = body_mass_g, color = species, fill = species)) +
       geom_boxplot(aes(fill = species),
@@ -2464,9 +2528,9 @@ countdown::countdown(
 ## Building Statistical Models
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 A model is a representation of what we think is going on in the real world. It can be a good fit, or a poor fit. 
 
@@ -2481,7 +2545,7 @@ A model is a representation of what we think is going on in the real world. It c
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE}
 
@@ -2546,9 +2610,9 @@ Different measures can give different centres depending on the data distribution
 
 One of the simplest statistical models in biology is the **mean**
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 | Lecturer     | Friends |
 | ----------- | ----------- |
@@ -2564,7 +2628,7 @@ One of the simplest statistical models in biology is the **mean**
 
 :::
 
-:::{.column}
+::: {.column}
 
 
 Calculating the mean:
@@ -2630,9 +2694,9 @@ $$s{^2}_{sample} = \frac{\sum(x - \bar{x})^2}{N -1}$$
 
 Variance is the average squared distance from the mean; it tells us how spread out the data are
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 | Value | Distance from mean | Squared distance |
 | ----- | ------------------ | ---------------- |
@@ -2648,7 +2712,7 @@ $$
 
 :::
 
-:::{.column}
+::: {.column}
 
 Why do we square and divide by *n-1*
 
@@ -2749,6 +2813,10 @@ pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "
 
 Shape: Symmetrical, bell-shaped curve
 
+:::: {.columns}
+
+::: {.column}
+
 - Rule of Thumb: For normally distributed data:
 
     ~68% within 1 SD
@@ -2757,14 +2825,25 @@ Shape: Symmetrical, bell-shaped curve
 
     ~99.7% within 3 SDs
 
-Relevance: Underpins many statistical tests and probability calculations 
+:::
+
+:::{.column}
+
+
+```{r, echo = FALSE, out.width="80%"}
+knitr::include_graphics("images/Standard_deviation.png")
+```
+
+:::
+
+::::
 
 
 ## Visualising a Distribution
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 **Histograms** show shape
 
@@ -2782,7 +2861,7 @@ pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "
 
 :::
 
-:::{.column}
+::: {.column}
 
 **Quantile-Quantile plots** plots against normality
 
@@ -2865,9 +2944,9 @@ Why Use These?:
 
 Going back to our friends data: 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 
 | Lecturer     | Friends |
@@ -2882,7 +2961,7 @@ Going back to our friends data:
 
 :::
 
-:::{.column}
+::: {.column}
 
 
 - The range is affected by extreme values
@@ -2910,9 +2989,9 @@ Going back to our friends data:
 
 * Any observations beyond whisker are plotted as individual points
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 
 ```{r, echo = FALSE, out.width="80%", fig.alt = "Boxplot"}
@@ -2921,7 +3000,7 @@ knitr::include_graphics("images/boxplot.png")
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, out.width="50%", fig.alt = "Box and whiskers"}
 knitr::include_graphics("images/cat.jpg")
@@ -2935,8 +3014,8 @@ knitr::include_graphics("images/cat.jpg")
 
 A statistical measure that quantifies the degree to which two variables move together.
 
-::::{.columns}
-:::{.column}
+:::: {.columns}
+::: {.column}
 Correlation Coefficient Range: −1 to +1
 
 - +1: Perfect positive relationship
@@ -2945,7 +3024,7 @@ Correlation Coefficient Range: −1 to +1
 
 - 0: No linear relationship
 :::
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, out.width="80%", fig.alt = "correlation"}
 knitr::include_graphics("images/correlation.png")
@@ -2990,11 +3069,11 @@ A high correlation does not imply that one variable causes the other to change.
 
 # Inferential Statistics  {background-color="#D9DBDB"}
 
-##
+## Inferential vs Descriptive
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ### Descriptive
 
@@ -3004,9 +3083,9 @@ A high correlation does not imply that one variable causes the other to change.
 
 :::
 
-:::{.column}
+::: {.column}
 
-## Inferential
+### Inferential
 
 - Analyses a sample of data to infer about a larger population
 
@@ -3060,9 +3139,9 @@ knitr::include_graphics("images/standard_error.png")
 ### Standard deviation vs. standard error: 
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 - Standard deviation measures variability **within** a sample
 
@@ -3072,7 +3151,7 @@ $s = \sqrt{\sum(x - \overline x)^2\over n - 1}$
 :::
 
 
-:::{.column}
+::: {.column}
 
 - Standard error  is how much the sample mean (from a given sample) is likely to vary from the true population mean.
 
@@ -3108,15 +3187,15 @@ Also known as the Gaussian distribution, its a bell shaped probability distribut
 
 ## Confidence Intervals Explained
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 Can be constructed by YOU:
 
 Do you want to know the range within which you will capture the mean...
 
-:::{.incremental}
+::: {.incremental}
 
 * 66% of the time = 1 * S.E.
 
@@ -3138,7 +3217,7 @@ $$
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, fig.height = 9}
 
@@ -3333,7 +3412,7 @@ countdown::countdown(
 
 # Introduction to Linear Models {background-color="#D9DBDB"}
 
-## Two-sample t-tests
+## t-tests
 
 **Q. When testing the difference between two population means, what is the null hypothesis for the difference in their means?**
 
@@ -3394,16 +3473,15 @@ Example: A botanist is studying the mass of pollen transported by individual bee
 **Is there a significant difference in pollen mass transported per bee for the two hives studied?**
 
 
-
 ## Standard error of the difference
 
  **Calculate the difference in means, and the standard error of the difference in means**
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
-## Mean Difference
+### Mean Difference
 
 $$
 \Delta \bar{X} = \bar{X}_2 - \bar{X}_1
@@ -3420,9 +3498,9 @@ $$
 
 :::
 
-:::{.column}
+::: {.column}
 
-## Standard error of the difference
+### Standard error of the difference
 
 $$
 SED = \sqrt{s^2_1\over n_1} + {s^2_2\over n_2}
@@ -3457,9 +3535,9 @@ $$
 
 ## Standard error of the difference
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 Mean difference = 5.3
 
@@ -3480,7 +3558,7 @@ Mean difference = 5.3
 
 :::
 
-:::{.column}
+::: {.column}
 
 $$
 SED = 2.53
@@ -3496,7 +3574,7 @@ knitr::include_graphics("images/t_distribution_comparisons.png")
 
 
 
-##
+## Confidence Intervals
 
 **Calculate 95% confidence intervals**
 
@@ -3507,7 +3585,7 @@ knitr::include_graphics("images/t_distribution_comparisons.png")
 
 **The mass of pollen transported per bee in Hive B is on average 5.3mg more than Hive A [0.29 - 10.3] (mean [± 95% CI])**
 
-##
+## Write-up
 
 **The mass of pollen transported per bee in Hive B is on average 5.3mg more than Hive A [0.29 - 10.3] (mean [± 95% CI])**
 
@@ -3517,13 +3595,13 @@ $$
 \alpha = 1 - C
 $$
 
-:::{.fragment}
+::: {.fragment}
 
 As the 95% CI calculated from the *t* distribution *do not* cross 0, we can say that their is a > 5% probability of observing at least this difference in means under the assumption that the null hypothesis is true
 
 :::
 
-:::{.fragment}
+::: {.fragment}
 
 **"At P ≤ 0.05 bees from Hive B transport at least 0.29mg of pollen more per bee than Hive A"**
 
@@ -3532,9 +3610,9 @@ As the 95% CI calculated from the *t* distribution *do not* cross 0, we can say 
 
 ## P-value {.smaller}
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 IF the null hypothesis is true (samples are taken from populations with the same mean), the probability that we would have taken two samples that are at least this different by random chance (means, taking into account data spread, etc.) is 1.15%.
 
@@ -3543,7 +3621,7 @@ IF the null hypothesis is true (samples are taken from populations with the same
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = T, eval = FALSE}
 
@@ -3611,9 +3689,9 @@ alternative hypothesis: true difference in means is not equal to 0
 ## Linear models
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 * Difference tests: t-test, ANOVA, ANCOVA
 
@@ -3621,7 +3699,7 @@ alternative hypothesis: true difference in means is not equal to 0
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, out.width="60%", fig.alt = "Introduction to linear models"}
 knitr::include_graphics("images/linear_model_difference.png")
@@ -3691,9 +3769,9 @@ summary(lsmodel1)
 
 ## Linear model assumptions
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 Are the same as those that apply to a Student's T-test
 
@@ -3703,7 +3781,7 @@ Are the same as those that apply to a Student's T-test
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, out.width="100%", fig.alt = "Introduction to linear models"}
 knitr::include_graphics("images/lm_t_test.png")
@@ -3724,7 +3802,7 @@ knitr::include_graphics("images/commmon_statistical_tests_linear_models.png")
 
 ## Assumptions of the Linear Model
 
-:::{.incremental}
+::: {.incremental}
 
 -  *Errors* should be normally distributed
 
@@ -3803,7 +3881,7 @@ performance::check_outliers(lsmodel1)
 
 ## What is a P-value
 
-:::{.fragment}
+::: {.fragment}
 
 ### The probability of getting results at least as extreme as the ones we observed. Assuming the Null Hypothesis is true
 
@@ -3811,7 +3889,7 @@ performance::check_outliers(lsmodel1)
 
 ## Hypothesis formation
 
-:::{.incremental}
+::: {.incremental}
 
 - **Null hypothesis:** there is **no** difference between groups. Or no relationship between dependent and independent variables
 
@@ -3854,7 +3932,7 @@ The **null hypothesis** is that there is no relationship between your variables 
 
 e.g you want to know whether there is a difference in longevity between two groups of mice fed on different diets, diet A and diet B. 
 
-:::{.incremental}
+::: {.incremental}
 
 - **Null hypothesis:** there is **no** difference in longevity between the two groups.
 
@@ -3935,7 +4013,7 @@ legend("topright", legend = "95% CI", lty = 1, col = "red")
 
 “Diets can change the longevity of mice (*p* = 0.0016).”
 
-:::{.incremental}
+::: {.incremental}
 
 - “Mice on diet B lived significantly shorter lives than mice on diet A (*t*<sub>22</sub> = -3.6, *p* = 0.006).”
 
@@ -3972,9 +4050,9 @@ knitr::include_graphics("images/null-and-alternate.png")
 
 ## A non-significant p-value DOES NOT mean the null hypothesis is true
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 
 Here we can illustrate why a non-significant result does not always mean that the null hypothesis is true.
@@ -3985,7 +4063,7 @@ BUT - we can see that the observed mean difference is much more likely under the
 
 :::
 
-:::{.column}
+::: {.column}
 
 
 ```{r, echo = FALSE, out.width="90%"}
@@ -4014,9 +4092,9 @@ knitr::include_graphics("images/type-1.png")
 
 ## Why a significant p-value is not the same as an important effect
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 If we plot the null model for a very large sample size, we can see that even very small mean differences will be considered 'surprising'. 
 
@@ -4024,7 +4102,7 @@ However, just because data is surprising, does not mean we need to care about it
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, out.width="90%"}
 
@@ -4071,7 +4149,7 @@ Type 2 error = Keeping the null hypothesis (because *p* > $\alpha$) the random s
 
 ## Type 2 error
 
-:::{.incremental}
+::: {.incremental}
 
 * Probability of a Type 2 error is known as $\beta$ 
 
@@ -4148,9 +4226,9 @@ You're running an experiment comparing two groups (e.g., Control vs. Treatment),
 
 ## Simulate for power
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = T, eval = F}
 simulate_lm_power <- function(n_per_group = 50,
@@ -4213,9 +4291,9 @@ simulate_lm_power(n_per_group = 50)
 
 ## Power curves
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = T, eval = F}
 sample_sizes <- seq(10, 100, by = 10)
@@ -4230,7 +4308,7 @@ abline(h = 0.8, col = "red", lty = 2)
 ```
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = F, eval = T}
 sample_sizes <- seq(10, 100, by = 10)
@@ -4265,9 +4343,9 @@ This is a Shiny App designed to demonstrate the effects of:
 ## Linear models for regression analysis
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 Difference tests: t-test, ANOVA, ANCOVA
 
@@ -4280,7 +4358,7 @@ knitr::include_graphics("images/linear_model_difference.png")
 
 :::
 
-:::{.column}
+::: {.column}
 
 Association tests: Regressions
 
@@ -4304,7 +4382,7 @@ knitr::include_graphics("images/basic_linear.png")
 
 Basic linear models aim to describe a linear relationship between a:
 
-:::{.incremental}
+::: {.incremental}
 
 - response (dependent) variable and a predictor (independent) variable. 
 
@@ -4320,9 +4398,9 @@ $$
 \LARGE{y = a + bx}
 $$
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ### Where:
 
@@ -4342,7 +4420,7 @@ $x$ is the value of the explanatory variable
 
 :::
 
-:::{.column}
+::: {.column}
 
 
 ```{r, echo = FALSE, out.width="100%", fig.alt = "regression"}
@@ -4394,9 +4472,9 @@ The regression model fitted by **O**rdinary **L**east **S**quares (OLS) will pro
 
 ## Sum of Squares Errors
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, out.width="40%", fig.alt = "sum of squares error"}
 
@@ -4406,7 +4484,7 @@ knitr::include_graphics("images/ols-2.png")
 
 :::
 
-:::{.column}
+::: {.column}
 
 This produces the line with the *smallest* total area size for the squares. 
 
@@ -4428,9 +4506,9 @@ SUM OF SQUARES OF RESIDUAL ERROR = $(2^2)+(-1^2)+(4^2)+(-3^2)+(-2^2)=34$
 
 ## Sums of Squares
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 
 ```{r, echo = FALSE, out.width="100%", fig.alt = "OLS fits a line to produce the smallest amount of SSE"}
@@ -4441,7 +4519,7 @@ knitr::include_graphics("images/Sum of squares.png")
 
 :::
 
-:::{.column}
+::: {.column}
 
 **SST** The squared differences between the observed dependent variable $y_i$ and its overall mean $\overline{y}$.
 
@@ -4460,9 +4538,9 @@ $$
 \LARGE{y_i = a + bx+\epsilon}
 $$
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 $y_i$ is the predicted value of the response variable
 
@@ -4476,7 +4554,7 @@ $\epsilon$ is the value of the residual error
 
 :::
 
-:::{.column}
+::: {.column}
 
 
 ```{r, echo = F}
@@ -4581,7 +4659,7 @@ summary(janka_ls1)
 
 ## Assumptions of the Linear Model
 
-:::{.incremental}
+::: {.incremental}
 
 -  *Errors* should be normally distributed
 
@@ -4702,7 +4780,7 @@ Rather than deleting observations, sensitivity analysis asks:
 
 If they do, conclusions should be correspondingly weakened.
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## Full Data
 
@@ -4742,9 +4820,14 @@ As a result, confidence intervals and hypothesis tests are unreliable.
 ## Robust standard errors in R
 
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 ## OLS errors
+
+```{r, eval = F, echo = T}
+summary(janka_ls1)
+
+```
 
 ```{r}
 summary(janka_ls1)
@@ -4752,6 +4835,13 @@ summary(janka_ls1)
 ```
 
 ## Sandwich errors
+
+```{r, eval = F, echo = T}
+
+lmtest::coeftest(janka_ls1, 
+                 vcov = sandwich::vcovHC(janka_ls1, type = "HC3"))
+
+```
 
 ```{r}
 library(sandwich)
@@ -4796,9 +4886,25 @@ The bootstrap approximates the sampling distribution by resampling observations.
 
 Build confidence intervals based on sampling distribution
 
-:::{.panel-tabset}
+```{r, echo = FALSE, out.width="80%"}
+
+knitr::include_graphics("images/bootstrapping.png")
+
+```
+
+
+## Bootstrapping
+
+::: {.panel-tabset}
 
 ## Bootstrapped parameters
+
+
+```{r, eval = F, echo = T}
+
+bootstrap_parameters(lsmodel1, iterations = 2000)
+
+```
 
 ```{r}
 library(here)
@@ -4816,6 +4922,17 @@ bootstrap_parameters(lsmodel1, iterations = 2000)
 ```
 
 ## Simulation check
+
+```{r, eval = F, echo = T}
+
+parameters_model <- bootstrap_model(lsmodel1, iterations = 2000)
+
+ggplot(parameters_model, aes(sample = typeSelf))+
+    stat_qq_band() +
+    stat_qq_line() +
+    stat_qq_point()
+
+```
 
 ```{r}
 parameters_model <- bootstrap_model(lsmodel1, iterations = 2000)
@@ -4844,11 +4961,11 @@ They require minimal assumptions but test sharp null hypotheses.
 
 ## Permutation tests in R
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
-```{r, echo = FALSE, out.width="50%"}
+```{r, echo = FALSE, out.width="80%"}
 
 knitr::include_graphics("images/perm.png")
 
@@ -4856,7 +4973,16 @@ knitr::include_graphics("images/perm.png")
 
 :::
 
-:::{.column}
+::: {.column}
+
+```{r, eval = FALSE, echo = TRUE}
+library(coin)
+
+coin::independence_test(height ~ as.factor(type),
+                  data = darwin, 
+                  distribution = approximate(nresample = 5000))
+
+```
 
 ```{r}
 library(coin)
@@ -4910,13 +5036,13 @@ knitr::include_graphics("images/model_summary.png")
 ANOVAs use information about variances, but the main goal of analysis is comparison of MEANS (don’t let the name mix you up - more on this later).
 
 
-:::{.fragment}
+::: {.fragment}
 
 **ANOVA is an omnibus test** – it tests for significant differences between any means in the study
 
 :::
 
-:::{.fragment}
+::: {.fragment}
 
 
 **ANOVA is just a special case of the linear model**
@@ -4929,7 +5055,7 @@ ANOVAs use information about variances, but the main goal of analysis is compari
 
 **Null Hypothesis (H0):** All means are equal (in other words, all groups are from populations with the same mean)
 
-:::{.fragment}
+::: {.fragment}
 
 **Alternative Hypothesis (HA):** At least two group means are NOT equal (that means that just two could be different, or they could ALL be different)
 
@@ -4940,9 +5066,9 @@ ANOVAs use information about variances, but the main goal of analysis is compari
 ## ANOVA Example 
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 We have collected data for soil uranium concentrations at three locations on Los Alamos National Lab property: Site A, Site B, and Site C. The data structure is shown here: 
 
@@ -4950,7 +5076,7 @@ A one-way ANOVA can be used to assess whether there is a statistically significa
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, out.width="120%", fig.alt = "A tidy dataframe illustrating one continuous dependent variable and and one factor predictor variable (with three levels)"}
 knitr::include_graphics("images/three_level.png")
@@ -4979,9 +5105,9 @@ knitr::include_graphics("images/understand-ANOVA.png")
 
 ## What does an ANOVA actually do?
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
 $$
 \large F = {SSR / (k-1)\over SSE / (N-k)} = {MSR\over MSE}
@@ -5003,7 +5129,7 @@ This is a **ratio** of the between group variance and the the within group varia
 
 :::
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 ```{r, echo = FALSE, out.width="120%", fig.alt = ""}
@@ -5018,9 +5144,9 @@ knitr::include_graphics("images/one-way-ANOVA.png")
 
 ## F distribution
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 
 - This F distribution is used when we want to compare within and between group variances.
@@ -5029,12 +5155,9 @@ knitr::include_graphics("images/one-way-ANOVA.png")
 
 - For a given value of **numerator** and **denominator** degrees of freedom we can look up the probability of observing this ratio under a null hypothesis of identical variances.
 
-
-- If F value is high enough then we might have enough evidence to conclude that samples are likely drawn from populations with *different* means.
-
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = F, fig.height = 10}
 x <- seq(0.001, 5, by = 0.001)
@@ -5064,9 +5187,9 @@ legend("topright", legend = c("df1 = 1, df2 = 1", "df1 = 2, df2 = 1", "df1 = 5, 
 
 ## ANOVA Example
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, message = FALSE}
 
@@ -5079,7 +5202,7 @@ bulbs |>
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE}
 bulb_lsmodel0 <- lm(lifetime_hours ~ bulb_type, data = bulbs)
@@ -5098,7 +5221,7 @@ summary(bulb_lsmodel0)
 
 ## Correcting for multiple comparisons
 
-:::{.incremental}
+::: {.incremental}
 
 - The *F*-ratio tells us only whether the model fitted to the data (SSR) accounts for more variance than other factors (SSE). 
 
@@ -5110,7 +5233,7 @@ summary(bulb_lsmodel0)
 
 ## Planned contrasts
 
-:::{.incremental}
+::: {.incremental}
 
 - You focused on a *few* scientifically sensible comparisons, rather than every possible comparison
 
@@ -5124,7 +5247,7 @@ summary(bulb_lsmodel0)
 
 ## Post hoc
 
-:::{.incremental}
+::: {.incremental}
 
 - Typically unplanned comparisons, conducted only after a significant ANOVA result
 
@@ -5208,9 +5331,9 @@ knitr::include_graphics("images/basic_linear.png")
 
 ## Straight line equation
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, out.width="80%", fig.alt = "Culmen: the ridge along the top part of a bird's bill"}
 
@@ -5221,7 +5344,7 @@ knitr::include_graphics("images/culmen.jpg")
 
 :::
 
-:::{.column}
+::: {.column}
 
 
 ```{r, echo = F, out.width = "60%"}
@@ -5263,7 +5386,7 @@ ggplot(aes(x= bill_length_mm,
 In order to represent a categorical variable in a model - we need to convert these cases to ones that are compatible with the maths. 
 Dummy variables, are coded with 0 and 1's. With three species we would have the following:
 
-:::{.incremental}
+::: {.incremental}
 
 * Adelie[0,0] - the reference or *intercept* species
 
@@ -5318,9 +5441,9 @@ lm(bill_length_mm ~
 
 The species of penguin *changes* the relationship between bill length and bill depth (e.g. the shape of their beaks are different).
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = T, eval = F}
 lsmodel1 <- lm(bill_length_mm ~ 
@@ -5336,7 +5459,7 @@ summary(lsmodel1)
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = F}
 lsmodel1 <- lm(bill_length_mm ~ 
@@ -5358,9 +5481,9 @@ summary(lsmodel1)
 ## Additive vs Interaction
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ### Additive model
 
@@ -5372,7 +5495,7 @@ knitr::include_graphics("images/no_interaction.png")
 
 :::
 
-:::{.column}
+::: {.column}
 
 ### Interaction model
 
@@ -5409,7 +5532,7 @@ Compares whether adding the interaction improves fit
 
 ## When considering interaction terms
 
-:::{.incremental}
+::: {.incremental}
 
 * Have a clear basis for *why* you expect an interaction (and visualise the data)
 
@@ -5424,9 +5547,9 @@ Compares whether adding the interaction improves fit
 
 Generalisations are no longer valid in interaction models, the effect of a predictor variable on the dependent variable is now conditional on the value of the other predictor variable
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #|echo: TRUE
@@ -5444,7 +5567,7 @@ emmeans::emmeans(lsmodel1,
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #|echo: TRUE
@@ -5494,7 +5617,7 @@ countdown::countdown(
 
 ## Simple linear model
 
-:::{.incremental}
+::: {.incremental}
 
 - **Question**: Does the amount of sunlight affect plant growth?
 
@@ -5507,7 +5630,7 @@ countdown::countdown(
 
 ## Control variables
 
-:::{.incremental}
+::: {.incremental}
 
 - **Question**: Does the amount of sunlight affect plant growth?
 
@@ -5521,7 +5644,7 @@ countdown::countdown(
 
 ## Multiple predictor model
 
-:::{.incremental}
+::: {.incremental}
 
 - **Question**: How do water and nutrient levels affect plant growth?
 
@@ -5536,7 +5659,7 @@ countdown::countdown(
 
 ## Multiple predictor model
 
-:::{.incremental}
+::: {.incremental}
 
 - **Question**: Do water and nutrient levels work together to affect plant growth?
 
@@ -5550,7 +5673,7 @@ countdown::countdown(
 
 ## Exercise 1
 
-:::{.incremental}
+::: {.incremental}
 
 - **Question**: Does temperature affect the metabolic rate of lizards?
 
@@ -5564,7 +5687,7 @@ countdown::countdown(
 
 ## Exercise 2:
 
-:::{.incremental}
+::: {.incremental}
 
 - **Question**: How does diet and exercise affect cholesterol in mice?
 
@@ -5580,7 +5703,7 @@ countdown::countdown(
 
 ## Exercise 3:
 
-:::{.incremental}
+::: {.incremental}
 
 - **Question**: Do immune system responses depend on stress and sleep in humans?
 
@@ -5643,7 +5766,7 @@ These methods are widely available in statistical software and remain frequently
 
 ## AIC
 
-:::{.incremental}
+::: {.incremental}
 
 - The Akaike Information Criterion (AIC)  balances the trade-off between model fit and complexity by penalizing models with more parameters.
 
@@ -5659,9 +5782,9 @@ These methods are widely available in statistical software and remain frequently
 
 ## AIC
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 **AIC can:**
 
@@ -5671,7 +5794,7 @@ These methods are widely available in statistical software and remain frequently
 
 :::
 
-:::{.column}
+::: {.column}
 
 **AIC cannot:**
 
@@ -5970,11 +6093,11 @@ DAGs provide a formal framework to:
 
 They make assumptions explicit and open to critique.
 
-## 
+## DAGS
 
-::::
 
-:::{.column}
+
+::: {.column}
 
 ```{r, eval = FALSE, echo = TRUE}
 library(ggdag)
@@ -5995,7 +6118,7 @@ ggdag_status(dag) + theme_dag()
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = FALSE, eval = TRUE}
 library(ggdag)
@@ -6016,7 +6139,7 @@ ggdag_status(dag) + theme_dag()
 
 :::
 
-::::
+
 
 ## Building a causally informed model
 
@@ -6066,11 +6189,11 @@ ggdag(dag, text = FALSE, use_labels = "label") +
 ```
 
 
-## 
-
-:::{.panel-tabset}
-
 ## Adjustment
+
+::: {.panel-tabset}
+
+### Adjustment
 
 ```{r}
 # What should we adjust for?
@@ -6081,7 +6204,7 @@ ggdag_adjustment_set(dag,
 
 ```
 
-## Model
+### Model
 
 ```
 
@@ -6131,11 +6254,11 @@ ggdag(dag, text = FALSE, use_labels = "label") +
 ```
 
 
-## 
+## Adjustment 2
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
-## Adjustment
+### Adjustment
 
 ```{r}
 # What should we adjust for?
@@ -6146,7 +6269,7 @@ ggdag_adjustment_set(dag,
 
 ```
 
-## Model
+### Model
 
 ```
 
@@ -6198,12 +6321,12 @@ ggdag(dag, text = FALSE, use_labels = "label") +
 ```
 
 
-## 
+## Adjustment 3
 
-:::{.panel-tabset}
+::: {.panel-tabset}
 
 
-## Collider
+### Collider
 
 ```{r}
 ggdag_collider(dag,
@@ -6213,7 +6336,7 @@ ggdag_collider(dag,
 
 ```
 
-## Adjustment
+### Adjustment
 
 ```{r}
 # What should we adjust for?
@@ -6259,7 +6382,7 @@ A model with poor diagnostics is a bad fit for the data – confidence intervals
 
 - Check the model is a good fit for the observed data
 
-:::{.incremental}
+::: {.incremental}
 
 * Diagnostic plots of residuals
 
@@ -6267,10 +6390,7 @@ A model with poor diagnostics is a bad fit for the data – confidence intervals
 * Multicollinearity
 
 
-* Omitted Variable Bias
-
-
-* Irrelevant variables
+* Careful selection of variables
 
 
 * Hypothesis testing for model simplification
@@ -6282,9 +6402,9 @@ A model with poor diagnostics is a bad fit for the data – confidence intervals
 
 ## Model checks
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 ```{r, echo = T}
 
@@ -6299,7 +6419,7 @@ lsmodel1 <- lm(bill_length_mm ~
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
 ```{r, echo = T}
 library(performance)
@@ -6323,9 +6443,9 @@ check_model(lsmodel1, check = c("linearity", "homogeneity"))
 
 ## Collinearity and High Leverage {.smaller}
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 The next two plots analyze for collinearity and high leverage points.
 
@@ -6336,7 +6456,7 @@ The next two plots analyze for collinearity and high leverage points.
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
 
 ```{r, echo = F}
@@ -6400,9 +6520,9 @@ Each predictor is regressed (in turn) against the full model *without* that pred
 ## Normality of Residuals
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 If the distributions are skewed, this can indicate problems with the model.
@@ -6413,7 +6533,7 @@ If the distributions are skewed, this can indicate problems with the model.
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
 ```{r, echo = F, out.width = "90%"}
 
@@ -6510,9 +6630,9 @@ butterfly |>
 
 ## Fix the dataset
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: false
@@ -6533,7 +6653,7 @@ butterfly_correct |>
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: true
@@ -6649,9 +6769,9 @@ summary(model_2)
 
 ## Figures
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="30%"}
+::: {.column width="30%"}
 
 ```{r}
 #| eval: false
@@ -6671,7 +6791,7 @@ butterfly_correct |>
 
 :::
 
-:::{.column width="70%"}
+::: {.column width="70%"}
 
 ```{r}
 
@@ -6694,9 +6814,9 @@ butterfly_correct |>
 
 ## A better figure
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="30%"}
+::: {.column width="30%"}
 
 ```{r}
 #| eval: false
@@ -6724,7 +6844,7 @@ emmeans::emmeans(model_2, specs = ~ sex + jun_mean,
 
 :::
 
-:::{.column width="70%"}
+::: {.column width="70%"}
 
 ```{r}
 
@@ -6760,7 +6880,7 @@ emmeans::emmeans(model_2, specs = ~ sex + jun_mean,
 
 - It aims to fit a regression line which minimises the squared differences between observed and predicted values
 
-:::{.fragment}
+::: {.fragment}
 
 ![](images/ols.png){fig-align="center" fig-alt="ordinary least squares" width=70%}
 
@@ -6776,7 +6896,7 @@ $$
 
 where:
 
-:::{.incremental}
+::: {.incremental}
 
 - $y_i$ is the predicted value of the response variable.
 
@@ -6870,7 +6990,7 @@ When using our residuals to calculate standard error, confidence intervals and s
 
 - with a constant variance. 
 
-:::{.fragment}
+::: {.fragment}
 <br>
 This implies that the residuals, or the distances between the observed values and the values predicted by the linear model, can be modeled by drawing random values from a normal distribution.
 
@@ -6884,7 +7004,7 @@ $$
 y_i \sim N(\mu = \beta_0 + \beta_1 X_i, \sigma^2)
 $$
 
-:::{.fragment}
+::: {.fragment}
 
 Which literally means that $y_i$ is drawn from a normal distribution with parameters:
 
@@ -6980,9 +7100,9 @@ plot(model)
 
 ## Residuals vs Fitted
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 
@@ -6992,7 +7112,7 @@ plot(model, which=1)
 
 :::
 
-:::{.column}
+::: {.column}
 
 - **Purpose:** To check for linearity and homoscedasticity.
 
@@ -7005,9 +7125,9 @@ plot(model, which=1)
 
 ## QQ-plot
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 
@@ -7017,7 +7137,7 @@ plot(model, which=2)
 
 :::
 
-:::{.column}
+::: {.column}
 
 - **Purpose:** To assess the normality of the residuals
 
@@ -7029,9 +7149,9 @@ plot(model, which=2)
 
 ## Scale-location
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 
@@ -7041,7 +7161,7 @@ plot(model, which=3)
 
 :::
 
-:::{.column}
+::: {.column}
 
 - **Purpose:** To check homoscedasticity and identify outliers
 
@@ -7053,9 +7173,9 @@ plot(model, which=3)
 
 ## Residuals vs. Leverage
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 
@@ -7065,7 +7185,7 @@ plot(model, which=4)
 
 :::
 
-:::{.column}
+::: {.column}
 
 - **Purpose:** To identify influential data points(outliers)
 
@@ -7078,15 +7198,15 @@ plot(model, which=4)
 
 ## Performance
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 The `performance` package from [easystats](https://easystats.github.io/easystats/) can produce (among other things) similar plots.
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| fig-height: 7
@@ -7102,9 +7222,9 @@ check_model(model)
 
 ## Formal tests
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 - For linear models we can also run some formal tests on the residuals
 
@@ -7124,7 +7244,7 @@ performance::check_heteroscedasticity(model)
 ```
 :::
 
-:::{.column}
+::: {.column}
 
 - This becomes more difficult with generalised models
 
@@ -7138,7 +7258,7 @@ performance::check_heteroscedasticity(model)
 
 ## What are Generalised linear models?
 
-:::{.incremental}
+::: {.incremental}
 
 - The Generalised Linear Model (GLM) is an extension of the ordinary linear regression model that accommodates a broader range of response variable types and error distributions.
 
@@ -7211,7 +7331,7 @@ $g(\mu_i) = \eta_i$
 
 :::
 
-:::{.fragment}
+::: {.fragment}
 
 - $\eta_i$ linear prediction for observation $i$
 
@@ -7254,7 +7374,7 @@ $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$
 
 :::
 
-:::{.fragment}
+::: {.fragment}
 
  - $\epsilon_i$ is the error term for observation $i$
 
@@ -7264,9 +7384,9 @@ $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$
 
 ## Generalised Linear Model
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 **Linear Predictor** ($\eta$):
 
@@ -7284,7 +7404,7 @@ $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$
 
 :::
 
-:::{.column}
+::: {.column}
 
 - $\eta_i$ linear prediction for observation $i$
 
@@ -7317,9 +7437,9 @@ The choice of error family and link influence how well the model fits
 
 ## Choosing an error family
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 - What type of variable is the outcome?
 
@@ -7327,7 +7447,7 @@ The choice of error family and link influence how well the model fits
 
 :::
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
 ![](images/flow.png){fig-align="center" fig-alt="physalia logo" width=150%}
 
@@ -7344,7 +7464,7 @@ The choice of error family and link influence how well the model fits
 
 This regression analysis uses data from the Australian forestry industry recording wood density and timber hardness from 36 different samples
 
-:::{.incremental}
+::: {.incremental}
 
 - Timber hardness is quantified on the "Janka" scale
 
@@ -7424,9 +7544,9 @@ check_normality(residuals(janka_ls))
 
 The R output for the `MASS::boxcox()` function plots a maximum likelihood curve (with a 95% confidence interval - drops down as dotted lines) for the best transformation for fitting the dependent variable to the model.
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 | lambda value | transformation |
 |--------------|----------------|
@@ -7437,7 +7557,7 @@ The R output for the `MASS::boxcox()` function plots a maximum likelihood curve 
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: true
@@ -7621,7 +7741,7 @@ summary(janka_wls)
 
 ## Troublesome transformations
 
-:::{.incremental}
+::: {.incremental}
 
 - Changes interpretability
 
@@ -7678,9 +7798,9 @@ summary(janka_glm)
 
 ## Plot model
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: false
@@ -7700,7 +7820,7 @@ ggplot(janka, aes(x = dens, y = hardness)) +
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: true
@@ -7815,9 +7935,9 @@ summary(janka_gamma)
 
 ## Plot model
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: false
@@ -7833,7 +7953,7 @@ check_model(janka_gamma, detrend =F)
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: true
@@ -7860,9 +7980,9 @@ check_model(janka_gamma, detrend =F)
 
 ## Log-Likelihood
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 - Likelihood measures the probability of observing the given data under a specific statistical model, as a function of the model's parameters.
 
@@ -7872,7 +7992,7 @@ check_model(janka_gamma, detrend =F)
 
 :::
 
-:::{.column}
+::: {.column}
 
 ![](images/log-likelihood.png){fig-align="center" fig-alt="The log-likelihood (l) maximum is the same as the likelihood (L) maximum." width=100%}
 
@@ -7886,7 +8006,7 @@ Likelihood Function:
 
 $L(\theta | y) = f(y_1 | \theta) \times f(y_2 | \theta) \times \ldots \times f(y_n | \theta)$
 
-:::{.fragment}
+::: {.fragment}
 <br>
 Log-Likelihood Function:
 
@@ -7894,7 +8014,7 @@ $\ell(\theta | y) = \log(f(y_1 | \theta)) + \log(f(y_2 | \theta)) + \ldots + \lo
 
 :::
 
-:::{.fragment}
+::: {.fragment}
 <br>
 Although log-likelihood functions are mathematically easier than their multiplicative counterparts, they can be challenging to calculate by hand. They are usually calculated with software.
 
@@ -7904,7 +8024,7 @@ Although log-likelihood functions are mathematically easier than their multiplic
 
 For a specified error family distribution and link function, the glm finds parameter values that have the highest likelihood score.
 
-:::{.incremental}
+::: {.incremental}
 
 - Which estimates are most probable for producing the observed data
 
@@ -7921,9 +8041,9 @@ $$\ell(\theta | \mathbf{y}) = \sum_{i=1}^{n} \log(f(y_i | \theta))$$
 ## Maximum Likelihood
 
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: true
@@ -7969,7 +8089,7 @@ log_likelihood_visual()
 
 :::
 
-:::{.column}
+::: {.column}
 
 - A contour plot visualizing the log-likelihood surface for a normal distribution fitted to simulated data. 
 
@@ -8040,15 +8160,15 @@ ggplot() +
 
 ## Pseudo R-squared
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ![](images/deviance.png){fig-align="center" fig-alt="" width=100%}
 
 :::
 
-:::{.column}
+::: {.column}
 
 Formula: 
 
@@ -8089,7 +8209,7 @@ r.squaredLR(janka_gamma)
 
 ## AIC
 
-:::{.incremental}
+::: {.incremental}
 
 - The Akaike Information Criterion (AIC)  balances the trade-off between model fit and complexity by penalizing models with more parameters.
 
@@ -8105,9 +8225,9 @@ r.squaredLR(janka_gamma)
 
 ## AIC
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 **AIC can:**
 
@@ -8117,7 +8237,7 @@ r.squaredLR(janka_gamma)
 
 :::
 
-:::{.column}
+::: {.column}
 
 **AIC cannot:**
 
@@ -8137,7 +8257,7 @@ The likelihood ratio test (LRT) “unifies” frequentist statistical tests. Bra
 
 $\text{LR} = -2(\ln L_1 - \ln L_2)$
 
-:::{.fragment}
+::: {.fragment}
 
 Where:
 
@@ -8176,7 +8296,7 @@ LR
 
 ## Likelihood ratio test
 
-:::{.incremental}
+::: {.incremental}
 
 - The likelihood ratio test `lrtest()` is typically calculated as twice the difference in deviance between the two models. (Can also be carried out with the `anova()` function)
 
@@ -8196,7 +8316,7 @@ lrtest(null_model, fitted_model)
 
 What if the variance is unknown e.g. Gaussian and Gamma distributions?
 
-:::{.incremental}
+::: {.incremental}
 
 - Then the null model estimates one parameter while the alternative model estimates two, so the difference in df is still 1. 
 
@@ -8232,7 +8352,7 @@ drop1(fitted_model, test = "F")
 
 Common response variable in ecological datasets is the binary variable: we observe a phenomenon X or its “absence”
 
-:::{.incremental}
+::: {.incremental}
 
 * Presence/Absence of a species
 
@@ -8250,9 +8370,9 @@ Called a logistic regression or logit model
 
 ## Binary variables
 
-:::::{.columns}
+::::: {.columns}
 
-::::{.column}
+:::: {.column}
 
 ```{r}
 #| eval: true
@@ -8267,7 +8387,7 @@ load(file = "../data_2/Mayflies.rda")
 
 
 
-:::{.incremental}
+::: {.incremental}
 
 - Investigating mayfly abundance in relation to pollution gradient measured in Cumulative Criterion Units (CCU)
 
@@ -8279,7 +8399,7 @@ load(file = "../data_2/Mayflies.rda")
 
 ::::
 
-::::{.column}
+:::: {.column}
 
 ![](images/Ephemera.png){fig-align="center" fig-alt="Ephemera vulgata" width=60%}
 
@@ -8317,9 +8437,9 @@ ggplot(Mayflies, aes(x=CCU, y=Occupancy)) + geom_point()+
 
 ## Bernoulli Distribution
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 The Bernoulli distribution models the probability of success or failure in a single trial of a binary experiment:
 
@@ -8329,7 +8449,7 @@ The Bernoulli distribution models the probability of success or failure in a sin
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: true
@@ -8364,7 +8484,7 @@ ggplot(df, aes(x = Outcome, y = Probability, group = Outcome)) +
 
 ## Probability distribution
 
-::::{columns}
+:::: {columns}
 
 ::: {.column}
 $logit(p) = \log \frac{p}{1 - p}$
@@ -8406,7 +8526,7 @@ The log of the odds $(p / (1 - p))$
 
 $$ logit(p) = \log \frac{p}{1 - p} $$
 
-:::{.incremental}
+::: {.incremental}
 
 - The odds put our expected values on a 0 to +Inf scale.
 
@@ -8418,9 +8538,9 @@ $$ logit(p) = \log \frac{p}{1 - p} $$
 
 ## Probability, odds, logit-odds
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
 ```{r}
 #| eval: true
@@ -8465,7 +8585,7 @@ plot(independent_variable, log_odds, type = "l", col = "green", xlab = "Independ
 
 :::
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 - The odds put our expected values on a 0 to +Inf scale.
 
@@ -8498,7 +8618,7 @@ summary(mayfly_glm)
 
 ## Interpret the model
 
-:::{.incremental}
+::: {.incremental}
 
 Each coefficient corresponds to a predictor variable, indicating the change in the **log odds** of the response variable associated with a one-unit change in that predictor, holding other predictors constant.
 
@@ -8529,13 +8649,13 @@ When we use a binomial model, we produce the 'log-odds', this produces a fully u
 
 $$\log\left(\frac{p}{1-p}\right)	=	\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}$$
 
-:::{.fragment}
+::: {.fragment}
 
 $$\frac{p}{1-p}	=	e^{\beta_{0}}e^{\beta_{1}x_{1}}e^{\beta_{2}x_{2}}$$
 
 :::
 
-:::{.fragment}
+::: {.fragment}
 
 - We can interpret $\beta_{1}$ and $\beta_{2}$ as the increase in the log odds for every unit increase in $x_{1}$ and $x_{2}$. 
 
@@ -8545,13 +8665,13 @@ $$\frac{p}{1-p}	=	e^{\beta_{0}}e^{\beta_{1}x_{1}}e^{\beta_{2}x_{2}}$$
 
 ##
 
-:::::{.columns}
+::::: {.columns}
 
-::::{.column}
+:::: {.column}
 
 For the intercept: 
 
-:::{.incremental}
+::: {.incremental}
 
 - The estimate as log odds is 5.102.
 
@@ -8563,7 +8683,7 @@ For the intercept:
 
 ::::
 
-::::{.column}
+:::: {.column}
 
 ```{r}
 summary(mayfly_glm)
@@ -8576,14 +8696,14 @@ summary(mayfly_glm)
 
 ##
 
-:::::{.columns}
+::::: {.columns}
 
-::::{.column}
+:::: {.column}
 
 
 For the predictor variable `CCU`:
 
-:::{.incremental}
+::: {.incremental}
 
 - The estimate is -3.051.
 
@@ -8593,7 +8713,7 @@ For the predictor variable `CCU`:
 
 ::::
 
-::::{.column}
+:::: {.column}
 
 ```{r}
 summary(mayfly_glm)
@@ -8605,13 +8725,13 @@ summary(mayfly_glm)
 
 ##
 
-:::::{.columns}
+::::: {.columns}
 
-::::{.column}
+:::: {.column}
 
 Now, let's interpret the coefficient for `CCU` using the odds ratio interpretation:
 
-:::{.incremental}
+::: {.incremental}
 
 - The odds ratio associated with `CCU` is calculated as $e^{\beta_{\text{CCU}}} = e^{-3.051}$.
 
@@ -8623,7 +8743,7 @@ Now, let's interpret the coefficient for `CCU` using the odds ratio interpretati
 
 ::::
 
-::::{.column}
+:::: {.column}
 
 ```{r}
 #| eval: true
@@ -8686,7 +8806,7 @@ arm::binnedplot(pred, dresid)
 
 - [DHARMa](https://theoreticalecology.wordpress.com/2016/08/28/dharma-an-r-package-for-residual-diagnostics-of-glmms/) works by **simulating residuals** from the fitted model, comparing them with observed residuals, and providing diagnostic plots to assess model adequacy and identify potential issues like heteroscedasticity or influential data points.
 
-:::{.fragment}
+::: {.fragment}
 
 ```{r}
 #| echo: true
@@ -8754,9 +8874,9 @@ emmeans::emmeans(mayfly_glm,
 
 We can use `emmeans` package to compute estimated marginal means (EMMs) from a fitted GLM, convert them into a tibble format for visualization with ggplot2, overlay the means with uncertainty ribbons and add them on a scatter plot of the original data.
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column width="60%"}
+::: {.column width="60%"}
 
 ```{r}
 #| eval: true
@@ -8787,7 +8907,7 @@ ggplot(Mayflies, aes(x=CCU, y=Occupancy)) + geom_point()+
 
 :::
 
-:::{.column width="40%"}
+::: {.column width="40%"}
 
 
 ```{r}
@@ -8878,7 +8998,7 @@ ggplot(binom_data, aes(x = success, y = probability, color = trials)) +
 ::: 
 
 
-:::{.column}
+::: {.column}
 
 
 $logit(p) = \log \frac{p}{1 - p}$
@@ -8904,7 +9024,7 @@ $y_i = Binomial(n,p)$
 ![](images/Tribolium castaneum.jpg){fig-align="center" fig-alt="Tribolium" width=50%}
 :::
 
-:::{.column}
+::: {.column}
 
 This small dataset is from an experiment looking at mortality in batches of flour exposed to different doses of pesticides.
 
@@ -8992,9 +9112,9 @@ summary(beetle_glm_weights)
 
 - For a Binomial model standard residual checks do not apply
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| echo: true
@@ -9023,7 +9143,7 @@ plot(beetle_glm_weights, which = 2)
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| echo: false
@@ -9057,9 +9177,9 @@ plot(beetle_glm_weights, which = 2)
 
 ## Performance residual checks
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| echo: true
@@ -9071,7 +9191,7 @@ performance::check_model(beetle_glm_weights)
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| echo: true
@@ -9090,7 +9210,7 @@ performance::binned_residuals(beetle_glm_weights)
 
 - [DHARMa](https://theoreticalecology.wordpress.com/2016/08/28/dharma-an-r-package-for-residual-diagnostics-of-glmms/) works by **simulating residuals** from the fitted model, comparing them with observed residuals, and providing diagnostic plots to assess model adequacy and identify potential issues like heteroscedasticity or influential data points.
 
-:::{.fragment}
+::: {.fragment}
 
 ```{r}
 #| echo: true
@@ -9201,7 +9321,7 @@ summary(beetle_glm_weights)
 
 ## Overdispersion
 
-::::
+:::: {.columns}
 
 ::: {.column}
 
@@ -9210,7 +9330,7 @@ $P(X = s) = C(n, s) \cdot p^s \cdot (1 - p)^{n - s}$
 
 :::
 
-:::{.column}
+::: {.column}
 
 **Quasibinomial**
 $P(X = s) = C(n, s) \cdot p(p+k\theta)^{s-1} \cdot (1 - pk\theta)^{n - s}$
@@ -9252,9 +9372,9 @@ summary(beetle_quasiglm)
 
 ## Fitting the quasibinomial model
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 Standard Error, Confidence intervals and p-values WILL change.
 
@@ -9291,7 +9411,7 @@ ggplot(beetles, aes(x=Dose, y=Mortality_rate)) + geom_point()+
 
 :::
 
-:::{.column}
+::: {.column}
 
 Likelihood ratio tests should now be applied with an F-statistics
 
@@ -9312,25 +9432,8 @@ drop1(beetle_quasiglm, test = "F")
 ## Challenge: Binomial model
 
 
-:::: columns
-
-
-::: {.column width="60%"}
-
-On the afternoon of January 28th, 1986 the space shuttle Challenger experienced a critical failure and broke apart in mid air, resulting in the deaths of all seven crewmembers.
-
-An investigation discovered critical failures in all six of the O-rings in the solid rocket booster.
-
-> How did temperature affect the probability of o-ring failure?
-
-> What was the probability of all o-rings failing when the temperature was 36 degrees F
-
-:::
-
-::: {.column width="40%"}
-
 ```{r}
-#| label: ex-challenger-timer
+#| label: ex-beetle-timer
 countdown::countdown(
   minutes = 40,
   color_border = "#00AEEF",
@@ -9345,22 +9448,15 @@ countdown::countdown(
 )
 ```
 
-<br><br>
-
-![](images/space-shuttle.jpg){fig-align="center" fig-alt="Challenger" width=60%}
-
-:::
-
-::::
 
 
 # GLMs for count data {background-color="#D9DBDB"}
 
 ## Poisson
 
-:::: columns
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: true
@@ -9393,7 +9489,7 @@ ggplot(poisson_data, aes(x = events, y = probability, color = lambda)) +
 
 ::: 
 
-:::{.column}
+::: {.column}
 
 Count or rate data are ubiquitous in the life sciences (e.g number of parasites per microlitre of blood, number of species counted in a particular area). These type of data are **discrete** and **non-negative**.
 
@@ -9408,7 +9504,7 @@ a discrete distribution with a single parameter, λ (lambda), which defines both
 
 ## GLM
 
-:::{.incremental}
+::: {.incremental}
 
 Recall the simple linear regression case (i.e a GLM with a Gaussian error structure and identity link). For the sake of clarity let's consider a single explanatory variable where $\mu$ is the mean for *Y*:
 
@@ -9425,7 +9521,7 @@ $y_i \sim \mathcal{N}(\mu_i, \sigma^2)$
 
 * If we want to model count data we therefore want to **constrain** this mean to be positive only. 
 
-:::{.incremental}
+::: {.incremental}
 
 * Mathematically we can do this by taking the **logarithm** of the mean (the log is the default link for the Poisson distribution). 
 
@@ -9441,7 +9537,7 @@ $y_i \sim \mathcal{N}(\mu_i, \sigma^2)$
 
 The **Poisson** distribution has the following characteristics:
 
-:::{.incremental}
+::: {.incremental}
 
 * **Discrete** variable (integer), defined on the range $0, 1, \dots, \infty$.
 
@@ -9456,15 +9552,15 @@ The **Poisson** distribution has the following characteristics:
 
 ## Poisson: Case study
 
-:::: columns
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ![](images/3 Spined Stickleback.jpg){fig-align="center" fig-alt="Stickleback" width=50%}
 
 :::
 
-:::{.column}
+::: {.column}
 
 In this study the authors investigated the effect of the parasitic tapeworm *Schistocephalus solidus* infection on the susceptibility of infection from a second parasite, the trematode *Diplostomum pseudospathaceum*
 
@@ -9573,9 +9669,9 @@ summary(stick_poisson)
 
 ## Poisson model fit 
 
-:::: columns
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 Linear Model
 
@@ -9594,7 +9690,7 @@ plot(stick_lm, which=3)
 
 :::
 
-:::{.column}
+::: {.column}
 
 Poisson Model
 
@@ -9633,9 +9729,9 @@ drop1(stick_poisson, test = "Chisq")
 
 ## Model summary
 
-:::: columns
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| echo: true
@@ -9646,7 +9742,7 @@ summary(stick_poisson)
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r}
 #| eval: true
@@ -9710,7 +9806,7 @@ It may be true that you are initially unsure whether overdispersion is coming fr
 
 You can fit models with the same dependent and independent variables and different error structures and use AIC to help determine the best model for your data
 
-## Overdispersion in the cuckoo model
+## Overdispersion in the model
 
 
 $\phi = \frac{\text{Residual deviance}}{\text{Residual degrees of freedom}}$ = $\frac{697.25}{217} = 3.21$
@@ -10011,7 +10107,7 @@ ii) mixed-effects models cope well with missing data, unequal group sizes and re
 
 ## Structure {.smaller}
 
-:::{.incremental}
+::: {.incremental}
 
 - Biological datasets are often highly structured, containing clusters of non-independent observational units that are hierarchical in nature, and LMMs allow us to explicitly model the non-independence in such data. 
 
@@ -10027,7 +10123,7 @@ ii) mixed-effects models cope well with missing data, unequal group sizes and re
 
 ## Error rates
 
-:::{.incremental}
+::: {.incremental}
 
 - If the fixed effect varies or is manipulated at the level of the clutch, then treating multiple chicks from a single clutch as independent would represent pseudoreplication
 
@@ -10059,9 +10155,9 @@ lmer(blood_sugar ~ treatment + time + (1|individual))
 
 ## Fixed and Random Effects
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ### Fixed Effect
 
@@ -10076,7 +10172,7 @@ y ~ x, data = data)
 
 :::
 
-:::{.column}
+::: {.column}
 
 ### Random Effect
 
@@ -10158,9 +10254,9 @@ ggplot(data, aes(x = x,
 
 ## Mean between groups
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = F, fig.width = 8}
 
@@ -10174,7 +10270,7 @@ ggplot(data, aes(x = group,
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = F, fig.width = 8}
 
@@ -10411,9 +10507,9 @@ data |>
 
 ```
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 ${y_{ij} = \beta0_{j} + \beta1x+\epsilon_i}$
 
@@ -10432,7 +10528,7 @@ plot_function(lmer1, "Random intercept")
 
 :::
 
-:::{.column}
+::: {.column}
 
 ${y_{ij}  = \beta0_{j} + \beta1_{j}x+\epsilon_i}$
 
@@ -10459,9 +10555,9 @@ Random slope models give the model far more flexibility to fit the data, but req
 
 ## Checking models
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 Checking models with random effects is more complex
 
@@ -10471,7 +10567,7 @@ Checking models with random effects is more complex
 
 :::
 
-:::{.column}
+::: {.column}
 
 ```{r, echo = F, warning = F, message = F, fig.width = 12}
 
@@ -10565,9 +10661,9 @@ Your model did fit, but it generated that warning because some of your random ef
 
 ## Recommended {.smaller}
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 - Cite the relevant packages for constructing and presenting analyses
 
@@ -10581,7 +10677,7 @@ Your model did fit, but it generated that warning because some of your random ef
 
 :::
 
-:::{.column}
+::: {.column}
 ```{r, echo = T}
 
 sjPlot::tab_model(lmer3)
@@ -10633,9 +10729,9 @@ sjPlot::tab_model(lmer3)
 
 ## Reading list {.smaller}
 
-::::{.columns}
+:::: {.columns}
 
-:::{.column}
+::: {.column}
 
 [Writing statistical methods for ecologists](https://doi.org/10.1002/ecs2.4539)
 
@@ -10653,7 +10749,7 @@ sjPlot::tab_model(lmer3)
 
 :::
 
-:::{.column}
+::: {.column}
 
 [Ten common statistical mistakes to watch out for when writing or reviewing a manuscript.](https://elifesciences.org/articles/48175)
 
@@ -10673,17 +10769,13 @@ sjPlot::tab_model(lmer3)
 
 ::::
 
-## 
+## Contact
 
-::::
 
-::: {.column}
 
 <br>
 
 {{< fa brands linkedin >}} [philip-leftwich](https://www.linkedin.com/in/philip-leftwich-117052155/)
-
-{{< fa brands mastodon >}} [\@ecoevo.social\@PhilipLeftwich](https://ecoevo.social/@PhilipLeftwich)
 
 {{< fa brands github >}} [PhilipLeftwich](https://github.com/Philip-Leftwich)
 
@@ -10691,10 +10783,4 @@ sjPlot::tab_model(lmer3)
 
 
 
-:::
-::: {.column}
 
-
-:::
-
-::::

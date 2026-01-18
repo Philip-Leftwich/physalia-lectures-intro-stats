@@ -259,6 +259,15 @@ knitr::include_graphics("images/reproducible-data-analysis-02.png")
 :::
 
 
+## A Record of decision making
+
+- Same data different analysts
+
+[Gould et al 2025](https://ecoevorxiv.org/repository/view/6000/)
+
+- Many societies, journals and community groups are requiring or advocating for documented analyses
+
+
 # Basic R {background-color="#D9DBDB"}
 
 ## Syntax
@@ -1964,9 +1973,9 @@ knitr::include_graphics("images/choosing-data-to-viz.png")
 
 Few 2012; Correll et al. 2020
 
-## 
+## Choosing chart types
 
-::: {.panel-tabset}
+:::{.panel-tabset}
 
 ## Bad
 
@@ -1987,8 +1996,8 @@ ggtitle("Poor choice: pie chart")
 
 ## Good
 
-```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
+```{r, eval = FALSE, echo = T, fig.asp = 0.8, fig.width = 7}
 ggplot(data, aes(x=Category, y=Value)) +
 geom_col() +
 theme_minimal() +
@@ -1996,9 +2005,29 @@ ggtitle("Better choice: bar chart")
 
 ```
 
+
+
+
+
 ## Better
 
-```{r, fig.asp = 0.8, fig.width = 7}
+
+
+
+```{r, eval = FALSE, echo = T, fig.asp = 0.8, fig.width = 7}
+data |> 
+    mutate(Category = fct_reorder(Category, Value)) |> 
+    ggplot(aes(x=Category, y=Value)) +
+    geom_col() +
+    theme_minimal() +
+    ggtitle("Better choice: Re-ordered bar chart")+
+  coord_flip()
+
+```
+
+
+
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
 data |> 
     mutate(Category = fct_reorder(Category, Value)) |> 
@@ -2009,6 +2038,7 @@ data |>
   coord_flip()
 
 ```
+
 :::
 
 ## Using Colour Effectively
@@ -2025,9 +2055,9 @@ Cairo 2016; Wilke 2019
 
 ## Example
 
-::: {.panel-tabset}
+::: {.column}
 
-## Bad
+
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 ggplot(penguins, aes(bill_length_mm, bill_depth_mm, colour=species)) +
@@ -2036,7 +2066,9 @@ ggtitle("Relies on colour alone")
 
 ```
 
-## Good
+:::
+
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(colorspace)
@@ -2084,9 +2116,9 @@ Crameri et al. 2020; Wilke 2019
 
 ## Example
 
-::: {.panel-tabset}
+::: {.column}
 
-## Bad
+
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 ggplot(penguins, aes(bill_length_mm, bill_depth_mm, colour=species)) +
@@ -2095,7 +2127,9 @@ ggtitle("Relies on colour alone")
 
 ```
 
-## Good
+:::
+
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(colorspace)
@@ -2124,9 +2158,8 @@ Cleveland et al. 1988; Pandey et al. 2015
 
 ## Example
 
-::: {.panel-tabset}
+::: {.column}
 
-## Bad
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 set.seed(123)
@@ -2142,7 +2175,12 @@ ggplot(data, aes(x = Time, y = Value)) +
 
 ```
 
-## Good
+
+:::
+
+::: {.column}
+
+
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 ggplot(data, aes(x = Time, y = Value)) +
@@ -2198,9 +2236,7 @@ Few 2012; Schwabish 2020
 
 ## Example
 
-::: {.panel-tabset}
-
-## Bad
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguin_count <- penguins |> group_by(species) |> 
@@ -2217,7 +2253,9 @@ penguins |>
 
 ```
 
-## Good
+:::
+
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguin_count <- penguins |> group_by(species) |> 
@@ -2254,9 +2292,9 @@ Tufte 2001; Correll et al. 2020
 
 ## Strip plots
 
-::: {.panel-tabset}
+::: {.column}
 
-## Bad
+
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
@@ -2271,7 +2309,9 @@ scale_colour_discrete_qualitative()
 
 ```
 
-## Good
+:::
+
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
@@ -2292,10 +2332,7 @@ penguins |>
 
 ## Example
 
-::: {.panel-tabset}
-
-
-## Bad
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> drop_na(sex) |> 
@@ -2312,7 +2349,9 @@ ggplot(aes(x= bill_length_mm,
 
 ```
 
-## Good
+:::
+
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> drop_na(sex) |> 
@@ -2345,9 +2384,7 @@ Few 2012; Cairo 2016
 
 ## Example
 
-::: {.panel-tabset}
-
-## Bad
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(ggbeeswarm)
@@ -2362,7 +2399,9 @@ penguins |>
 
 ```
 
-## Good
+:::
+
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(ggbeeswarm)
@@ -2382,9 +2421,7 @@ penguins |>
 ## Example
 
 
-::: {.panel-tabset}
-
-## Bad
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> 
@@ -2400,7 +2437,9 @@ ggplot(aes(x= bill_length_mm,
 
 ```
 
-## Good
+:::
+
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> 
@@ -2428,10 +2467,7 @@ ggplot(aes(x= bill_length_mm,
 
 ## Example
 
-::: {.panel-tabset}
-
-
-## Bad
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> 
@@ -2448,7 +2484,9 @@ ggplot(aes(x= species,
 
 ```
 
-## Good
+:::
+
+::: {.column}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 penguins |> 
@@ -5741,6 +5779,7 @@ In linear regression, variable selection directly affects:
 
 :::aside
 Harrell, 2015
+[Lewer et al 2025](https://bmjmedicine.bmj.com/lookup/doi/10.1136/bmjmed-2025-001375)
 :::
 
 
@@ -6005,17 +6044,33 @@ anova(model1, model2)
 
 Causal inference asks:
 
-> What would have happened to the outcome if the exposure had been different, all else equal?
+> What is the true cause-and-effect relationship between variables?
 
-Linear regression can support causal estimation only when correctly specified with respect to the underlying causal structure.
+- Regression estimates causal effects only when the model reflects the underlying causal structure
+
+- Choosin which variables to include matters just as much as the model structure
 
 ## Key causal roles of variables
 
+:::{.incremental}
+
 - Confounder: common cause of exposure and outcome
+    
+    A variable that influences both exposure and outcome
+    *Age influences physical activity and risk of heart disease*
 
 - Mediator: lies on the causal pathway
 
-- Collider: common effect of exposure and outcome
+    A variable on the causal pathway *between* exposure and outcome
+    *Light availability allows plants to use fertiliser more effectively, increasing biomass*
+    
+
+- Collider: a variable influenced by two or more other variables
+    
+    Adjusting on a collider can cause *collider bias*
+    *When estimating the effect of boldness on reproductive success in birds, trap capture is a collider because both boldness and body condition influence capture probability, so adjusting for capture biases the effect*
+
+:::
 
 Incorrect adjustment can induce bias, particularly when conditioning on colliders 
 
@@ -6061,6 +6116,17 @@ bp_data <- tibble(
 
 ```
 
+## Causal structure blood pressure
+
+```
+
+Drug → Cholesterol → Blood Pressure
+
+
+```
+
+ Cholesterol is a **mediator** of the drugs effect
+
 ## Incorrect model
 
 ```{r}
@@ -6070,6 +6136,12 @@ model1 <- lm(bp_reduction ~ drug_treatment + cholesterol_reduction, data = bp_da
 summary(model1)
 
 ```
+
+- Adjusting for cholesterol blocks the causal pathway.
+
+- This estimates the direct effect of the drug, not the total effect.
+
+- This answers a different scientific question than intended.
 
 ## Correct model
 
@@ -6081,23 +6153,28 @@ summary(model1)
 
 ```
 
-## Directed Acrylic Graphs (DAG)
+- Estimates the total effect of the drug on blood pressure.
 
-DAGs provide a formal framework to:
 
-- Encode causal assumptions
+## Directed Acylic Graphs (DAG)
 
-- Identify confounders and colliders
+DAGs help us
 
-- Determine valid adjustment sets
+- Represent causal assumptions visually.
 
-They make assumptions explicit and open to critique.
+- Identify confounders, mediators, and colliders.
+
+- Decide which variables to adjust for.
+
+
+- DAGs encode assumptions — they do not prove causality.
 
 ## DAGS
 
 
+:::: {.columns}
 
-::: {.column}
+::: {.column width = "40%"}
 
 ```{r, eval = FALSE, echo = TRUE}
 library(ggdag)
@@ -6105,35 +6182,39 @@ library(ggdag)
 
 # Define a simple DAG
 dag <- dagify(
-y ~ x + z,
-x ~ z,
-exposure = "x",
-outcome = "y"
+blood_pressure ~ cholesterol + drug,
+cholesterol ~ drug,
+exposure = "drug",
+outcome = "blood_pressure"
 )
 
 
-ggdag_status(dag) + theme_dag()
+ggdag_status(dag)+
+  geom_dag_label()+
+  theme_dag()
 
 ```
 
 :::
 
-::: {.column}
+::: {.column width = "60%"}
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 library(ggdag)
 
 
 # Define a simple DAG
 dag <- dagify(
-y ~ x + z,
-x ~ z,
-exposure = "x",
-outcome = "y"
+blood_pressure ~ cholesterol + drug,
+cholesterol ~ drug,
+exposure = "drug",
+outcome = "blood_pressure"
 )
 
 
-ggdag_status(dag) + theme_dag()
+ggdag_status(dag)+
+  geom_dag_label()+
+  theme_dag()
 
 ```
 
@@ -6143,17 +6224,29 @@ ggdag_status(dag) + theme_dag()
 
 ## Building a causally informed model
 
-- Including the confounder `z` supports unbiased estimation of the effect of `x` on `y`.
+- Adjust for confounders.
 
-- Identifying causal structure is based on prior knowledge and expertise
+- Do not adjust for mediators when estimating total effects.
 
-- Ignoring causal structure can lead to biased research
+- Never adjust for colliders.
+
+- Causal structure comes from subject-matter knowledge, not from the data alone.
 
 ## Antibiotic Treatment & Recovery
 
-A hospital wants to know if a new antibiotic reduces infection recovery time. Doctors tend to prescribe this drug only to the patients with the most severe infections - when prescribed this drug they are also often recommended to be moved to intensive care.
+**Question***
 
-Variables: 
+- Does a new antibiotic reduce recovery time?
+
+**Context**
+
+- More severe infections are more likely to receive the drug.
+
+- Severe cases are more likely to go to intensive care.
+
+- Those on the drug are monitored by moving them to intensive care
+
+**Variables**
 
 - antibiotic
 
@@ -6163,11 +6256,17 @@ Variables:
 
 - intensive_care
 
+**Prompt**
+
+- Should we adjust for intensive care?
+
 ## Antibiotic DAG
 
-```{r}
-library(ggdag)
-library(dagitty)
+:::: {.columns}
+
+::: {.column width = "40%"}
+
+```{r, eval = FALSE, echo = TRUE}
 
 dag <- dagify(
   recovery_time ~ antibiotic + infection_severity + intensive_care,
@@ -6184,27 +6283,74 @@ dag <- dagify(
 )
 
 # Visualize the DAG
-ggdag(dag, text = FALSE, use_labels = "label") + 
+ggdag_status(dag)+
+  geom_dag_label()+
   theme_dag()
 ```
 
+:::
+
+::: {.column width = "60%"}
+
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
+
+dag <- dagify(
+  recovery_time ~ antibiotic + infection_severity + intensive_care,
+  antibiotic ~ infection_severity,
+  intensive_care ~ antibiotic + infection_severity,
+  exposure = "antibiotic",
+  outcome = "recovery_time"
+)
+
+# Visualize the DAG
+ggdag_status(dag)+
+  geom_dag_label()+
+  theme_dag()
+```
+
+
+:::
+
+::::
+
+## Antibiotic DAG
+
+- Infection severity is a confounder
+    
+    A variable that affects both exposure and outcome
+    
+- Intensive care is a collider
+
+    A variable that is caused by both drug treatment and infection severity
 
 ## Adjustment
 
-::: {.panel-tabset}
+:::: {.columns}
 
-### Adjustment
+::: {.column width = "40%"}
 
-```{r}
+```{r, eval = FALSE, echo = TRUE}
 # What should we adjust for?
-ggdag_adjustment_set(dag,
-                    text = FALSE,
-                     use_labels = "label")+
+ggdag_adjustment_set(dag)+
+  geom_dag_label()+
   theme_dag()
 
 ```
 
-### Model
+:::
+
+::: {.column width = "40%"}
+
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
+
+ggdag_adjustment_set(dag)+
+  geom_dag_label()+
+  theme_dag()
+
+```
+:::
+
+::::
 
 ```
 
@@ -6216,9 +6362,11 @@ lm(recovery_time ~ infection_severity + antibiotic)
 
 ## Exercise & Heart Disease
 
-We want to know if exercise reduces heart disease risk. Age affects both exercise habits (younger people exercise more) and heart disease risk. Exercise might work through weight loss, which is on the causal pathway.
+**Question**
 
-Variables: 
+- Does exercise reduce heart disease risk?
+
+**Variables**
 
 - exercise
 
@@ -6230,46 +6378,83 @@ Variables:
 
 - genetics
 
+> What should we adjust for? 
+
 
 ## Exercise DAG
 
-```{r}
+:::: {.columns}
+
+::: {.column width = "40%"}
+
+```{r, eval = FALSE, echo = TRUE}
+
 dag <- dagify(
   heart_disease ~ exercise + age + weight_loss + genetics,
   exercise ~ age + genetics,
   weight_loss ~ exercise,
   exposure = "exercise",
-  outcome = "heart_disease",
-  labels = c(
-    exercise = "Exercise",
-    heart_disease = "Heart Disease",
-    age = "Age",
-    weight_loss = "Weight Loss",
-    genetics = "Genetics"
-  )
-)
+  outcome = "heart_disease")
 
-ggdag(dag, text = FALSE, use_labels = "label") + 
+
+# Visualize the DAG
+ggdag_status(dag)+
+  geom_dag_label()+
   theme_dag()
 ```
 
+:::
+
+::: {.column width = "60%"}
+
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
+
+dag <- dagify(
+  heart_disease ~ exercise + age + weight_loss + genetics,
+  exercise ~ age + genetics,
+  weight_loss ~ exercise,
+  exposure = "exercise",
+  outcome = "heart_disease")
+
+
+# Visualize the DAG
+ggdag_status(dag)+
+  geom_dag_label()+
+  theme_dag()
+```
+
+:::
+
+::::
 
 ## Adjustment 2
 
-::: {.panel-tabset}
+:::: {.columns}
 
-### Adjustment
+::: {.column width = "40%"}
 
-```{r}
+```{r, eval = FALSE, echo = TRUE}
 # What should we adjust for?
-ggdag_adjustment_set(dag,
-                    text = FALSE,
-                     use_labels = "label")+
+ggdag_adjustment_set(dag)+
+  geom_dag_label()+
   theme_dag()
 
 ```
 
-### Model
+:::
+
+::: {.column width = "40%"}
+
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
+
+ggdag_adjustment_set(dag)+
+  geom_dag_label()+
+  theme_dag()
+
+```
+:::
+
+::::
 
 ```
 
@@ -6283,9 +6468,11 @@ lm(heart_disease ~ exercise + genetics + age)
 
 ## Fertiliser & Crop Yield
 
-Researchers study whether organic fertiliser increases crop yield. They measure soil quality, rainfall, and pest damage. Pest damage is influenced by both the fertiliser (which may attract pests) and rainfall (which affects pest populations).
+**Question**
 
-Variables: 
+- Does fertiliser increase crop yield?
+
+**Variables**
 
 - fertiliser
 
@@ -6297,57 +6484,86 @@ Variables:
 
 - pest_damage
 
+**Key complication**
+
+pest_damage is affected by both fertiliser and rainfall
+
 
 ## Fertiliser DAG
 
-```{r}
+:::: {.columns}
+
+::: {.column width = "40%"}
+
+```{r, eval = FALSE, echo = TRUE}
+
 dag <- dagify(
   yield ~ fertilizer + soil_quality + rainfall + pest_damage,
   fertilizer ~ soil_quality,
   pest_damage ~ fertilizer + rainfall,
   exposure = "fertilizer",
-  outcome = "yield",
-  labels = c(
-    fertilizer = "Fertilizer",
-    yield = "Crop Yield",
-    soil_quality = "Soil Quality",
-    rainfall = "Rainfall",
-    pest_damage = "Pest Damage"
-  )
+  outcome = "yield"
 )
 
-ggdag(dag, text = FALSE, use_labels = "label") + 
+
+# Visualize the DAG
+ggdag_status(dag)+
+  geom_dag_label()+
   theme_dag()
 ```
 
+:::
 
-## Adjustment 3
+::: {.column width = "60%"}
 
-::: {.panel-tabset}
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
+
+dag <- dagify(
+  yield ~ fertilizer + soil_quality + rainfall + pest_damage,
+  fertilizer ~ soil_quality,
+  pest_damage ~ fertilizer + rainfall,
+  exposure = "fertilizer",
+  outcome = "yield"
+)
 
 
-### Collider
+# Visualize the DAG
+ggdag_status(dag)+
+  geom_dag_label()+
+  theme_dag()
+```
 
-```{r}
-ggdag_collider(dag,
-                    text = FALSE,
-                     use_labels = "label")+
+:::
+
+::::
+
+## Collider
+
+:::: {.columns}
+
+::: {.column width = "40%"}
+
+
+```{r, echo = TRUE, eval = FALSE}
+ggdag_collider(dag)+
+  geom_dag_label()+
+  theme_dag()
+
+```
+:::
+
+::: {.column width = "60%"}
+
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
+ggdag_collider(dag)+
+  geom_dag_label()+
   theme_dag()
 
 ```
 
-### Adjustment
+:::
 
-```{r}
-# What should we adjust for?
-ggdag_adjustment_set(dag,
-                    text = FALSE,
-                     use_labels = "label")+
-  theme_dag()
-
-```
-
-## Model
+::::
 
 ```
 
@@ -6355,7 +6571,16 @@ lm(yield ~ soil_quality + rainfall)
 
 ```
 
-:::
+## Common pitfalls
+
+- Adjusting for mediators changes the causal question.
+
+- Adjusting for colliders introduces bias.
+
+- Omitting confounders biases estimates.
+
+- Statistical significance does not imply causal validity.
+
 
 # Questions? {background-color="#D9DBDB"}
 
@@ -8346,7 +8571,7 @@ drop1(fitted_model, test = "F")
 
 
 
-# GLMs for binary data {background-color="#D9DBDB"}
+# GLMs for Binary and Binomial Data {background-color="#D9DBDB"}
 
 ## GLMS for binary data 
 
@@ -8364,11 +8589,11 @@ Common response variable in ecological datasets is the binary variable: we obser
 
 :::
 
-Wish to determine if $P/A∼ Variable$
+Wish to determine if $P(event)∼ Variable$
 
-Called a logistic regression or logit model
+Linear regression is inappropriate because probabilities are bounded between 0 and 1
 
-## Binary variables
+## Binary example: Mayflies
 
 ::::: {.columns}
 
@@ -8435,106 +8660,26 @@ ggplot(Mayflies, aes(x=CCU, y=Occupancy)) + geom_point()+
 
 
 
-## Bernoulli Distribution
 
-:::: {.columns}
-
-::: {.column}
-
-The Bernoulli distribution models the probability of success or failure in a single trial of a binary experiment:
-
-* where success occurs with probability $p$ 
-
-* and failure with probability ${1-p}$
-
-:::
-
-::: {.column}
-
-```{r}
-#| eval: true
-#| echo: false
-#| fig-height: 8
-#| message: false
-#| warning: false
-
-# Define probabilities
-p_success <- 0.7
-p_failure <- 1 - p_success
-
-# Create data frame
-df <- data.frame(
-  Outcome = c("Success", "Failure"),
-  Probability = c(p_success, p_failure)
-)
-
-# Plot
-ggplot(df, aes(x = Outcome, y = Probability, group = Outcome)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Probability Distribution of a Bernoulli Random Variable",
-       x = "Outcome",
-       y = "Probability") +
-  theme_minimal(base_size = 14)
-
-```
-
-:::
-
-::::
-
-## Probability distribution
+## Logistic regression
 
 :::: {columns}
 
 ::: {.column}
-$logit(p) = \log \frac{p}{1 - p}$
+$logit(p) = \log \frac{p}{1 - p} = {\beta0} + {\beta1x} $
 
-$y_i = Bernoulli(p) = \frac{p}{1 - p}$
+
 :::
 
 ::: {.column}
-**Mean of distribution** Probability (p) of observing an outcome
+The linear model operates on log-odds.
 
-**Variance of observed responses** As observed responses approach 0 or 1, the variance of the distribution decreases
+Predictions are converted back to probabilities automatically
 :::
 
 ::::
 
-## The link function
 
-If $μ = xβ$ is only true for normally distributed data, 
-then, if this is not the case, we must use a transformation on the expected values:
-
-$$g(μ) = xβ$$
-
-where $g(μ)$ is the link function.
-
-This allows us to relax the normality assumption.
-
-## The logit link
-
-For binary data, the link function is called the logit:
-
-$$ logit(p) = \log \frac{p}{1 - p} $$
-
-
-
-The log of the odds $(p / (1 - p))$
-
-
-## The logit link
-
-$$ logit(p) = \log \frac{p}{1 - p} $$
-
-::: {.incremental}
-
-- The odds put our expected values on a 0 to +Inf scale.
-
-- The log transformation puts our expected values on a -Inf to +Inf scale.
-
-- Now, the expected values can be linearly related to the linear predictor.
-
-:::
 
 ## Probability, odds, logit-odds
 
@@ -8598,7 +8743,7 @@ plot(independent_variable, log_odds, type = "l", col = "green", xlab = "Independ
 ::::
 
 
-## Example
+## Fitting the model
 
 
 
@@ -8608,12 +8753,15 @@ plot(independent_variable, log_odds, type = "l", col = "green", xlab = "Independ
 #| message: false
 #| warning: false
 
-mayfly_glm <- glm(Occupancy ~ CCU, family = binomial(link = "logit"), data = Mayflies)
+mayfly_glm <- glm(Occupancy ~ CCU, 
+                  family = binomial(link = "logit"), 
+                  data = Mayflies)
 
 summary(mayfly_glm)
 
 ```
 
+- Coefficients represent changes in log-odds.
 
 
 ## Interpret the model
@@ -8632,118 +8780,8 @@ Each coefficient corresponds to a predictor variable, indicating the change in t
 
 :::
 
-## Intepret the model
 
-| Probability | Odds                              | Log Odds | Verbiage               |
-|-------------|-----------------------------------|-----------------|------------------------|
-| $p=.95$     | $\frac{95}{5} = \frac{19}{1} = 19$ |      2.94           | 19 to 1 odds for      |
-| $p=.75$     | $\frac{75}{25} = \frac{3}{1} = 3$  |       1.09          | 3 to 1 odds for       |
-| $p=.50$     | $\frac{50}{50} = \frac{1}{1} = 1$  |        0         | 1 to 1 odds           |
-| $p=.25$     | $\frac{25}{75} = \frac{1}{3} = 0.33$ |    -1.11            | 3 to 1 odds against   |
-| $p=.05$     | $\frac{95}{5}  = \frac{1}{19} = 0.0526$ |   -2.94          | 19 to 1 odds against  |
-
-## Logit odds
-
-When we use a binomial model, we produce the 'log-odds', this produces a fully unconstrained linear regression as anything less than 1, can now occupy an infinite negative value -∞ to ∞.
-
-
-$$\log\left(\frac{p}{1-p}\right)	=	\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}$$
-
-::: {.fragment}
-
-$$\frac{p}{1-p}	=	e^{\beta_{0}}e^{\beta_{1}x_{1}}e^{\beta_{2}x_{2}}$$
-
-:::
-
-::: {.fragment}
-
-- We can interpret $\beta_{1}$ and $\beta_{2}$ as the increase in the log odds for every unit increase in $x_{1}$ and $x_{2}$. 
-
-- We could alternatively interpret $\beta_{1}$ and $\beta_{2}$ using the notion that a one unit change in $x_{1}$ as a percent change of $e^{\beta_{1}}$ in the odds. 
-
-:::
-
-##
-
-::::: {.columns}
-
-:::: {.column}
-
-For the intercept: 
-
-::: {.incremental}
-
-- The estimate as log odds is 5.102.
-
-- Therefore the odds are 164
-
-- Over 99% probability of observing mayfly when CCU = 0
-
-:::
-
-::::
-
-:::: {.column}
-
-```{r}
-summary(mayfly_glm)
-```
-
-::::
-
-:::::
-
-
-##
-
-::::: {.columns}
-
-:::: {.column}
-
-
-For the predictor variable `CCU`:
-
-::: {.incremental}
-
-- The estimate is -3.051.
-
-- This means that for every one unit increase in `CCU`, the log odds of the response variable **decreases by 3.051**, holding all other predictors constant.
-
-:::
-
-::::
-
-:::: {.column}
-
-```{r}
-summary(mayfly_glm)
-```
-
-::::
-
-:::::
-
-##
-
-::::: {.columns}
-
-:::: {.column}
-
-Now, let's interpret the coefficient for `CCU` using the odds ratio interpretation:
-
-::: {.incremental}
-
-- The odds ratio associated with `CCU` is calculated as $e^{\beta_{\text{CCU}}} = e^{-3.051}$.
-
-- Therefore, $e^{\beta_{\text{CCU}}} \approx 0.048$.
-
-- This means that for every one unit increase in `CCU`, the odds of the response variable decrease by a multiple of 0.048
-
-:::
-
-::::
-
-:::: {.column}
+## Exponentiating
 
 ```{r}
 #| eval: true
@@ -8752,123 +8790,45 @@ Now, let's interpret the coefficient for `CCU` using the odds ratio interpretati
 broom::tidy(mayfly_glm, exponentiate = T)
 ```
 
-::::
+- Exponentiating gives **odds ratios**
 
-:::::
+- These are multiplicative, while log odds are additive
 
-
-
-
-## Model fit
-
-For a simple Bernoulli/Binary GLM there are only a few checks that apply:
-
-```{r}
-#| eval: true
-#| echo: true
-#| fig-height: 6
-#| layout-ncol: 3
-#| message: false
-
-# Calculate and plot "deviance" residuals
-dresid <- resid(mayfly_glm, type = "deviance")
-hist(dresid)
-
-# Plot leverage
-plot(mayfly_glm, which = 5)
-
-# Plot Cook's distance
-plot(mayfly_glm, which = 4)
-
-```
-
-## Model fit
-
-Residuals in binary glms will never be normally distributed - so a "residuals vs fitted plot" provides little insight. We can try "binned residuals": 
-
-```{r}
-#| eval: true
-#| echo: false
-#| fig-height: 6
-#| message: false
-#| layout-ncol: 2
-
-plot(mayfly_glm, which = 1)
-
-pred <- predict(mayfly_glm)
-
-arm::binnedplot(pred, dresid)
-
-```
-
-
-## DHARMa fit
-
-- [DHARMa](https://theoreticalecology.wordpress.com/2016/08/28/dharma-an-r-package-for-residual-diagnostics-of-glmms/) works by **simulating residuals** from the fitted model, comparing them with observed residuals, and providing diagnostic plots to assess model adequacy and identify potential issues like heteroscedasticity or influential data points.
-
-::: {.fragment}
-
-```{r}
-#| echo: true
-#| eval: true
-library(DHARMa)
-plot(simulateResiduals(mayfly_glm))
-
-```
-
-:::
 
 ## Prediction
 
+> How probability of occupancy changes across the pollution gradient.
 
-- `predict()` function for GLMs computes predicted values based on the fitted model.
+::: {.column}
 
-- For existing data, it predicts values for each observation in the original dataset.
-
-- For new data, it predicts values for a specified new dataset, allowing for predictions on unseen data.
-
-
-```{r}
-#| eval: false
-#| echo: true
-#| message: false
-
-# Predictions for existing data
-predict(mayfly_glm, type = "response")
-
-```
-
-
-```{r}
-#| eval: false
-#| echo: true
-#| message: false
-
-# Predictions for new data
-new_CCU<- data.frame(CCU = c(0,1,2,3,4,5))
-predict(mayfly_glm, newdata = new_CCU, type = "response")
-
-```
-
-## Emmeans
-
-The `emmeans` package in R computes estimated marginal means (EMMs) it can also provides post-hoc comparisons and contrasts for fitted models.
-
-
-- This specific function call below computes EMMs for the predictor variable CCU at specific values (0 to 5) and provides them on the response scale.
-
-```{r}
+```{r, eval = FALSE, echo = TRUE}
 
 emmeans::emmeans(mayfly_glm, 
                  specs = ~ CCU, 
                  at=list(CCU=c(0:5)), 
                  type='response') |> 
-  as_tibble()|> 
-  gt::gt() |> 
-  gt::fmt_number(columns = everything(), n_sigfig = 2)
+  as_tibble()
 
 
 ```
+
+
+:::
+
+::: {.column}
+
+```{r, eval = TRUE, echo = FALSE}
+
+emmeans::emmeans(mayfly_glm, 
+                 specs = ~ CCU, 
+                 at=list(CCU=c(0:5)), 
+                 type='response') |> 
+  as_tibble()
+
+
+```
+
+:::
 
 ## Prediction plots with emmeans
 
@@ -8942,19 +8902,24 @@ ggplot(Mayflies, aes(x=CCU, y=Occupancy)) + geom_point()+
 ::::
 
 
-# GLMs for Binomial data {background-color="#D9DBDB"}
 
-## Proportion data and GLM
+## Binary to Binomial
 
-Sometimes, count data aligns more closely with logistic regression methodologies than it initially appears.
+Binary data = one trial per observation.
 
-We're not looking at typical count data when measuring the number of occurrences with a known total sample size.
+Often we observe multiple trials per unit:
 
-Imagine, for example, we're studying the prevalence of a native underbrush species across various forest plots. We assess 15 different plots, each meticulously surveyed for the presence of this underbrush, counting the number of square meters where the underbrush is present versus absent within a standard area:
+Examples:
 
-$$\frac{M^2~\text{with native underbrush (successes)}}{\text{Total surveyed area in}~M^2~(\text{trials})}$$
+- Number of seedlings that germinate out of 20 seeds
 
-Bound between zero and one
+- Number of insects that die out of 50 exposed individuals
+
+- Number of infected hosts out of a sampled population
+
+This is binomial data.
+
+> The model is the same — only the data structure change
 
 
 ## Binomial distribution
@@ -9064,19 +9029,7 @@ beetles
 ```
 
 
-## Binomial VS Bernoulli Keypoints!
-
-Bernoulli deals with the outcome of the single trial of the event, whereas Binomial deals with the outcome of the multiple trials of the single event.
-
-<br>
-
-Bernoulli is used when the outcome of an event is required for only one time, 
-
-<br>
-
-whereas the Binomial is used when the outcome of an event is required multiple times.
-
-## Binomial glm
+## cbind
 
 The GLM of the binomial counts will analyse the number of *each* batch of beetles killed, while taking into account the size of each group
 
@@ -9092,137 +9045,21 @@ summary(beetle_glm)
 
 ```
 
-## Weights
-
-An alternative method is to analyse the proportion of beetles killed and including the number of trials with the `weight` argument
-
-```{r}
-#| echo: true
-#| eval: true
-
-
-beetle_glm_weights <- glm(Mortality_rate ~ Dose, weights = trials, family = binomial(link = "logit"), data = beetles)
-
-summary(beetle_glm_weights)
-
-```
 
 
 ## Checking Binomial model fit
 
-- For a Binomial model standard residual checks do not apply
 
-:::: {.columns}
-
-::: {.column}
-
-```{r}
-#| echo: true
-#| eval: false
-
-# Calculate and plot "deviance" residuals
-
-par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
-
-pred <- predict(beetle_glm_weights) 
-dresid <- resid(beetle_glm_weights, type = "deviance")
-
-# Check for overdispersion
-hist(dresid)
-
-# Binned residuals
-arm::binnedplot(dresid, pred)
-
-# Plot leverage
-plot(beetle_glm_weights, which = 5)
-
-plot(beetle_glm_weights, which = 2)
-
-
-```
-
-:::
-
-::: {.column}
-
-```{r}
-#| echo: false
-#| eval: true
-
-# Calculate and plot "deviance" residuals
-
-par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
-
-pred <- predict(beetle_glm_weights) 
-dresid <- resid(beetle_glm_weights, type = "deviance")
-
-# Check for overdispersion
-hist(dresid)
-
-# Binned residuals
-arm::binnedplot(dresid, pred)
-
-# Plot leverage
-plot(beetle_glm_weights, which = 5)
-
-plot(beetle_glm_weights, which = 2)
-
-
-```
-
-:::
-
-::::
-
-
-## Performance residual checks
-
-:::: {.columns}
-
-::: {.column}
 
 ```{r}
 #| echo: true
 #| eval: true
 
-performance::check_model(beetle_glm_weights)
+performance::check_model(beetle_glm,
+                         detrend = FALSE)
 
 ```
 
-:::
-
-::: {.column}
-
-```{r}
-#| echo: true
-#| eval: true
-
-performance::binned_residuals(beetle_glm_weights)
-
-```
-
-:::
-
-::::
-
-## Checking with DHARMa
-
-
-- [DHARMa](https://theoreticalecology.wordpress.com/2016/08/28/dharma-an-r-package-for-residual-diagnostics-of-glmms/) works by **simulating residuals** from the fitted model, comparing them with observed residuals, and providing diagnostic plots to assess model adequacy and identify potential issues like heteroscedasticity or influential data points.
-
-::: {.fragment}
-
-```{r}
-#| echo: true
-#| eval: true
-#| message: false
-#| warning: false
-
-library(DHARMa)
-plot(simulateResiduals(beetle_glm_weights))
-```
-
-:::
 
 ## Estimates of significance
 
@@ -9247,20 +9084,6 @@ drop1(beetle_glm, test = "Chi")
 
 ```
 
-## Table
-
-This function has automatically applied the exponentiate to produce the odds and odds ratio:
-
-```{r}
-#| echo: true
-#| eval: true
-#| message: false
-
-library(sjPlot)
-
-tab_model(beetle_glm)
-
-```
 
 ## Predictions
 
@@ -9307,17 +9130,30 @@ ggplot(beetles, aes(x=Dose, y=Mortality_rate)) + geom_point()+
 
 
 
-## Overdispersion
+## A new issue: Overdispersion
 
 If the **residual deviance of the model is > the residual degrees of freedom** - we consider our binomial models to have **overdispersion**. 
 
 This means the variance is greater than predicted by the binomial distribution
 
-Overdispersion > 1.5 can be accounted for with the *quasi-binomial* glm
+$\frac{Residual~Deviance}{Residual~df}$ >1.5 ⇒ Overdispersion
+
+
 
 ```{r}
-summary(beetle_glm_weights)
+summary(beetle_glm)
 ```
+
+## Why overdispersion matters
+
+If overdispersion is present
+
+- Standard errors are too small
+
+- Confidence intervals are too narrow
+
+- p-values are too optimistic
+
 
 ## Overdispersion
 
@@ -9429,7 +9265,7 @@ drop1(beetle_quasiglm, test = "F")
 
 ::::
 
-## Challenge: Binomial model
+## Challenge
 
 
 ```{r}
@@ -9710,22 +9546,6 @@ plot(stick_poisson, which=3)
 :::
 
 ::::
-
-## Effect of treatment
-
-To perform a global test on the effect of treatment.
-
-The likelihood ratio test allows us to determine the overall deviance explained by treatment
-
-```{r}
-#| eval: true
-#| echo: true
-
-# For a fixed  mean-variance model we use a Chisquare distribution
-drop1(stick_poisson, test = "Chisq")
-
-```
-
 
 ## Model summary
 
@@ -10131,7 +9951,6 @@ ii) mixed-effects models cope well with missing data, unequal group sizes and re
 
 - Random effects represent grouping and allow the estimation of variance in the response variable within and among these groups. 
 
-- This reduces the probability of false positives and false negatives
 
 :::
 
@@ -10161,7 +9980,7 @@ lmer(blood_sugar ~ treatment + time + (1|individual))
 
 ### Fixed Effect
 
-Fixed effects are variables that we expect will affect the dependent/response variable: they’re what you call explanatory variables in a standard linear regression.
+Fixed effects are variables you want to estimate directly (treatment, temperature, time).
 
 ${y_i = \beta0 + \beta1x+\epsilon_i}$
 
@@ -10176,7 +9995,7 @@ y ~ x, data = data)
 
 ### Random Effect
 
-A random effect is a parameter that is allowed to vary across groups or individuals. Random effects do not take a single fixed value, rather they follow a distribution (usually the normal distribution) and allow a model to account for variation around an intercept or slope.
+A grouping factor that induces correlation (site, individual, clutch); we estimate its variance, not a separate coefficient for each level.
 
 ${y_{ij} = \beta0_{j} + \beta1x+\epsilon_i}$
 
@@ -10404,41 +10223,7 @@ summary(lmer1)
 
 
 
-## Model output
 
-Similar in interpretation to fixed effects from models you have constructed before
-
-**However** p-values for mixed models aren’t as straightforward as they are for the linear model. There are multiple approaches, and there’s a discussion surrounding these, with sometimes wildly differing opinions about which approach is the best.
-
-`lmerTest` lmer model fits via Satterthwaite's degrees of freedom method estimation.
-
-```
-Fixed effects:
-            Estimate Std. Error       df t value Pr(>|t|)    
-(Intercept)  23.2692     6.4818   4.1570    3.59   0.0215 *  
-x             2.0271     0.1703 424.0815   11.90   <2e-16 ***
-
-```
-
-## Degrees of Freedom
-
-- When we add these random variance components it adds uncertainty
-
-- Standard t/F assumptions don't hold
-
-- Degrees of freedom are absent or approximate
-
-## Satterthwaite method
-
-$$\text{df} \approx \frac{2 \cdot (\text{Var})^2}{\text{Var}(\text{Var})}$$
-
-- Var: This is the estimated variance of a quantity (like a fixed effect estimate).
-
-- Var of Var: This is the uncertainty in that variance estimate — how much the estimated variance might vary.
-
-We are estimating variance of fixed effects - and that estimate has its own uncertainty - lower df = wider confidence intervals. 
-
-**Method of calculating degrees of freedom will affect CI and inference**
 
 ## Marginal and conditional variance
 
@@ -10553,31 +10338,7 @@ Random slope models give the model far more flexibility to fit the data, but req
 
 
 
-## Checking models
 
-:::: {.columns}
-
-::: {.column}
-
-Checking models with random effects is more complex
-
-`check_model` will add plots to investigate the distribution of random effects
-
-`DHARMa` when dealing with increasingly complex models - residual simulations may be preferred
-
-:::
-
-::: {.column}
-
-```{r, echo = F, warning = F, message = F, fig.width = 12}
-
-DHARMa::simulateResiduals(lmer1, plot = T)
-
-```
-
-:::
-
-::::
 
 ## Comparing models
 
@@ -10622,28 +10383,8 @@ drop1(lmer1, test = "F")
 
 - Think carefully before deciding on the structure of your model
 
-- Often better to 'keep it maximal' with regards to random effects (if you can) - don't be guided solely by LRT.
 
 ---
-
-## Issues
-
-### Convergence warning
-
-Model may need simplification or an alternative algorithm
-
-```{r, echo = T, warning = T}
-lmer3 <- lmer(y ~ x + (x | group), data = data)
-
-```
-
-
-### Boundary fit
-
-Your model did fit, but it generated that warning because some of your random effects are very small
-
-
-
 
 ## Reporting models
 

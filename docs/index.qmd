@@ -244,9 +244,9 @@ knitr::include_graphics("images/reproducible-data-analysis-02.png")
 
 ## Kellner et al 2025
 
-- 93% of R scripts associated with species distribution and abundance papers failed to execute
+- 93% of papers could not be reproduced
 
-- Reproducibility assessment had to be abandoned due to non-functional code
+- 27% of papers with potentially reproducible code could be successfully run
 
 - Structural issues dominated over statistical ones
 

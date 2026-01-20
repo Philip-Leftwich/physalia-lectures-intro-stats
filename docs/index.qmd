@@ -1903,6 +1903,62 @@ ggplot(data = penguins,
 
 ::::
 
+
+## Facets
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+
+```{r, eval = FALSE, echo = T}
+ggplot(data = penguins, 
+       aes(x = bill_depth_mm,
+           y = body_mass_g,
+           colour = species))+
+         geom_point()+
+  geom_smooth(method = "lm", 
+              se = FALSE)+
+  labs(x = "Body mass (g)",
+       y = "Flipper length (mm)")+
+  scale_color_manual(
+    values = c("darkolivegreen4", 
+               "darkorchid3", 
+               "goldenrod1"))+
+  theme_minimal()+
+  facet_wrap(~species)#<<
+
+```
+
+:::
+
+::: {.column width="60%"}
+
+```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
+
+ggplot(data = penguins, 
+       aes(x = bill_depth_mm,
+           y = body_mass_g,
+           colour = species))+
+         geom_point()+
+  geom_smooth(method = "lm", 
+              se = FALSE)+
+  labs(x = "Body mass (g)",
+       y = "Flipper length (mm)")+
+  scale_color_manual(
+    values = c("darkolivegreen4", 
+               "darkorchid3", 
+               "goldenrod1"))+
+  theme_minimal(base_size = 20)+
+  facet_wrap(~species)#<<
+
+
+```
+
+:::
+
+::::
 # GGplot exercises
 
 ```{r}
@@ -1926,22 +1982,32 @@ countdown::countdown(
 
 ## Why Data Visualisation Matters
 
+::: {.incremental}
+
 - Figures are often the primary way results are interpreted
 
 - Poor visualisation can mislead even when the analysis is correct
 
 - Visual design choices affect comprehension, accuracy, and trust
 
-Cleveland and McGill 1984; Correll et al. 2020
+:::
 
 
 ## Design flaws that distort interpretation
+
+::: {.incremental}
 
 - Misuse of colour, scales, and chart types is widespread
 
 - Poor accessibility disproportionately affects colour-blind readers
 
-Cairo 2016; Schwabish and Feng 2021; Nunez et al. 2018
+::: 
+
+::: aside
+
+[Crameri et al 2020](https://www.nature.com/articles/s41467-020-19160-7)
+
+:::
 
 ## Matching Chart Types to the Data
 
@@ -1951,7 +2017,7 @@ Cairo 2016; Schwabish and Feng 2021; Nunez et al. 2018
 
 ## Data to viz
 
-```{r, echo = FALSE, out.width="50%"}
+```{r, echo = FALSE, out.width="45%"}
 knitr::include_graphics("images/choosing-data-to-viz.png")
 
 ```
@@ -1963,6 +2029,8 @@ knitr::include_graphics("images/choosing-data-to-viz.png")
 
 ## Avoiding Inappropriate Chart Types
 
+::: {.incremental}
+
 - Bar charts for continuous trends distort perception
 
 - Pie charts make comparisons difficult
@@ -1971,11 +2039,14 @@ knitr::include_graphics("images/choosing-data-to-viz.png")
 
 - Studies show accuracy drops sharply when chart type does not match task
 
-Few 2012; Correll et al. 2020
+:::
 
+::: aside
+[Spurious correlations](https://www.tylervigen.com/spurious-correlations)
+:::
 ## Choosing chart types
 
-:::{.panel-tabset}
+::::: {.panel-tabset}
 
 ## Bad
 
@@ -1996,6 +2067,9 @@ ggtitle("Poor choice: pie chart")
 
 ## Good
 
+:::: {.columns}
+
+::: {.column width="40%"}
 
 ```{r, eval = FALSE, echo = T, fig.asp = 0.8, fig.width = 7}
 ggplot(data, aes(x=Category, y=Value)) +
@@ -2005,14 +2079,29 @@ ggtitle("Better choice: bar chart")
 
 ```
 
+:::
+
+::: {.column width="60%"}
 
 
+```{r, eval = TRUE, echo = F, fig.asp = 0.8, fig.width = 7}
+ggplot(data, aes(x=Category, y=Value)) +
+geom_col() +
+theme_minimal() +
+ggtitle("Better choice: bar chart")
 
+```
+
+:::
+
+::::
 
 ## Better
 
 
+:::: {.columns}
 
+::: {.column width="40%"}
 
 ```{r, eval = FALSE, echo = T, fig.asp = 0.8, fig.width = 7}
 data |> 
@@ -2025,7 +2114,9 @@ data |>
 
 ```
 
+:::
 
+::: {.column width="60%"}
 
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 
@@ -2041,44 +2132,18 @@ data |>
 
 :::
 
+::::
+
+:::::
+
 ## Using Colour Effectively
+
+::: {.incremental}
 
 - Colour should encode information, not decorate
 
 - Use colour to highlight structure or groups
 
-- Avoid unnecessary gradients and saturated palettes
-
-- Colour misuse is a leading cause of misinterpretation
-
-Cairo 2016; Wilke 2019
-
-## Example
-
-::: {.column}
-
-
-
-```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
-ggplot(penguins, aes(bill_length_mm, bill_depth_mm, colour=species)) +
-geom_point() +
-ggtitle("Relies on colour alone")
-
-```
-
-:::
-
-::: {.column}
-
-```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
-library(colorspace)
-ggplot(penguins, aes(bill_length_mm, bill_depth_mm,
-colour=species, shape=species)) +
-geom_point(size=2) +
-theme_minimal()+
-  ggtitle("Redundant colour with shape")
-
-```
 
 :::
 
@@ -2088,6 +2153,9 @@ theme_minimal()+
 knitr::include_graphics("images/palette.png")
 
 ```
+
+
+
 
 
 ## Accessibility: Colour, Shape, and Redundancy
@@ -2100,7 +2168,7 @@ knitr::include_graphics("images/palette.png")
 
 - Redundant encoding improves accuracy and inclusivity
 
-Ware 2013; Nunez et al. 2018
+
 
 ## Colour Palettes and Accessibility
 
@@ -2119,11 +2187,12 @@ Crameri et al. 2020; Wilke 2019
 ::: {.column}
 
 
-
 ```{r, echo = FALSE, fig.asp = 0.8, fig.width = 7}
 ggplot(penguins, aes(bill_length_mm, bill_depth_mm, colour=species)) +
 geom_point() +
-ggtitle("Relies on colour alone")
+theme_minimal(base_size = 20)+
+ggtitle("Relies on colour alone")+
+theme(legend.position = "bottom")
 
 ```
 
@@ -2137,8 +2206,9 @@ ggplot(penguins, aes(bill_length_mm, bill_depth_mm,
 colour=species, shape=species)) +
 geom_point(size=2) +
 scale_colour_discrete_qualitative()+
-theme_minimal()+
-  ggtitle("Accessible colour")
+theme_minimal(base_size = 20)+
+ggtitle("Accessible colour")+
+theme(legend.position = "bottom")
 
 ```
 
@@ -2154,7 +2224,6 @@ theme_minimal()+
 
 - Axis manipulation is a well-documented source of distortion
 
-Cleveland et al. 1988; Pandey et al. 2015
 
 ## Example
 
@@ -2171,7 +2240,8 @@ data <- data.frame(
 # Misleading Log Scale (Unlabelled)
 ggplot(data, aes(x = Time, y = Value)) +
   geom_line() +
-  scale_y_log10() 
+  scale_y_log10() +
+  theme_minimal(base_size = 20)
 
 ```
 
@@ -2186,7 +2256,7 @@ ggplot(data, aes(x = Time, y = Value)) +
 ggplot(data, aes(x = Time, y = Value)) +
   geom_line() +
   scale_y_log10(labels = scales::label_log()) +
-  theme_minimal()+
+  theme_minimal(base_size = 20)+
   annotation_logticks(sides = "l")+
   labs(y = "Log10 scale")
 
@@ -2198,6 +2268,8 @@ ggplot(data, aes(x = Time, y = Value)) +
 
 Every axis should have:
 
+::: {.incremental}
+
 - A clear label
 
 - Units where relevant
@@ -2208,7 +2280,7 @@ Every axis should have:
 
 - Clear labelling improves comprehension and reduces cognitive load
 
-Schwabish 2020
+:::
 
 ## Ensuring Text Is Legible
 
@@ -2218,11 +2290,47 @@ Schwabish 2020
 
 - Illegible text undermines otherwise correct figures
 
-Cairo 2016; Wilke 2019
+
+## Legible text
+
+::::{.columns}
+
+::: {.column width="40%"}
+
+```{r, echo = TRUE, eval = FALSE, fig.asp = 0.8, fig.width = 7}
+ggplot(penguins, aes(bill_length_mm, bill_depth_mm,
+colour=species, shape=species)) +
+geom_point(size=2) +
+scale_colour_discrete_qualitative()+
+theme_minimal(base_size = 20)+
+ggtitle("Accessible colour")+
+theme(legend.position = "bottom")#<==
+```
+:::
+
+::: {.column width="60%"}
+
+```{r, echo = FALSE, eval = TRUE, fig.asp = 0.8, fig.width = 7}
+ggplot(penguins, aes(bill_length_mm, bill_depth_mm,
+colour=species, shape=species)) +
+geom_point(size=2) +
+scale_colour_discrete_qualitative()+
+theme_minimal(base_size = 20)+
+ggtitle("Accessible colour")+
+theme(legend.position = "bottom")
+```
+
+:::
+
+
+
+::::
 
 ## Adding Text Directly to Figures
 
 - Direct labels reduce reliance on legends
+
+::: {.incremental}
 
 - Particularly useful for:
 
@@ -2232,7 +2340,7 @@ Cairo 2016; Wilke 2019
 
 - Direct labelling improves speed and accuracy of interpretation
 
-Few 2012; Schwabish 2020
+:::
 
 ## Example
 
@@ -2248,7 +2356,7 @@ penguins |>
          colour = "black",
          fill = "gray90") +
     coord_flip() +
-    theme_minimal()+
+    theme_minimal(base_size = 20)+
     theme(legend.position = "none")
 
 ```
@@ -2273,22 +2381,23 @@ penguins |>
                  label = n),
              hjust = 1.5)+
     coord_flip() +
-    theme_minimal()+
+    theme_minimal(base_size = 20)+
     theme(legend.position = "none")
 
 ```
 
 :::
 
-## Avoiding Overcluttering
+## Overcluttering
+
 
 - Too much information reduces clarity
 
 - Avoid excessive annotations, colours, and symbols
 
-- Visual clutter significantly reduces interpretability
+- Overlapping data points
 
-Tufte 2001; Correll et al. 2020
+
 
 ## Strip plots
 
@@ -2304,7 +2413,7 @@ penguins |>
                y = body_mass_g,
                colour = species))+
     geom_point()+
-  theme_classic()+
+  theme_classic(base_size = 20)+
 scale_colour_discrete_qualitative()
 
 ```
@@ -2322,7 +2431,7 @@ penguins |>
                fill = species))+
     geom_beeswarm(shape = 21, 
                   colour = "white")+
-  theme_classic()+
+  theme_classic(base_size = 20)+
   scale_fill_discrete_qualitative()
 
 ```
@@ -2342,10 +2451,9 @@ ggplot(aes(x= bill_length_mm,
                      shape = sex)) +
   geom_point()+
   scale_colour_discrete_qualitative()+
-  theme_classic()+
+  theme_classic(base_size = 20)+
     labs(x="Bill length (mm)",
-         y="Bill depth (mm)") +
-  theme(text = element_text(size = 6))
+         y="Bill depth (mm)")
 
 ```
 
@@ -2361,10 +2469,9 @@ ggplot(aes(x= bill_length_mm,
                      shape = sex)) +
   geom_point()+
   scale_colour_discrete_qualitative()+
-  theme_classic()+
+  theme_classic(base_size = 20)+
     labs(x="Bill length (mm)",
          y="Bill depth (mm)") +
-  theme(text = element_text(size = 6))+
   facet_wrap(~sex)
 
 ```
@@ -2373,6 +2480,7 @@ ggplot(aes(x= bill_length_mm,
 
 ## Gridlines: Less Is Usually More
 
+
 - Gridlines should support, not dominate
 
 - Use light, unobtrusive lines
@@ -2380,7 +2488,6 @@ ggplot(aes(x= bill_length_mm,
 - Remove unnecessary minor gridlines
 
 
-Few 2012; Cairo 2016
 
 ## Example
 
@@ -2394,7 +2501,7 @@ penguins |>
                fill = species))+
     geom_beeswarm(shape = 21, 
                   colour = "white")+
-  theme_bw()+
+  theme_bw(base_size = 20)+
   scale_fill_discrete_qualitative()
 
 ```
@@ -2411,7 +2518,7 @@ penguins |>
                fill = species))+
     geom_beeswarm(shape = 21, 
                   colour = "white")+
-  theme_classic()+
+  theme_classic(base_size = 20)+
   scale_fill_discrete_qualitative()
 
 ```
@@ -2430,10 +2537,9 @@ ggplot(aes(x= bill_length_mm,
                      colour=species)) +
   geom_point()+
   scale_colour_discrete_qualitative()+
-  theme_classic()+
+  theme_classic(base_size = 20)+
     labs(x="Bill length (mm)",
-         y="Bill depth (mm)") +
-  theme(text = element_text(size = 6))
+         y="Bill depth (mm)") 
 
 ```
 
@@ -2448,10 +2554,9 @@ ggplot(aes(x= bill_length_mm,
                      colour=species)) +
   geom_point()+
   scale_colour_discrete_qualitative()+
-  theme_minimal()+
+  theme_minimal(base_size = 20)+
     labs(x="Bill length (mm)",
-         y="Bill depth (mm)") +
-  theme(text = element_text(size = 6))
+         y="Bill depth (mm)")
 
 ```
 
@@ -2476,10 +2581,9 @@ ggplot(aes(x= species,
            fill = species)) +
   geom_bar(stat = "summary")+
   scale_fill_discrete_qualitative()+
-  theme_classic()+
+  theme_classic(base_size = 20)+
     labs(x="Bill length (mm)",
          y="Bill depth (mm)") +
-  theme(text = element_text(size = 6))+
   theme(legend.position = "none")
 
 ```
@@ -2501,7 +2605,7 @@ penguins |>
               colour = "white")+
   scale_fill_discrete_qualitative()+
   scale_colour_discrete_qualitative()+
-  theme_classic()+
+  theme_classic(base_size = 20)+
   theme(legend.position = "none")+
     labs(
     x = "",
@@ -2523,8 +2627,9 @@ penguins |>
 
 - Reproducible figures improve transparency and trust
 
+::: aside
 Sandve et al. 2013; Ivimey-Cook et al. 2023
-
+:::
 
 
 ## Keep learning

@@ -10022,23 +10022,28 @@ geom_pointrange(data = means_poisson,
 
 ## Why mixed model?
 
-The key feature of a linear mixed-effects model is the inclusion of random effects - variables where our observations are grouped into subcategories that systematically affect our outcome - to account for important structure in our data. 
+The key feature of a linear mixed-effects model is the inclusion of 
 
-Mixed-effects model can be used in many situations instead of one of our more straightforward tests when this structure may be important:
+- **random effects** - observations are grouped into subcategories that systematically affect our outcome.
 
+- This accounts for **structure** in our data where some observations are more closely related than others
+
+Mixed-effects model can be used when this structure may be important:
+
+::: {.incremental}
 i) mixed-effects models incorporate group and even individual-level differences
 
 ii) mixed-effects models cope well with missing data, unequal group sizes and repeated measurements
+
+:::
 
 ## Structure {.smaller}
 
 ::: {.incremental}
 
-- Biological datasets are often highly structured, containing clusters of non-independent observational units that are hierarchical in nature, and LMMs allow us to explicitly model the non-independence in such data. 
+- Biological datasets are often highly structured, containing clusters of non-independent data, and LMMs allow us to explicitly model this. 
 
-- Example: 
-
-> We measure several chicks from the same clutch, and several clutches from different females, or we might take repeated measurements of the same chick’s growth rate over time. 
+-  We measure several chicks from the same clutch, and several clutches from different females, or we might take repeated measurements of the same chick’s growth rate over time. 
 
 - In both cases, we might expect that measurements within a statistical unit (here, an individual, or a female’s clutch) might be more similar than measurements from different units. 
 
@@ -10050,11 +10055,11 @@ ii) mixed-effects models cope well with missing data, unequal group sizes and re
 
 ::: {.incremental}
 
-- If the fixed effect varies or is manipulated at the level of the clutch, then treating multiple chicks from a single clutch as independent would represent pseudoreplication
+- If the fixed effect varies or is manipulated at the level of the clutch, then treating multiple chicks from a single clutch as independent would represent *pseudoreplication*
 
-- If fixed effects vary at the level of the chick, then non-independence among clutches or mothers could also be accounted for. 
+- If fixed effects vary at the level of the chick, then *non-independence* among clutches or mothers could also be accounted for. 
 
-- Random effects represent grouping and allow the estimation of variance in the response variable within and among these groups. 
+- Random effects represent grouping and allow the estimation of variance *within and among* these groups. 
 
 
 :::
@@ -10100,7 +10105,7 @@ y ~ x, data = data)
 
 ### Random Effect
 
-A grouping factor that induces correlation (site, individual, clutch); we estimate its variance, not a separate coefficient for each level.
+A grouping factor that induces correlation (site, individual, clutch); we estimate its *variance*, not a separate coefficient for each level.
 
 ${y_{ij} = \beta0_{j} + \beta1x+\epsilon_i}$
 
@@ -10113,7 +10118,7 @@ y ~ x + (1|group), data = data)
 
 ::::
 
-## A regression on simulated data
+## Pooled regression
 
 ```{r, include = F}
 
@@ -10222,7 +10227,7 @@ The mean value is slightly different between each group
 
 ## Stratified analysis
 
-One way to analyse this data would be to conduct independent regressions for each group: 
+One way to analyse this data would be to conduct **independent** regressions for each group: 
 
 ```{r, echo = F, fig.width = 12}
 
@@ -10236,18 +10241,22 @@ ggplot(data, aes(x = x, y = y, color = group, group = group)) +
 
 ```
 
-Each analysis will be restricted by its sample size, and the reduction in power will inflate sampling bias - leading to inconclusive results
+> Each analysis will be restricted by its sample size, and the reduction in power will inflate sampling bias - leading to inconclusive results
 
 
-## Partial pooling
+## Mixed model
+
+::: {.incremental}
 
 - Complete pooling models all the information together and ignores structure
 
 - Mixed models employ partial pooling:
 
-- Fixed effects calculated on pooled data
+    - Fixed effects calculated on pooled data
 
-- For each group the random effect estimates the intercept
+    - For each group the random effect estimates the intercept
+
+:::
 
 ```{r, echo = F, fig.width = 10}
 
@@ -10327,55 +10336,6 @@ summary(lmer1)
 **Residual** The residual/leftover deviations or variance not due to fixed or random effects
 
 
-
-
-
-## Marginal and conditional variance
-
-```{r, include = FALSE}
-library(ggeffects)
-
-```
-
-- `ggpredict` and `ggemmeans` both from the ggeffects package
-
-- Both can extract predictions from a model, but behave differently
-
-::: {.panel-tabset}
-
-
-## ggpredict
-
-```{r}
-
-ggpredict(mixed_model, terms = "x")
-
-```
-
-## ggemmeans
-
-```{r}
-
-ggemmeans(mixed_model, terms = "x")
-
-```
-
-:::
-
-## Marginal and conditional variance
-
-- Marginal variance:
-
-    - Random effects averaged out across the population   
-    - Narrower SE
-    - Good for general comparisons
-    
-- Conditional variance:
-
-    - Random effects included for each block
-    - Highly group-specific predictions
-    - SE larger to represent more individual variation
-
 ## Random slopes and intercepts {.smaller}
 
 ```{r, include = FALSE}
@@ -10440,8 +10400,6 @@ A random intercepts and random slopes model, where both intercepts and slopes ar
 ::::
 
 Random slope models give the model far more flexibility to fit the data, but require a lot more data to obtain accurate estimates of separate slopes for each group.
-
-
 
 
 

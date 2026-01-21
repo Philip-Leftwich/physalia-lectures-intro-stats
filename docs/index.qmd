@@ -6276,7 +6276,6 @@ DAGs help us
 
 ## DAGS
 
-
 :::: {.columns}
 
 ::: {.column width = "40%"}
@@ -6325,7 +6324,7 @@ ggdag_status(dag)+
 
 :::
 
-
+::::
 
 ## Building a causally informed model
 
@@ -6453,6 +6452,7 @@ ggdag_adjustment_set(dag)+
   theme_dag()
 
 ```
+
 :::
 
 ::::
@@ -6463,7 +6463,7 @@ lm(recovery_time ~ infection_severity + antibiotic)
 
 ```
 
-:::
+
 
 ## Exercise & Heart Disease
 
@@ -6557,6 +6557,7 @@ ggdag_adjustment_set(dag)+
   theme_dag()
 
 ```
+
 :::
 
 ::::
@@ -6567,9 +6568,6 @@ lm(heart_disease ~ exercise + genetics + age)
 
 ```
 
-
-
-:::
 
 ## Fertiliser & Crop Yield
 

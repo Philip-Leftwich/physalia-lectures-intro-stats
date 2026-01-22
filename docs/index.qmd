@@ -9472,15 +9472,20 @@ $y_i \sim \mathcal{N}(\mu_i, \sigma^2)$
 
 ![](images/poisson_regression.webp){fig-align="center" fig-alt="Poisson equation" width=80%}
 
-## Poisson limitations
+## Poisson distribution
 
 The **Poisson** distribution has the following characteristics:
 
+::: {.column}
+
 ::: {.incremental}
 
-* **Discrete** variable (integer), defined on the range $0, 1, \dots, \infty$.
+* **Discrete** variable (integer),
 
-* A single ***rate*** parameter $\lambda$, where $\lambda > 0$.
+$$
+        0, 1, \dots, \infty
+$$
+
 
 * **Mean** = $\lambda$  
 
@@ -9488,6 +9493,43 @@ The **Poisson** distribution has the following characteristics:
 
 :::
 
+:::
+
+::: {.column}
+
+```{r}
+library(tidyverse)
+
+# Define lambdas and support
+lambdas <- c(1, 3, 6, 10)
+x_vals <- 0:25
+
+# Create data
+poisson_multi_df <- expand_grid(
+  x = x_vals,
+  lambda = lambdas
+) %>%
+  mutate(
+    probability = dpois(x, lambda),
+    lambda = factor(lambda)
+  )
+
+# Plot
+ggplot(poisson_multi_df, aes(x = x, y = probability)) +
+  geom_col(width = 0.7) +
+  facet_wrap(~ lambda, ncol = 2, scales = "free_y") +
+  labs(
+    title = "Poisson Distributions for Different Values of λ",
+    subtitle = "λ is both the rate and the mean of the distribution",
+    x = "Count (x)",
+    y = "P(X = x)"
+  ) +
+  theme_minimal()
+
+
+```
+
+:::
 
 ## Poisson: Case study
 
@@ -9687,14 +9729,20 @@ ggplot(aes(x=Treatment, y=rate)) +
 ::::
 
 
-## Poisson limitations
+## Poisson assumptions
 
 So for the Poisson regression case we assume that the mean and variance are the same.
-Hence, as the mean *increases*, the variance *increases* also (**heteroscedascity**).
-This may or may not be a sensible assumption so watch out! Just because a Poisson distribution *usually* fits well for count data, doesn't mean that a Gaussian distribution *can't* always work.
 
-Recall the link function between the predictors and the mean and the rules of logarithms (if $\log{\lambda} = k$(value of predictors), then $\lambda = e^k$):
+:::{.incremental}
 
+- As the mean *increases*, the variance *increases* also (**heteroscedascity**).
+
+
+- This may or may not be a sensible assumption so watch out! 
+
+    Just because a Poisson distribution *usually* fits well for count data, doesn't mean that a Gaussian distribution *can't* always work.
+
+:::
 
 ## Overdispersion
 
@@ -9725,9 +9773,57 @@ Overdispersion occurs when the variance in the data is even higher than the mean
 
 ## Overdispersion and what to do about it
 
-It may be true that you are initially unsure whether overdispersion is coming from zero-inflation, larger variance than the mean or both. 
+::: {.incremental}
 
-You can fit models with the same dependent and independent variables and different error structures and use AIC to help determine the best model for your data
+- It may be true that you are initially unsure whether overdispersion is coming from zero-inflation, larger variance than the mean or both. 
+
+- You can fit models with the same dependent and independent variables and different error structures and use AIC to help determine the best model for your data
+
+- Study the residual plots
+
+:::
+
+## AIC
+
+::: {.incremental}
+
+- The Akaike Information Criterion (AIC)  balances the trade-off between model fit and complexity by penalizing models with more parameters.
+
+- It aims to find the model that best explains the data while avoiding overfitting.
+
+- AIC is calculated as follows: $\text{AIC} = 2k - 2\ln(\hat{L})$, 
+
+- where: log-likelihood is the maximized value of the likelihood function for the fitted model. $k$ is the number of parameters in the model.
+
+- In general a difference in AIC of <2 suggests equivalent goodness-of-fit
+
+:::
+
+## AIC
+
+:::: {.columns}
+
+::: {.column}
+
+**AIC can:**
+
+- Compare non-nested models fitted to the same dataset and response variable
+
+- Compare across different GLM families and link functions
+
+:::
+
+::: {.column}
+
+**AIC cannot:**
+
+- Compare models where the response variable is transformed
+
+- Compare models where there are differences in the dataset
+
+:::
+
+::::
 
 ## Overdispersion in the model
 
@@ -9794,21 +9890,6 @@ summary(stick_poisson)
 summary(stick_quasipoisson)
 
 ```
-
-## F distributions
-
-The presence of overdispersion suggested the use of the F-test for nested models. We will test if the interaction term can be dropped from the model.
-
-Though here for a term with only one degree of freedom $t^2$ = the F distribution with denominator degree of freedom
-
-```{r}
-#| eval: true
-#| echo: true
-
-drop1(stick_quasipoisson, test = "F")
-
-```
-
 
 
 # Negative Binomial {background-color="#D9DBDB"}
@@ -9918,6 +9999,14 @@ check_zeroinflation(stick_quasipoisson)
 #| echo: true
 #| fig-height: 7
 #| warning: false
+
+
+# Poisson
+stick_poisson <- glm(Diplo_intensity ~ Treatment, family = poisson, data = parasite)
+
+# Quasipoisson
+stick_quasipoisson <- glm(Diplo_intensity ~ Treatment, family = quasipoisson, data = parasite)
+
 # Neg bin
 stick_nb <- glm.nb(Diplo_intensity ~ Treatment, link = "log", data = parasite)
 
@@ -9951,16 +10040,6 @@ performance::check_model(stick_nb)
 
 performance::check_zeroinflation(stick_nb)
 
-```
-
-## Validating a model by simulation
-
-```{r}
-#| echo: true
-#| fig-height: 7
-#| layout-ncol: 2
-#| warning: false
-plot(DHARMa::simulateResiduals(stick_nb))
 ```
 
 
